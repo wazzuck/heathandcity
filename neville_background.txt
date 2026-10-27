@@ -1,0 +1,82 @@
+I am a London based experienced software support engineer with over 17 years working in financial ultra low latency market data.
+
+My current status:-
+I was made redundant alsmost 4 years ago as a software suport engineer, and I am currently a 44 year unemployed father who has a lot of time but very limited financial funds. I have the support from my family and can raise maybe £10,000-£20,000 if a business idea was to require it. I could raise an additional funds if there was significant growth in the business and this amount of capital could be justified to grow the business further. My son has recently been diagnosed with ADHD and I think that I may have undiagnosed ADHD.
+
+My skills are:-
+- Complex business analysis such as reading exchange technical / function specifications to understand market data messaging extraction and mapping.
+- Linux and computer infrastructure.
+- Python / BASH for data analysis and automation.
+- Conference calls and technical discussion.
+- Building things in the real world with basic tools and power tools.
+
+My education:-
+I have a degree in Software Engineering from the University of Ulster.
+I have attended an Advanced AI course that teaches techniques such the following
+Core Areas: Data engineering, Mops, and deep learning.
+Neural Network Architectures: Word2Vec, Two-Tower Neural Networks for search, Vision Transformers (ViT) for image captioning, YOLO for object detection, and Transformer models (including multi-head attention and custom loss functions).
+Advanced Techniques: Parameter Efficient Fine-Tuning (PEFT) such as Low-Rank Adaptation (LoRA) and soft prompting, mixed-precision training, and distributed data parallelism.
+Deployment: Using GPUs for training and inference, Docker, Kubernetes, and Streamlit.
+A predictive model for Hacker News upvotes using word embeddings.
+A document retrieval system with Two-Tower Neural Networks.
+An object detection model with custom circular bounding regions.
+A Transformer model for generating tiny stories.
+A multimodal model for image captioning with Vision Transformers.
+A fine-tuned large language model using LoRA and soft prompting techniques.
+
+My network of friends and family:-
+My wife works in healthcare as an occupational therapist.
+My brother in law is an AI researcher manager with a PhD from oxford and access to the scientific academic community.
+My father in law is a retired pharmacist. He also has access to a large London property portfolio that he owns. He also has connections in the London catering industry.
+My brother is an injured mechatronics engineer who works in a factory.
+My mother is law is an amateur London actress with connections in the London TV/Film community.
+My wife's family are Jewish and have access to members of that community.
+My own family are Northern Irish and have access to that community.
+My father's girlfriend is a wealthy widower based near Dublin with an extensive real estate portfolio.
+My best friends work in central UK movement.
+I am also a father of a 7 year old boy and understanding parenting. 
+
+My assets:-
+A beautiful flat in one of most desirable areas in London's - Hampstead and access to that wealthy market.
+A car that can be used to transport large items
+My father has a 40 acre farm near to Belfast.
+
+Weaknesses:-
+I think that I have undiagnosed ADHD as my son has been diagnosed with ADHD.
+
+My hobbies and interests include:-
+- Travel
+- Computers
+- Finance
+- Software
+- Understanding businesses in London
+- Historical locations
+- Architecture
+- Long walks
+- Money saving tips
+
+Problems:-
+Competition if absolutely everywhere in London, and starting a new business in an existing field will burn significant amount of capital trying to gain market share in a market where every field that I can think of is saturated and already has competition.
+If I do create a product and the product is highly successful but easily replicated then it will be copied almost instantly by a larger competitor or multiple smaller competitors leading to zero margins and a war of attrition. 
+
+Due to AI and outsourcing, making a commodity software product is no longer viable given the limited barrier to entry using AI.
+
+In my opinion to be successful you need either one of these three things.
+- Advanced / extremely rare knowledge.
+- An expensive asset such as equipment machinery or real estate that very few other competitors can afford.
+- Extreme hyper local knowledge of an area such as London, an understanding of its ruthless nature and incredible competitiveness and how to avoid common traps such as bad capital allocation or bad real estate decisions.
+
+If I do start a new business that can be copied I would need to build a defensible moat against competitors, and I would need to start significantly ahead of others in order to generate enough capital to outgrow heavily funded competitors.
+
+Previous Ideas:-
+Car parking application. Parking apps already exist in the UK / London such as Ringo, PayByPhone and many more. Recently the UK government changed the availability of the data to be available on the D-TRO service levelling the playing field for new parking apps to appear. The problem is that as the data is readily available and completely free there will be significantly competition in the future leading to zero margins.
+
+Snails - I am interested in breeding snails for the production of food and medical products to be produced from the mucus. I have successful breed snails and I think that this could have commercial value as there is land available for production in Ireland.
+
+itoldyouso.tech is the professional website for a local IT and technical support service operating in North West London, catering to small businesses and busy households.
+
+TillSwift (tillswift.com) is a UK-focused payment processor and merchant services comparison tool designed to help businesses find the most cost-effective card payment and point-of-sale (POS) solutions.
+
+Previously when conducting research an AI recommended building a market data exchange driven change tracking system, and I think that this is an excellent idea that I am currently pursuing.
+
+Additionally a local client has contacted me, about automation of email classification for internal use, and building a CRM to manage incoming work. I am currently building this with AI, and I think that this is an excellent idea as it's hyper local with a wealthy Hampstead insurance brokerage middleman company, and these are the kinds of wealthy clients that will pay for a successful highly customised product.
