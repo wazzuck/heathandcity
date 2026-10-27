@@ -1,0 +1,18 @@
+{
+  "name": "hampstead-local-consulting-web",
+  "version": "1.0.0",
+  "description": "Static single-page showcase website with WebGPU and Three.js 3D visual centrepiece for Hampstead and North West London private technology consulting.",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "scripts": {
+    "serve": "python3 -m http.server 8080",
+    "test": "python3 scripts/verify_site.py"
+  },
+  "dependencies": {
+    "three": "0.170.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

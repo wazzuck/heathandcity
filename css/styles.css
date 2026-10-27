@@ -1,0 +1,1230 @@
+/**
+ * ============================================================================
+ * FILE: css/styles.css
+ * ============================================================================
+ *
+ * PURPOSE:
+ * Defines the visual design system, responsive grid layout, senior-friendly
+ * typography scale, and Three-Dimensional (3D) Web Graphics Processing Unit
+ * (WebGPU) / Web Graphics Library (WebGL) showcase framing for the Hampstead
+ * and North West (NW) London private technology consulting website.
+ *
+ * WHAT THIS FILE IS NOT FOR:
+ * - Does not rely on external Cascading Style Sheets (CSS) frameworks.
+ * - Does not obscure service descriptions behind low-contrast effects.
+ *
+ * INVARIANTS:
+ * 1. Maintains high contrast ratios meeting Web Content Accessibility
+ *    Guidelines (WCAG) AA/AAA standards for senior (60+) readers.
+ * 2. Supports two complete colour palettes: Sovereign Vault Dark (default)
+ *    and Warm Parchment Stationery ([data-theme="parchment"]).
+ * 3. Supports a one-click Large Type mode (html.large-type) scaling all rem
+ *    units proportionally.
+ * ============================================================================
+ */
+
+/* --------------------------------------------------------------------------
+ * Step 1: Define root design tokens and colour palettes.
+ * -------------------------------------------------------------------------- */
+:root {
+  --bg-primary: #090d14;
+  --bg-elevated: #101724;
+  --bg-card: rgba(18, 26, 40, 0.88);
+  --bg-card-solid: #131c2b;
+  --bg-glass: rgba(12, 18, 28, 0.82);
+
+  --text-primary: #f5f2eb;
+  --text-secondary: #c4cddb;
+  --text-muted: #8f9db2;
+
+  --accent-gold: #d4af6a;
+  --accent-gold-bright: #ecd095;
+  --accent-gold-soft: rgba(212, 175, 106, 0.16);
+  --accent-emerald: #34d399;
+  --accent-emerald-soft: rgba(52, 211, 153, 0.15);
+  --accent-amber: #fbbf24;
+  --accent-sapphire: #60a5fa;
+
+  --border-subtle: rgba(212, 175, 106, 0.22);
+  --border-strong: rgba(212, 175, 106, 0.48);
+  --shadow-card: 0 20px 48px rgba(0, 0, 0, 0.45);
+
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+  --container-max: 1260px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+}
+
+/* Step 2: Warm Parchment Stationery theme for daylight reading preference. */
+html[data-theme="parchment"] {
+  --bg-primary: #f6f2e9;
+  --bg-elevated: #ece6d8;
+  --bg-card: rgba(255, 253, 248, 0.96);
+  --bg-card-solid: #ffffff;
+  --bg-glass: rgba(246, 242, 233, 0.92);
+
+  --text-primary: #121824;
+  --text-secondary: #2c3647;
+  --text-muted: #546175;
+
+  --accent-gold: #8c651d;
+  --accent-gold-bright: #6e4d10;
+  --accent-gold-soft: rgba(140, 101, 29, 0.12);
+  --accent-emerald: #0f766e;
+  --accent-emerald-soft: rgba(15, 118, 110, 0.12);
+  --accent-amber: #b45309;
+
+  --border-subtle: rgba(18, 24, 36, 0.15);
+  --border-strong: rgba(140, 101, 29, 0.45);
+  --shadow-card: 0 14px 34px rgba(18, 24, 36, 0.08);
+}
+
+/* Step 3: Senior-friendly Large Typography scale (A+ mode). */
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+html.large-type {
+  font-size: 114%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.68;
+  font-size: 1.05rem;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* --------------------------------------------------------------------------
+ * Step 4: Utility containers, section headers, and typography primitives.
+ * -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 5.5rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.section--alt {
+  background-color: var(--bg-elevated);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+  border: 1px solid var(--border-subtle);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 3.6vw, 3.1rem);
+  font-weight: 600;
+  line-height: 1.16;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+}
+
+.section-lead {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 78ch;
+  margin: 0 0 2.5rem 0;
+}
+
+a {
+  color: var(--accent-gold-bright);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--text-primary);
+}
+
+/* --------------------------------------------------------------------------
+ * Step 5: Top navigation bar and Senior Readability Toolbar.
+ * -------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  flex-wrap: wrap;
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-monogram {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--accent-gold-soft);
+  color: var(--accent-gold);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1.15rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.brand-text__name {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.brand-text__meta {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-gold);
+}
+
+.comfort-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.utility-btn {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.42rem 0.72rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.utility-btn:hover,
+.utility-btn[aria-pressed="true"] {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+}
+
+/* --------------------------------------------------------------------------
+ * Step 6: Hero Split Layout & Interactive WebGPU / Three.js 3D Stage.
+ * -------------------------------------------------------------------------- */
+.hero-section {
+  padding: 3rem 0 4.5rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.15fr;
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.35rem, 4.1vw, 3.55rem);
+  line-height: 1.12;
+  font-weight: 600;
+  margin: 0 0 1.2rem 0;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent-gold);
+}
+
+.hero-subtitle {
+  font-size: 1.14rem;
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
+}
+
+.credibility-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  margin: 0 0 1.75rem 0;
+}
+
+.pillar-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.85rem;
+}
+
+.pillar-chip__value {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  line-height: 1.15;
+}
+
+.pillar-chip__label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 1.4rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, #d4af6a 0%, #b88b3b 100%);
+  color: #090d14;
+  box-shadow: 0 8px 24px rgba(212, 175, 106, 0.28);
+}
+
+.btn--primary:hover {
+  color: #090d14;
+  transform: translateY(-1px);
+}
+
+.btn--secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.btn--secondary:hover {
+  background: var(--accent-gold-soft);
+}
+
+.discretion-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  border-left: 3px solid var(--accent-emerald);
+  padding-left: 0.85rem;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Step 7: The Interactive 3D WebGPU / Three.js Showcase Theatre Panel.
+ * Always keeps a deep obsidian background so additive GPU shaders shine even
+ * when the page is switched to Warm Paper daylight mode.
+ * -------------------------------------------------------------------------- */
+.gpu-theatre {
+  background: radial-gradient(
+    circle at 50% 42%,
+    #162238 0%,
+    #0a0f1a 68%,
+    #060911 100%
+  );
+  color: #f5f2eb;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.gpu-theatre__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(8, 12, 20, 0.86);
+  border-bottom: 1px solid rgba(212, 175, 106, 0.24);
+  flex-wrap: wrap;
+}
+
+.gpu-status-group {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
+}
+
+.gpu-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  padding: 0.22rem 0.55rem;
+  border-radius: 4px;
+  background: rgba(212, 175, 106, 0.16);
+  color: #ecd095;
+  border: 1px solid rgba(212, 175, 106, 0.35);
+}
+
+.gpu-badge--muted {
+  background: rgba(52, 211, 153, 0.14);
+  color: #6ee7b7;
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+.gpu-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  background: rgba(10, 15, 25, 0.75);
+  border-bottom: 1px solid rgba(212, 175, 106, 0.18);
+}
+
+.scene-tab-btn {
+  background: rgba(20, 29, 46, 0.75);
+  color: #c4cddb;
+  border: 1px solid rgba(212, 175, 106, 0.22);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.65rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scene-tab-btn span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #d4af6a;
+  margin-bottom: 0.12rem;
+}
+
+.scene-tab-btn:hover,
+.scene-tab-btn.is-active {
+  background: rgba(212, 175, 106, 0.2);
+  color: #ffffff;
+  border-color: #d4af6a;
+}
+
+.gpu-viewport-wrap {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  overflow: hidden;
+}
+
+#gpu-centrepiece-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+#gpu-centrepiece-canvas:active {
+  cursor: grabbing;
+}
+
+.gpu-hud-overlay {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.85rem;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.gpu-caption-box {
+  background: rgba(8, 12, 20, 0.82);
+  border: 1px solid rgba(212, 175, 106, 0.32);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  max-width: 390px;
+  backdrop-filter: blur(8px);
+}
+
+.gpu-caption-box h2 {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  margin: 0 0 0.2rem 0;
+  color: #ecd095;
+}
+
+.gpu-caption-box p {
+  font-size: 0.8rem;
+  line-height: 1.42;
+  margin: 0;
+  color: #d7dfeb;
+}
+
+.gpu-telemetry-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: flex-end;
+}
+
+.telemetry-pill {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  background: rgba(8, 12, 20, 0.84);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  color: #a7f3d0;
+  padding: 0.22rem 0.55rem;
+  border-radius: 4px;
+}
+
+.gpu-controls-bar {
+  padding: 0.8rem 1rem;
+  background: rgba(8, 12, 20, 0.92);
+  border-top: 1px solid rgba(212, 175, 106, 0.24);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.slider-row label {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: #ecd095;
+}
+
+.slider-row input[type="range"] {
+  flex: 1;
+  min-width: 140px;
+  accent-color: #d4af6a;
+  cursor: pointer;
+}
+
+.slider-readout {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: #34d399;
+  min-width: 85px;
+  text-align: right;
+}
+
+.gpu-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.gpu-mini-btn {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f5f2eb;
+  border: 1px solid rgba(212, 175, 106, 0.35);
+  border-radius: 4px;
+  padding: 0.34rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.gpu-mini-btn:hover {
+  background: rgba(212, 175, 106, 0.24);
+}
+
+.gpu-note-line {
+  font-size: 0.76rem;
+  color: #9fb0c7;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Step 8: Quiet Digital Filing Clerk Banner (Senior Messaging Rules).
+ * -------------------------------------------------------------------------- */
+.clerk-promises {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.promise-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-top: 3px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  padding: 1.6rem;
+  box-shadow: var(--shadow-card);
+}
+
+.promise-card__num {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-gold);
+  display: block;
+  margin-bottom: 0.45rem;
+}
+
+.promise-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  margin: 0 0 0.65rem 0;
+}
+
+.promise-card p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+ * Step 9: Interactive "One Clean Daily Screen" Vertical Simulator.
+ * -------------------------------------------------------------------------- */
+.vertical-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.vertical-tab-btn {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.vertical-tab-btn.is-active,
+.vertical-tab-btn:hover {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+  color: var(--text-primary);
+}
+
+.daily-screen-frame {
+  background: var(--bg-card-solid);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+}
+
+.daily-screen__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 1.35rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.daily-screen__title {
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  margin: 0.35rem 0 0.5rem 0;
+}
+
+.daily-screen__summary {
+  margin: 0;
+  color: var(--text-secondary);
+  max-width: 72ch;
+}
+
+.daily-screen__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.screen-stat {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.2rem;
+}
+
+.screen-stat--gold {
+  border-left: 4px solid var(--accent-gold);
+}
+
+.screen-stat--emerald {
+  border-left: 4px solid var(--accent-emerald);
+}
+
+.screen-stat--amber {
+  border-left: 4px solid var(--accent-amber);
+}
+
+.screen-stat__label {
+  display: block;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.screen-stat__value {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.daily-screen__queue {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.queue-row {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.25rem;
+}
+
+.queue-row__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.queue-row__priority {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+.queue-row__timer {
+  color: var(--accent-emerald);
+}
+
+.queue-row__client {
+  font-size: 1.08rem;
+  margin: 0 0 0.2rem 0;
+}
+
+.queue-row__matter {
+  margin: 0 0 0.6rem 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.queue-row__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border-subtle);
+  font-size: 0.86rem;
+}
+
+.queue-row__status {
+  color: var(--text-secondary);
+}
+
+.queue-row__ref {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.daily-screen__guarantee {
+  margin-top: 1.4rem;
+  padding: 0.95rem 1.2rem;
+  background: var(--accent-emerald-soft);
+  border: 1px solid var(--accent-emerald);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+}
+
+/* --------------------------------------------------------------------------
+ * Step 10: High-Impact Vertical Deep-Dive Cards & Additional Practices.
+ * -------------------------------------------------------------------------- */
+.verticals-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.vertical-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.85rem;
+  box-shadow: var(--shadow-card);
+}
+
+.vertical-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  margin: 0.3rem 0 0.85rem 0;
+}
+
+.vertical-card ul {
+  padding-left: 1.2rem;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.vertical-card li {
+  margin-bottom: 0.75rem;
+}
+
+.vertical-card li strong {
+  color: var(--text-primary);
+}
+
+/* --------------------------------------------------------------------------
+ * Step 11: The 4 Specialist Roles Grid & 80/20 Architecture Diagram.
+ * -------------------------------------------------------------------------- */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.role-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.85rem;
+  box-shadow: var(--shadow-card);
+}
+
+.role-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.65rem;
+}
+
+.role-card__number {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.role-card__tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: var(--accent-gold-soft);
+  color: var(--accent-gold);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.role-card__title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  margin: 0 0 0.6rem 0;
+}
+
+.role-card__best-for {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+}
+
+.role-card__pitch {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  background: var(--bg-primary);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+.architecture-layers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.arch-layer {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.4rem;
+}
+
+.arch-layer__step {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-emerald);
+}
+
+.arch-layer h4 {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  margin: 0.35rem 0 0.5rem 0;
+}
+
+.arch-layer p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+ * Step 12: Three-Step Pricing Grid & Interactive ROI Calculator.
+ * -------------------------------------------------------------------------- */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.pricing-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-card);
+}
+
+.pricing-card--featured {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 1px var(--accent-gold), var(--shadow-card);
+}
+
+.pricing-card__step {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  margin-bottom: 0.4rem;
+}
+
+.pricing-card__title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  margin: 0 0 0.9rem 0;
+}
+
+.pricing-card__price-row {
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pricing-card__price {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  line-height: 1.1;
+}
+
+.pricing-card__duration {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.pricing-card__desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 1.2rem 0;
+}
+
+.pricing-card__list {
+  margin: auto 0 0 0;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+.pricing-card__item {
+  margin-bottom: 0.5rem;
+}
+
+.calculator-box {
+  margin-top: 3rem;
+  background: var(--bg-card-solid);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.calc-field {
+  margin-bottom: 1.15rem;
+}
+
+.calc-field label {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.calc-field select,
+.calc-field input[type="range"] {
+  width: 100%;
+}
+
+.calc-field select,
+.form-input {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+}
+
+.calc-results {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.6rem;
+}
+
+.calc-metric {
+  margin-bottom: 1.1rem;
+}
+
+.calc-metric__label {
+  display: block;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.calc-metric__value {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2.15rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+/* --------------------------------------------------------------------------
+ * Step 13: Local Hampstead Presence, Contact Form & Footer.
+ * -------------------------------------------------------------------------- */
+.postcode-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.25rem 0;
+}
+
+.postcode-pill {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.enquiry-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  font-size: 0.92rem;
+}
+
+.site-footer {
+  padding: 3rem 0;
+  background: var(--bg-elevated);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.site-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+ * Step 14: Responsive Media Queries for Tablet and Mobile Viewports.
+ * -------------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .hero-grid,
+  .calculator-box,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-grid,
+  .clerk-promises {
+    grid-template-columns: 1fr;
+  }
+
+  .architecture-layers,
+  .vertical-tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .credibility-pillars,
+  .daily-screen__stats,
+  .verticals-catalog-grid,
+  .roles-grid,
+  .architecture-layers,
+  .vertical-tabs,
+  .gpu-mode-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .gpu-viewport-wrap {
+    height: 300px;
+  }
+}
