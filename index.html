@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<!--
+==============================================================================
+FILE: index.html
+==============================================================================
+
+PURPOSE:
+Single-page static showcase website for the Hampstead and North West (NW)
+London private technology consulting practice. Combines a Three-Dimensional
+(3D) Web Graphics Processing Unit (WebGPU) and Three.js visual centrepiece
+with a clear, high-contrast presentation of services for senior principals.
+
+WHAT THIS FILE IS NOT FOR:
+- Does not require server-side rendering, databases, or login sessions.
+- Does not require SharedArrayBuffer, Cross-Origin Opener Policy (COOP), or
+  Cross-Origin Embedder Policy (COEP) HTTP headers.
+
+INVARIANTS:
+1. Compatible out-of-the-box with GitHub Pages and Cloudflare Pages.
+2. Degrades gracefully across WebGPU, Web Graphics Library (WebGL), Two-
+   Dimensional (2D) Canvas, and static reduced-motion modes.
+3. All customer-facing copy uses British English conventions.
+==============================================================================
+-->
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    Heath &amp; City Systems Advisory | Private AI, Workflow &amp; Data
+    Engineering for Hampstead (NW3) &amp; NW London
+  </title>
+  <meta
+    name="description"
+    content="Private workflow automation, sovereign document retrieval, and financial PDF normalisation for Hampstead and North West London insurance brokers, surgeons, King's Counsel, and family offices."
+  />
+
+  <!-- Step 1: Load editorial serif, humanist sans, and monospace fonts. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Step 2: Load the bespoke architectural stylesheet. -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- =======================================================================
+       Step 3: Sticky Header & Senior Readability Comfort Bar
+       ======================================================================= -->
+  <header class="site-header" role="banner">
+    <div class="container site-header__inner">
+      <a href="#top" class="brand-lockup">
+        <span class="brand-monogram" data-brand-monogram>H·C</span>
+        <span class="brand-text">
+          <span class="brand-text__name" data-brand-name>
+            Heath &amp; City Systems Advisory
+          </span>
+          <span class="brand-text__meta" data-brand-postcodes>
+            NW3 · NW6 · NW8 · NW11 · N6
+          </span>
+        </span>
+      </a>
+
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links">
+          <li><a href="#daily-screen">Live Practice Demo</a></li>
+          <li><a href="#services-by-vertical">Vertical Services</a></li>
+          <li><a href="#specialist-roles">4 Advisory Roles</a></li>
+          <li><a href="#architecture">80/20 Engine</a></li>
+          <li><a href="#pricing">Pricing &amp; ROI</a></li>
+          <li><a href="#contact">Hampstead Consultation</a></li>
+        </ul>
+      </nav>
+
+      <div class="comfort-toolbar" aria-label="Reading comfort controls">
+        <button
+          type="button"
+          id="toggle-font-size"
+          class="utility-btn"
+          aria-pressed="false"
+          title="Increase text size for comfortable reading"
+        >
+          Text Size: A / A+
+        </button>
+        <button
+          type="button"
+          id="toggle-theme-mode"
+          class="utility-btn"
+          aria-pressed="false"
+          title="Switch between Sovereign Vault Dark and Warm Paper mode"
+        >
+          Theme: Vault Dark
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- =====================================================================
+         Step 4: Hero Section with Interactive 3D WebGPU / Three.js Centrepiece
+         ===================================================================== -->
+    <section class="hero-section" aria-labelledby="hero-heading">
+      <div class="container hero-grid">
+        <!-- Left Column: Executive Positioning & Institutional Credibility -->
+        <div class="hero-copy">
+          <div class="eyebrow" data-brand-badge>
+            HAMPSTEAD NW3 · PRIVATE PRACTICE
+          </div>
+          <h1 id="hero-heading" class="hero-title">
+            A Quiet Digital Filing Clerk &amp;
+            <em>Sovereign Data Vault</em> for Established Hampstead Practices.
+          </h1>
+          <p class="hero-subtitle">
+            We engineer private document intelligence, automated inbox
+            triage, and financial PDF reconciliation for senior principals across
+            <strong>Hampstead, Belsize Park, St John's Wood, and Highgate</strong>
+            —without changing how you use Microsoft Outlook or Gmail, and with
+            <strong>zero confidential data ever leaving your control</strong>.
+          </p>
+
+          <div class="credibility-pillars" role="list">
+            <div class="pillar-chip" role="listitem">
+              <span class="pillar-chip__value">17+ Years</span>
+              <span class="pillar-chip__label">
+                City of London Ultra-Low-Latency Financial Systems
+              </span>
+            </div>
+            <div class="pillar-chip" role="listitem">
+              <span class="pillar-chip__value">100% Private</span>
+              <span class="pillar-chip__label">
+                On-Site Hampstead Hardware or Locked UK Vault
+              </span>
+            </div>
+            <div class="pillar-chip" role="listitem">
+              <span class="pillar-chip__value">NW3 Local</span>
+              <span class="pillar-chip__label">
+                Face-to-Face Trust, Setup &amp; Ongoing Retainer Care
+              </span>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn--primary">
+              Book a 14-Day Read-Only Inbox Audit (£750–£1,500)
+            </a>
+            <a href="#daily-screen" class="btn btn--secondary">
+              Explore the "One Clean Daily Screen" Demo
+            </a>
+          </div>
+
+          <p class="discretion-note">
+            <strong>Human Control Guaranteed:</strong> Our systems never send
+            an email to your clients behind your back. They organise the work,
+            extract the figures, and prepare the drafts so you and your staff
+            remain in complete command.
+          </p>
+        </div>
+
+        <!-- Right Column: Interactive WebGPU / Three.js 3D Visual Centrepiece -->
+        <div
+          class="gpu-theatre"
+          aria-label="Interactive 3D GPU Systems Visualisation"
+        >
+          <div class="gpu-theatre__topbar">
+            <div class="gpu-status-group">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span id="gpu-engine-badge" class="gpu-badge">
+                PROBING WEBGPU / THREE.JS PIPELINE...
+              </span>
+              <span id="gpu-fps-badge" class="gpu-badge gpu-badge--muted">
+                60 FPS · ZERO COOP/COEP
+              </span>
+            </div>
+            <button
+              type="button"
+              id="gpu-pause-btn"
+              class="gpu-mini-btn"
+              aria-pressed="false"
+            >
+              Pause 3D Motion
+            </button>
+          </div>
+
+          <!-- Multi-Scene Switcher Tabs -->
+          <div
+            class="gpu-mode-tabs"
+            role="group"
+            aria-label="Select 3D GPU Visualisation Scene"
+          >
+            <button
+              type="button"
+              class="scene-tab-btn is-active"
+              data-scene-mode="lattice"
+              aria-pressed="true"
+            >
+              <span>SCENE 01 · INBOX &amp; BUNDLES</span>
+              Order-from-Chaos Lattice
+            </button>
+            <button
+              type="button"
+              class="scene-tab-btn"
+              data-scene-mode="vault"
+              aria-pressed="false"
+            >
+              <span>SCENE 02 · PRIVATE ARCHIVE</span>
+              Sovereign Neural Vault
+            </button>
+            <button
+              type="button"
+              class="scene-tab-btn"
+              data-scene-mode="telemetry"
+              aria-pressed="false"
+            >
+              <span>SCENE 03 · CITY PRECISION</span>
+              Portfolio &amp; Fee Telemetry
+            </button>
+          </div>
+
+          <!-- 3D Canvas Viewport -->
+          <div class="gpu-viewport-wrap">
+            <canvas
+              id="gpu-centrepiece-canvas"
+              aria-label="Interactive 3D particle and architectural lattice simulation"
+            ></canvas>
+
+            <div class="gpu-hud-overlay">
+              <div class="gpu-caption-box">
+                <h2 id="scene-caption-title">
+                  Order from Chaos: The Autonomous Inbox Lattice
+                </h2>
+                <p id="scene-caption-subtitle">
+                  Watch unstructured emails, 2,000-page PDF bundles, and
+                  insurer remittances pass through a normalisation lens into an
+                  ordered ledger.
+                </p>
+              </div>
+              <div class="gpu-telemetry-pills">
+                <span id="telemetry-pipeline" class="telemetry-pill">
+                  ENTITY EXTRACTION &amp; STATE CHASER
+                </span>
+                <span id="telemetry-throughput" class="telemetry-pill">
+                  2,400 PAGES / MIN LOCAL OCR
+                </span>
+                <span id="telemetry-egress" class="telemetry-pill">
+                  0 BYTES EXTERNAL CLOUD EGRESS
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Simulation Controls -->
+          <div class="gpu-controls-bar">
+            <div class="slider-row">
+              <label for="order-slider">
+                SIMULATE WORKFLOW STATE (CHAOS → ORDER):
+              </label>
+              <input
+                type="range"
+                id="order-slider"
+                min="0"
+                max="100"
+                value="78"
+              />
+              <span id="order-slider-value" class="slider-readout">
+                78% Order
+              </span>
+            </div>
+            <div class="gpu-action-row">
+              <div>
+                <button
+                  type="button"
+                  id="btn-simulate-chaos"
+                  class="gpu-mini-btn"
+                >
+                  Simulate Inbox Storm (8%)
+                </button>
+                <button
+                  type="button"
+                  id="btn-simulate-order"
+                  class="gpu-mini-btn"
+                >
+                  Engage Normalisation Lens (96%)
+                </button>
+                <button
+                  type="button"
+                  id="btn-trigger-pulse"
+                  class="gpu-mini-btn"
+                >
+                  Trigger Reconciliation Pulse
+                </button>
+              </div>
+              <p id="scene-caption-note" class="gpu-note-line">
+                Move cursor over the 3D field to inspect nodes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         Step 5: Why Generic Agencies Fail & The "Quiet Digital Filing Clerk"
+         ===================================================================== -->
+    <section class="section section--alt" aria-labelledby="why-heading">
+      <div class="container">
+        <div class="eyebrow">DESIGNED FOR SENIOR PRINCIPALS</div>
+        <h2 id="why-heading" class="section-title">
+          Why Commodity Software Fails Established North West London Practices
+        </h2>
+        <p class="section-lead">
+          A Hampstead insurance broker, King's Counsel (KC), private surgeon,
+          or property principal often generates £500k–£5m+ annually with just
+          1 to 10 staff. Over 20–30 years, Microsoft Outlook, scanned PDFs, and
+          fragile Excel sheets became your database, task tracker, and filing
+          cabinet—often held together in the head of one trusted Personal
+          Assistant (PA) or medical secretary.
+        </p>
+
+        <div class="clerk-promises">
+          <article class="promise-card">
+            <span class="promise-card__num">PRINCIPLE 01 · ZERO DISRUPTION</span>
+            <h3>Keep Using Outlook &amp; Gmail Exactly as You Do Today</h3>
+            <p>
+              Nobody in your office has to learn bloated Customer Relationship
+              Management (CRM) platforms like Salesforce or Monday.com. Our
+              system works quietly in the background—reading incoming emails,
+              sorting attachments by client or matter, and presenting one clean
+              daily screen.
+            </p>
+          </article>
+
+          <article class="promise-card">
+            <span class="promise-card__num">
+              PRINCIPLE 02 · SOVEREIGN CONFIDENTIALITY
+            </span>
+            <h3>Zero Client, Patient, or Financial Data on Public Cloud AI</h3>
+            <p>
+              Solicitors Regulation Authority (SRA), Bar Standards, and
+              clinical governance rules prohibit uploading confidential files
+              to public tools. We deploy locked-down private search and
+              Optical Character Recognition (OCR) appliances right in your
+              office or a private United Kingdom (UK) vault.
+            </p>
+          </article>
+
+          <article class="promise-card">
+            <span class="promise-card__num">
+              PRINCIPLE 03 · PRACTICE CONTINUITY
+            </span>
+            <h3>Eliminate "Single-PA Fragility" Forever</h3>
+            <p>
+              If your practice manager, medical secretary, or senior PA is on
+              holiday, unwell, or retires, your firm never stalls. Institutional
+              memory is extracted out of individual inboxes into a self-
+              documenting system you can review in 10 minutes a day.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         Step 6: Interactive "One Clean Daily Screen" Simulator by Vertical
+         ===================================================================== -->
+    <section
+      id="daily-screen"
+      class="section"
+      aria-labelledby="simulator-heading"
+    >
+      <div class="container">
+        <div class="eyebrow">INTERACTIVE 5-MINUTE COFFEE DEMO</div>
+        <h2 id="simulator-heading" class="section-title">
+          Experience Your Practice's "One Clean Daily Screen"
+        </h2>
+        <p class="section-lead">
+          Select your practice type below to see how the quiet background
+          engine organises your morning into three clear answers:
+          <strong>(1) What needs a reply today</strong>,
+          <strong>(2) Who hasn't replied to you</strong>, and
+          <strong>(3) Every reconciled figure or PDF page citation in one click</strong>.
+        </p>
+
+        <div
+          class="vertical-tabs"
+          role="tablist"
+          aria-label="Practice Verticals"
+        >
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn is-active"
+            data-vertical-tab="insurance"
+            aria-selected="true"
+          >
+            A. Boutique Insurance &amp; Mortgage Brokers
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn"
+            data-vertical-tab="medical"
+            aria-selected="false"
+          >
+            B. Surgeons &amp; Medico-Legal Experts
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn"
+            data-vertical-tab="legal"
+            aria-selected="false"
+          >
+            C. King's Counsel, Arbitrators &amp; Law Partners
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn"
+            data-vertical-tab="family_office"
+            aria-selected="false"
+          >
+            D. Family Offices &amp; Multi-SPV Property
+          </button>
+        </div>
+
+        <div class="daily-screen-frame" role="tabpanel">
+          <div class="daily-screen__header">
+            <div>
+              <span id="demo-screen-badge" class="eyebrow">
+                BEACHHEAD VERTICAL · NW3 / NW6
+              </span>
+              <h3 id="demo-screen-title" class="daily-screen__title">
+                Boutique Insurance Brokers &amp; Financial Introducers
+              </h3>
+              <p id="demo-screen-summary" class="daily-screen__summary">
+                Eliminates shared-inbox chaos, missed policy renewals, and
+                manual underwriter chasing while staff continue using Outlook.
+              </p>
+            </div>
+            <div>
+              <span id="demo-screen-digest" class="gpu-badge">
+                08:00 AM Daily Principal Digest
+              </span>
+            </div>
+          </div>
+
+          <div id="demo-screen-stats" class="daily-screen__stats"></div>
+          <div id="demo-screen-queue" class="daily-screen__queue"></div>
+          <div id="demo-screen-guarantee" class="daily-screen__guarantee"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         Step 7: Complete Catalogue of Services by Vertical (Sections A - F)
+         ===================================================================== -->
+    <section
+      id="services-by-vertical"
+      class="section section--alt"
+      aria-labelledby="catalog-heading"
+    >
+      <div class="container">
+        <div class="eyebrow">BESPOKE INFORMATION SYSTEMS BY SECTOR</div>
+        <h2 id="catalog-heading" class="section-title">
+          High-Impact Solutions Across Six North West London Verticals
+        </h2>
+        <p class="section-lead">
+          Every engagement solves concrete, high-margin administrative bottlenecks
+          where generic off-the-shelf software fails.
+        </p>
+
+        <div class="verticals-catalog-grid">
+          <!-- Vertical A -->
+          <article class="vertical-card">
+            <span class="eyebrow">VERTICAL A · BROKERAGES</span>
+            <h3>Boutique Insurance Brokers &amp; Financial Introducers</h3>
+            <ul>
+              <li>
+                <strong>Automated Inbox Ingestion &amp; Triage:</strong>
+                Classifies incoming quotes, policy renewals, underwriter
+                queries, and claims across shared or individual inboxes by
+                Client, Policy, Insurer, and Urgency.
+              </li>
+              <li>
+                <strong>"Waiting on Reply" Renewal &amp; Chaser Radar:</strong>
+                Prevents high-value renewals or compliance documents from
+                slipping through the cracks when staff are busy or away.
+              </li>
+              <li>
+                <strong>One-Screen Workflow Tracker:</strong>
+                Replaces hours of internal email forwarding with an instant
+                morning view of every open policy and underwriter bottleneck.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Vertical B -->
+          <article class="vertical-card">
+            <span class="eyebrow">
+              VERTICAL B · ROYAL FREE · WELLINGTON · HARLEY ST
+            </span>
+            <h3>Senior Medical Consultants, Surgeons &amp; Medico-Legal Experts</h3>
+            <ul>
+              <li>
+                <strong>2,000-Page Medico-Legal Bundle Chronology Engine:</strong>
+                A 100% private OCR + extraction pipeline that ingests 1,000–
+                3,000 pages of scanned National Health Service (NHS) and General
+                Practitioner (GP) records, links every date, diagnosis, scan,
+                and medication to the exact PDF page number, and outputs a
+                structured Word chronology in your template—saving 10–15 hours
+                of weekend work per report.
+              </li>
+              <li>
+                <strong>Private Practice Insurer Underpayment Recovery:</strong>
+                Automatically reconciles hospital theatre lists against invoices,
+                Bupa/AXA/Vitality/embassy remittance PDFs, and bank feeds to
+                recover the 8–15% of fees routinely underpaid.
+              </li>
+              <li>
+                <strong>Dictation-to-Multi-Party Action Pipeline:</strong>
+                Turns a single post-clinic voice note into a draft GP referral
+                letter, patient summary, insurer pre-authorisation request, and
+                secretary booking ticket.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Vertical C -->
+          <article class="vertical-card">
+            <span class="eyebrow">VERTICAL C · LEGAL &amp; CHAMBERS</span>
+            <h3>Senior Lawyers, King's Counsel, Arbitrators &amp; Mediators</h3>
+            <ul>
+              <li>
+                <strong>Private "Second Brain" Precedent Appliance:</strong>
+                Uses Two-Tower neural search and hybrid keyword/vector indexing
+                on a locked-down local Linux box or dedicated private UK server
+                to search 20+ years of opinions, clauses, trust structures, and
+                skeleton arguments in seconds with zero data leaving your control.
+              </li>
+              <li>
+                <strong>Financial Disclosure &amp; Bundle Discrepancy Detection:</strong>
+                Normalises hundreds of PDF bank statements and company accounts
+                in high-net-worth matrimonial and commercial litigation,
+                flagging missing date ranges, hidden transfers, and conflicting
+                figures automatically.
+              </li>
+              <li>
+                <strong>Know Your Customer (KYC) &amp; Anti-Money Laundering (AML) Chaser:</strong>
+                Secure document intake and expiry tracking for passports, trust
+                deeds, and source-of-wealth declarations.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Vertical D -->
+          <article class="vertical-card">
+            <span class="eyebrow">VERTICAL D · WEALTH &amp; PROPERTY</span>
+            <h3>Family Offices, Financiers &amp; Multi-SPV Property Principals</h3>
+            <ul>
+              <li>
+                <strong>Multi-Bank &amp; Private Fund PDF Aggregation:</strong>
+                Applies City market-data extraction to read unstructured PDF
+                capital calls, Net Asset Value (NAV) statements, and tax packs
+                from Coutts, UBS, Julius Baer, Goldman, and private syndicates—
+                validating figures and populating your master Excel workbook.
+              </li>
+              <li>
+                <strong>Property Portfolio "Silent Loss" &amp; Compliance Radar:</strong>
+                Reads managing agent statements, leases, and bank feeds across
+                dozens of Special Purpose Vehicle (SPV) properties, alerting you
+                90/60/30 days before rent review windows, lease breaks, insurance
+                renewals, or Gas Safety, Electrical Installation Condition
+                Report (EICR), and Energy Performance Certificate (EPC) deadlines.
+              </li>
+              <li>
+                <strong>Block &amp; Property Management Inbox Triage:</strong>
+                Organises leaseholder repair requests, contractor quotes, and
+                service charge queries arriving via email and WhatsApp.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Vertical E -->
+          <article class="vertical-card">
+            <span class="eyebrow">VERTICAL E · SPECIALIST PRACTICES</span>
+            <h3>Surveyors, Boutique Accountants &amp; Allied Health Clinics</h3>
+            <ul>
+              <li>
+                <strong>Chartered &amp; Party Wall Surveyors / Planning Consultants:</strong>
+                Automated tracking of Camden and Hampstead Garden Suburb
+                conservation correspondence, neighbour notices, awards, and
+                architectural PDF drawings.
+              </li>
+              <li>
+                <strong>Boutique Accountancy &amp; Tax Practices:</strong>
+                Automated chasing and classification of client tax return
+                schedules, His Majesty's Revenue and Customs (HMRC) letters,
+                and Companies House filing deadlines.
+              </li>
+              <li>
+                <strong>Private Allied Health Clinics (Physio, Occupational Therapy, Private GP):</strong>
+                Streamlined patient intake, referral letter generation, and
+                insurer fee reconciliation.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Vertical F -->
+          <article class="vertical-card">
+            <span class="eyebrow">VERTICAL F · UNIVERSAL INFRASTRUCTURE</span>
+            <h3>Solving "The Single-PA Fragility" &amp; Legacy IT Headaches</h3>
+            <ul>
+              <li>
+                <strong>Institutional Memory Extraction:</strong>
+                Protects practices where operations live inside the inbox of one
+                trusted PA or office manager approaching retirement—documenting
+                workflows, task statuses, and unpaid invoices automatically.
+              </li>
+              <li>
+                <strong>Immediate Local Technical Rescue (<span data-brand-support-label>itoldyouso.tech</span>):</strong>
+                When Outlook freezes, shared drives fail, Wi-Fi drops, or a
+                phishing scare occurs, our sister local support practice steps
+                in on-site in NW London with immediate warmth and competence.
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         Step 8: The 4 High-Status Advisory Roles & 80/20 Reusable Core Engine
+         ===================================================================== -->
+    <section
+      id="specialist-roles"
+      class="section"
+      aria-labelledby="roles-heading"
+    >
+      <div class="container">
+        <div class="eyebrow">INSTITUTIONAL CREDIBILITY · LOCAL PRESENCE</div>
+        <h2 id="roles-heading" class="section-title">
+          Four Specialist Engagement Roles
+        </h2>
+        <p class="section-lead">
+          We do not operate as a generic remote agency or junior freelancer.
+          Every system is architected personally by a Hampstead-based engineer
+          with 17+ years building mission-critical financial market data
+          infrastructure in the City of London.
+        </p>
+
+        <!-- Dynamically populated from SPECIALIST_ROLES in js/config.js -->
+        <div id="specialist-roles-grid" class="roles-grid"></div>
+
+        <!-- 80/20 Reusable Core Engine Breakdown -->
+        <div id="architecture" style="margin-top: 4.5rem;">
+          <div class="eyebrow">RELIABLE PRODUCTISED ENGINEERING</div>
+          <h3 class="section-title" style="font-size: 2.2rem;">
+            The 80/20 Reusable Core Architecture
+          </h3>
+          <p class="section-lead">
+            Building software from scratch for every firm causes scope creep.
+            We combine an <strong>80% battle-tested core engine</strong> with a
+            <strong>20% bespoke layer</strong> tailored to your exact templates,
+            insurers, banks, or court bundles.
+          </p>
+
+          <div class="architecture-layers">
+            <div class="arch-layer">
+              <span class="arch-layer__step">LAYER 01 · SAFE INGESTION</span>
+              <h4>Read-Only Connectors</h4>
+              <p>
+                Non-intrusive connectors for Microsoft 365 (Outlook), Google
+                Workspace, and local PDF folders—zero risk to live email.
+              </p>
+            </div>
+            <div class="arch-layer">
+              <span class="arch-layer__step">
+                LAYER 02 · PRIVATE INTELLIGENCE
+              </span>
+              <h4>Local OCR &amp; Neural Extraction</h4>
+              <p>
+                Two-Tower retrieval, Low-Rank Adaptation (LoRA) fine-tuned
+                models, and deterministic parsers outputting verified JSON
+                records with exact page citations.
+              </p>
+            </div>
+            <div class="arch-layer">
+              <span class="arch-layer__step">LAYER 03 · STATE &amp; CHASER</span>
+              <h4>Deadline &amp; Reply Radar</h4>
+              <p>
+                Tracks open matters, statutory compliance horizons, and
+                "Waiting on Third-Party Reply" timers automatically.
+              </p>
+            </div>
+            <div class="arch-layer">
+              <span class="arch-layer__step">LAYER 04 · SENIOR-FRIENDLY UI</span>
+              <h4>Clutter-Free Daily Screen</h4>
+              <p>
+                High-contrast, large-typography dashboard plus an optional
+                8:00 AM Automated Daily Digest Email summarising top priorities.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         Step 9: Three-Step Pricing Architecture & Interactive ROI Calculator
+         ===================================================================== -->
+    <section
+      id="pricing"
+      class="section section--alt"
+      aria-labelledby="pricing-heading"
+    >
+      <div class="container">
+        <div class="eyebrow">TRANSPARENT COMMERCIAL STRUCTURE</div>
+        <h2 id="pricing-heading" class="section-title">
+          Three-Step Engagement &amp; Pricing Architecture
+        </h2>
+        <p class="section-lead">
+          Start with a low-risk, fixed-fee read-only prototype using a sample
+          of your own historical documents before committing to full deployment.
+        </p>
+
+        <!-- Dynamically populated from PRICING_STEPS in js/config.js -->
+        <div id="pricing-steps-grid" class="pricing-grid"></div>
+
+        <!-- Interactive Practice Time & Revenue Recovery Calculator -->
+        <div
+          class="calculator-box"
+          aria-labelledby="calculator-heading"
+        >
+          <div>
+            <span class="eyebrow">RETURN ON INVESTMENT ESTIMATOR</span>
+            <h3
+              id="calculator-heading"
+              class="section-title"
+              style="font-size: 1.9rem;"
+            >
+              Estimate Your Practice's Annual Time &amp; Fee Recovery
+            </h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.4rem;">
+              Adjust the sliders below to model the conservative impact of
+              automated document extraction, fee reconciliation, and renewal
+              protection for your practice.
+            </p>
+
+            <div class="calc-field">
+              <label for="calc-vertical">Select Practice Vertical:</label>
+              <select id="calc-vertical">
+                <option value="insurance">
+                  Boutique Insurance / Mortgage Brokerage
+                </option>
+                <option value="medical">
+                  Senior Medical Consultant / Medico-Legal Practice
+                </option>
+                <option value="legal">
+                  King's Counsel / Arbitrator / Boutique Law Partner
+                </option>
+                <option value="family_office">
+                  Family Office / Multi-SPV Property Principal
+                </option>
+              </select>
+            </div>
+
+            <div class="calc-field">
+              <label for="calc-hours">
+                <span>Weekly Hours Lost to Bundles, PDFs &amp; Inbox Chasing:</span>
+                <span id="calc-hours-display">12 hrs / week</span>
+              </label>
+              <input
+                type="range"
+                id="calc-hours"
+                min="4"
+                max="35"
+                step="1"
+                value="12"
+              />
+            </div>
+
+            <div class="calc-field">
+              <label for="calc-revenue">
+                <span>Annual Practice / Portfolio Volume:</span>
+                <span id="calc-revenue-display">£1.5m / yr</span>
+              </label>
+              <input
+                type="range"
+                id="calc-revenue"
+                min="0.5"
+                max="10.0"
+                step="0.5"
+                value="1.5"
+              />
+            </div>
+          </div>
+
+          <div class="calc-results" aria-live="polite">
+            <div class="calc-metric">
+              <span class="calc-metric__label">
+                ESTIMATED SENIOR / PA TIME RECLAIMED
+              </span>
+              <strong id="calc-result-hours" class="calc-metric__value">
+                415 hrs / year
+              </strong>
+            </div>
+            <div class="calc-metric">
+              <span class="calc-metric__label">
+                ESTIMATED ANNUAL TIME VALUE &amp; FEE PROTECTION
+              </span>
+              <strong id="calc-result-value" class="calc-metric__value">
+                £103,000 / year
+              </strong>
+            </div>
+            <p
+              id="calc-result-note"
+              style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         Step 10: Hyper-Local Hampstead Contact & Step 1 Audit Booking
+         ===================================================================== -->
+    <section
+      id="contact"
+      class="section"
+      aria-labelledby="contact-heading"
+    >
+      <div class="container contact-grid">
+        <div>
+          <div class="eyebrow">HAMPSTEAD &amp; NORTH WEST LONDON</div>
+          <h2 id="contact-heading" class="section-title">
+            Arrange a Discreet Local Coffee or On-Site Audit
+          </h2>
+          <p class="section-lead" style="margin-bottom: 1.25rem;">
+            Senior principals rightly ignore cold offshore emails. Based in
+            <strong>Hampstead (NW3)</strong>, I meet clients face-to-face at
+            their chambers, clinic, office, or over coffee on Heath Street,
+            Haverstock Hill, or St John's Wood High Street—carrying a live,
+            sanitised demonstration system on an iPad/laptop that you can inspect
+            in five minutes.
+          </p>
+
+          <div id="neighbourhood-pills" class="postcode-pills"></div>
+
+          <div
+            style="
+              background: var(--bg-card);
+              border: 1px solid var(--border-subtle);
+              border-radius: var(--radius-md);
+              padding: 1.4rem;
+              margin-top: 1.5rem;
+            "
+          >
+            <h3
+              style="
+                font-family: var(--font-serif);
+                font-size: 1.35rem;
+                margin: 0 0 0.5rem 0;
+              "
+            >
+              Direct Principal Contact (Provisional Brand — TBC)
+            </h3>
+            <p style="margin: 0.3rem 0;">
+              <strong>Base:</strong>
+              <span data-brand-location>
+                Hampstead Village, London NW3 (On-Site Visits by Appointment)
+              </span>
+            </p>
+            <p style="margin: 0.3rem 0;">
+              <strong>Email:</strong>
+              <a href="mailto:principal@heathandcity.co.uk" data-brand-email-link>
+                <span data-brand-email>principal@heathandcity.co.uk</span>
+              </a>
+            </p>
+            <p style="margin: 0.3rem 0;">
+              <strong>Telephone:</strong>
+              <a href="tel:+442079460921" data-brand-phone-link>
+                <span data-brand-phone>020 7946 0921</span>
+              </a>
+            </p>
+            <p style="margin: 0.7rem 0 0 0; font-size: 0.9rem; color: var(--text-muted);">
+              Need immediate help with a frozen Outlook inbox, office Wi-Fi, or
+              hardware fault today? Visit our local technical support desk at
+              <a
+                href="https://itoldyouso.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-brand-support-link
+              >
+                <span data-brand-support-label>itoldyouso.tech</span>
+              </a>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Zero-Cloud Local Consultation Builder Form -->
+        <form id="audit-enquiry-form" class="enquiry-form">
+          <h3
+            style="
+              font-family: var(--font-serif);
+              font-size: 1.6rem;
+              margin: 0 0 0.4rem 0;
+            "
+          >
+            Request a 5-Minute Live Demo or Step 1 Audit
+          </h3>
+          <p
+            style="
+              font-size: 0.9rem;
+              color: var(--text-secondary);
+              margin: 0 0 1.25rem 0;
+            "
+          >
+            This form runs 100% locally in your browser—nothing is sent to a
+            third-party server. It prepares a private message in your own email
+            client or copies it to your clipboard.
+          </p>
+
+          <div class="form-group">
+            <label for="enquiry-name">Your Name &amp; Title</label>
+            <input
+              type="text"
+              id="enquiry-name"
+              class="form-input"
+              placeholder="e.g. Mr R. Cohen KC / Mr S. Patel FRCS"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="enquiry-practice">Practice, Chambers, or Firm</label>
+            <input
+              type="text"
+              id="enquiry-practice"
+              class="form-input"
+              placeholder="e.g. Heathside Insurance / Harley Street Practice"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="enquiry-postcode">Postcode Area</label>
+            <select id="enquiry-postcode" class="form-input">
+              <option value="NW3 (Hampstead / Belsize Park / Swiss Cottage)">
+                NW3 — Hampstead / Belsize Park / Swiss Cottage
+              </option>
+              <option value="NW8 (St John's Wood)">
+                NW8 — St John's Wood
+              </option>
+              <option value="NW6 (West Hampstead / Kilburn)">
+                NW6 — West Hampstead
+              </option>
+              <option value="NW11 (Hampstead Garden Suburb / Golders Green)">
+                NW11 — Hampstead Garden Suburb / Golders Green
+              </option>
+              <option value="N6 (Highgate)">
+                N6 — Highgate
+              </option>
+              <option value="W1 / WC2 / EC2 (Harley St / Inns of Court / City)">
+                W1 / WC2 / EC2 — Harley Street / Chambers / City
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="enquiry-bottleneck">Primary Bottleneck or Interest</label>
+            <select id="enquiry-bottleneck" class="form-input">
+              <option value="Step 1: 14-Day Read-Only Inbox & Workflow Audit (£750–£1,500)">
+                Step 1: 14-Day Read-Only Inbox &amp; Workflow Audit (£750–£1,500)
+              </option>
+              <option value="Medico-Legal 2,000-Page Bundle Chronology & Insurer Reconciliation">
+                Medico-Legal Bundle Chronology &amp; Insurer Fee Recovery
+              </option>
+              <option value="Private 'Second Brain' 20-Year Precedent Search Appliance">
+                Private "Second Brain" 20-Year Precedent Search Appliance
+              </option>
+              <option value="Multi-Bank PDF Aggregation & SPV Property Compliance Radar">
+                Multi-Bank PDF Aggregation &amp; SPV Property Compliance Radar
+              </option>
+              <option value="5-Minute Live Coffee Demo in Hampstead">
+                5-Minute Live Coffee Demo in Hampstead
+              </option>
+            </select>
+          </div>
+
+          <div class="hero-actions" style="margin-top: 1.4rem; margin-bottom: 0.6rem;">
+            <button type="submit" class="btn btn--primary">
+              Prepare Private Email Enquiry
+            </button>
+            <button
+              type="button"
+              id="copy-enquiry-btn"
+              class="btn btn--secondary"
+            >
+              Copy Brief to Clipboard
+            </button>
+          </div>
+
+          <p
+            id="enquiry-status-message"
+            aria-live="polite"
+            style="font-size: 0.86rem; color: var(--accent-emerald); margin: 0;"
+          ></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- =======================================================================
+       Step 11: Footer with Portable GitHub Pages / Cloudflare Compliance Note
+       ======================================================================= -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container site-footer__inner">
+      <div>
+        <strong data-brand-name>Heath &amp; City Systems Advisory</strong>
+        <span> · </span>
+        <span data-brand-tagline>
+          City-Grade Engineering &amp; Private Systems for Hampstead Practices
+        </span>
+        <div style="margin-top: 0.3rem;">
+          Serving <span data-brand-postcodes>NW3 · NW6 · NW8 · NW11 · N6</span> ·
+          Sister immediate support service:
+          <a
+            href="https://itoldyouso.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-brand-support-link
+          >
+            <span data-brand-support-label>itoldyouso.tech</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <span>
+          Static Sovereign Architecture · WebGPU &amp; Three.js Accelerated ·
+          Zero External Tracking
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Step 12: Boot the ES Module Application Controller -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
