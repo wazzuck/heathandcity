@@ -50,7 +50,7 @@ export const SITE_CONFIG = Object.freeze({
     "Hampstead Garden Suburb (NW11)",
     "Golders Green (NW11)"
   ],
-  contactEmail: "principal@heathandcity.co.uk",
+  contactEmail: "contactus@heathandcity.com",
   contactPhoneDisplay: "020 7946 0921",
   contactPhoneHref: "+442079460921",
   officeLocation: "Hampstead Village, London NW3 (On-Site Visits by Appointment)",
