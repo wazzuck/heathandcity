@@ -1,0 +1,125 @@
+/*******************************************************/
+/*                 Cookie Policy Banner                */
+/*******************************************************/
+#cookiepolicy {
+  background: #585858;
+  padding: 1.5em 1em;
+  color: #ffffff;
+  display: none;
+  position: relative;
+  z-index: 10;
+  line-height: 1.5;
+}
+#cookie-message {
+  padding-right: 55px;
+  max-width: 42em;
+  text-align: left;
+  margin-left: 20em;
+  font-size: 1em;
+  line-height: 1.5em;
+}
+#cookie-message h2 {
+  font-size: 1.5em;
+  margin: 0;
+}
+#cookie-message p {
+  margin: 2em 0;
+}
+#cookiepolicy p a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+.cookie-button {
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  margin-right: 1em;
+  cursor: pointer;
+  font-size: 1em;
+  color: #151515 !important;
+  background: #ffffff;
+  border: none;
+  line-height: 1;
+  padding: 12px 8px;
+  outline: none;
+  font-family: "Lato", sans-serif;
+}
+.cookie-button:hover,
+.cookie-button:active,
+.cookie-button:focus {
+  background: white;
+  color: #585858;
+  box-shadow: 0 0 0 2px white;
+  text-decoration: none;
+}
+#cookiepolicy p a:hover,
+#cookiepolicy p a:active,
+#cookiepolicy p a:focus {
+  background: white;
+  color: #585858;
+  box-shadow: 0 0 0 2px white;
+  text-decoration: none;
+}
+
+/*******************************************************/
+/*                 Cookie Settings Page                */
+/*******************************************************/
+#cookie-settings a {
+  display: inline-block;
+  margin: 1em 0;
+}
+#cookie-settings table {
+  max-width: 40em;
+}
+#cookie-settings th,
+#cookie-settings td {
+  border: 1px solid #a7a7a7;
+  padding: 0.5em;
+}
+#cookie-settings th {
+  font-weight: bold;
+  background: #f9f9f9;
+  color: #555555;
+}
+#cookie-settings td:nth-of-type(1) {
+  width: 20%;
+}
+#cookie-settings td:nth-of-type(2) {
+  width: 60%;
+}
+#cookie-settings td:nth-of-type(3) {
+  width: 20%;
+}
+#cookie-alert {
+  outline: none;
+}
+
+/*******************************************************/
+/*                    Media Queries                    */
+/*******************************************************/
+@media only screen and (max-width: 1380px) {
+  #cookiepolicy {
+    font-size: 1em;
+  }
+}
+@media only screen and (max-width: 1150px) {
+  #cookie-message {
+    padding-right: 0;
+    margin-left: 1em;
+  }
+}
+@media only screen and (max-width: 750px) {
+  #cookie-message {
+    font-size: 0.9em;
+  }
+}
+@media only screen and (max-width: 550px) {
+  #cookie-message {
+    font-size: 0.8em;
+  }
+}
+@media only screen and (max-width: 470px) {
+  #cookie-message {
+    font-size: 0.7em;
+  }
+}

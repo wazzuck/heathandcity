@@ -1,0 +1,205 @@
+/**
+ * Theme Name: NHS England Child Theme
+ * Author: Silicon Practice
+ * Template:   nhsuk-frontend-theme
+ * Version: 1.1.2 NHS England
+ * Description: Foundation by Silicon Practice.
+ */
+
+:root {
+  /* Core colour palette */
+  --blue:	#005eb8;
+  --dark-blue:	#003d78;
+  --green: #007f3b;
+  --yellow: #ffeb3b;
+  --warm-yellow: #ffb81C;
+  --red: #d5281b;
+  --dark-pink: #7C2855;
+  --purple: #330072;
+  --black: #212b32;
+  --grey-1: #4c6272;
+  --grey-2: #768692;
+  --grey-3: #aeb7bd;
+  --grey-4: #d8dde0;
+  --grey-5: #f0f4f5;
+  --white: #ffffff;
+  --pale-yellow: #fff9c4;
+
+  /* Text */
+  --text: #000000;
+  --secondary-text: var(--grey-1);
+
+  /* Links */
+  --link-color: var(--blue);
+  --link-hover-color: var(--dark-pink);
+  --link-visited-color: var(--purple);
+  --link-active-color: var(--dark-blue);
+
+  /* Focus state */
+  --focus-color: 	var(--yellow);
+  --focus-text-color: var(--black);
+
+  /* Border */
+  --border-color: var(--grey-4);
+  --form-border-color: var(--grey-1);
+
+  /* Error state */
+  --error-color: var(--red);
+
+  /* Button */
+  --button-color: var(--green);
+  --button-secondary-color: var(--grey-1);
+
+  /* Page background color */
+  --background-colour: var(--grey-5);
+}
+
+/* Links */
+a {
+  color:var(--link-color);
+}
+
+/* Header Dark */
+.nhsuk-header {
+  background-color:var(--wp--preset--color--primary)!important;
+}
+.nhsuk-search__submit  {
+  background-color:var(--grey-5);
+}
+.nhsuk-search__submit:hover  {
+  background-color:var(--wp--preset--color--primary-hover);
+}
+.nhsuk-icon__search {
+    fill: var(--wp--preset--color--primary);
+}
+
+/* Header White */
+.nhsuk-header.nhsuk-header--white {
+  background-color:var(--white)!important;
+}
+.nhsuk-header--white .nhsuk-organisation-descriptor {
+  color: var(--wp--preset--color--primary)!important;
+}
+.nhsuk-header--white a:active .nhsuk-organisation-descriptor,
+.nhsuk-header--white a:focus .nhsuk-organisation-descriptor,
+.nhsuk-header--white a:hover .nhsuk-organisation-descriptor
+{
+  color: black!important;
+}
+
+.nhsuk-header--white .nhsuk-search__submit  {
+  background-color:var(--wp--preset--color--primary)!important;
+}
+.nhsuk-header--white .nhsuk-search__submit:hover  {
+  background-color:var(--wp--preset--color--primary-hover)!important;
+  border-color:var(--wp--preset--color--primary-hover)!important;
+}
+.nhsuk-header--white .nhsuk-search__submit:focus  {
+  background-color:var(--wp--preset--color--yellow)!important;
+  box-shadow: 0 -2px var(--wp--preset--color--yellow), 0 4px var(--wp--preset--color--black)!important;
+}
+.nhsuk-header__navigation, .nhsuk-navigation-container {
+  background-color:var(--wp--preset--color--primary)!important;
+}
+/* Logo */
+.nhsuk-header--white .nhsuk-logo .nhsuk-logo__background {
+
+}
+
+/* Footer */
+.nhsuk-footer {
+border-color: var(--wp--preset--color--primary);
+}
+
+/* Action link */
+.nhsuk-action-link__link {
+
+}
+
+/* Inset text */
+.nhsuk-inset-text {
+    border-color: var(--wp--preset--color--primary)!important;
+}
+
+/* Signage */
+.wp-block-nhsuk-signage li a {
+  background-color:var(--wp--preset--color--primary)!important;
+  color:var(--white)!important;
+}
+.app-list-signage li a:hover {
+  background-color:var(--wp--preset--color--primary-hover)!important;
+}
+.app-list-signage li a:focus {
+  background-color:var(--focus-color)!important;
+  color:var(--black)!important;
+}
+
+/* Card Group Primary*/
+.card-group-primary .nhsuk-card{
+  background-color:var(--wp--preset--color--primary)!important;
+}
+.card-group-primary .nhsuk-card__heading, .card-group-primary .nhsuk-card__heading a {
+   color:var(--white)!important;
+}
+.card-group-primary .nhsuk-card__heading a:focus {
+   color:var(--black)!important;
+}
+.card-group-primary .nhsuk-card__description {
+   color:var(--white)!important;
+}
+.card-group-primary .nhsuk-card--clickable {
+    border-bottom-width: 1px;
+}
+
+/* Card Group Secondary*/
+.card-group-secondary .nhsuk-card{
+  background-color:var(--wp--preset--color--secondary)!important;
+}
+.card-group-secondary .nhsuk-card__heading, .card-group-secondary .nhsuk-card__heading a {
+   color:var(--white)!important;
+}
+.card-group-secondary .nhsuk-card__heading a:focus {
+   color:var(--black)!important;
+}
+.card-group-secondary .nhsuk-card__description {
+   color:var(--white)!important;
+}
+.card-group-secondary .nhsuk-card--clickable {
+    border-bottom-width: 1px;
+}
+
+/* Card Background Colour */
+.nhsuk-card .card-secondary, .card-secondary .nhsuk-card  {
+  background-color:var(--wp--preset--color--secondary)!important;
+}
+.nhsuk-card .card-red, .card-red .nhsuk-card  {
+  background-color:var(--red)!important;
+  height: 100%;
+}
+.nhsuk-card .card-green, .card-green .nhsuk-card   {
+  background-color:var(--green)!important;
+  height: 100%;
+}
+.nhsuk-card .card-purple, .card-purple .nhsuk-card  {
+  background-color:var(--purple)!important;
+  height: 100%;
+}
+/* Hero */
+.nhsuk-hero-content {
+  background-color:var(--wp--preset--color--primary)!important;
+}
+.nhsuk-hero--image-description .nhsuk-hero-content .nhsuk-hero__arrow:before, .nhsuk-hero--image-description .nhsuk-hero-content .nhsuk-hero__arrow:after {
+  border-color:var(--wp--preset--color--primary)!important;
+}
+
+/* Color Helpers */
+.background-color-primary {
+  background-color: var(--wp--preset--color--primary);
+}
+.text-white{
+  color: var(--white)
+} 
+
+.transaction-header-border {
+  border-top: 4px solid var(--wp--preset--color--primary)!important;
+}
