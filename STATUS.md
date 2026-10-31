@@ -30,6 +30,12 @@
    (`clients/southgatesurgery/`) following the Silicon Practice provider
    collapse, covering all clinical rosters, opening hours, patient care
    pathways, and National Health Service (NHS) Design System assets.
+9. Authored the comprehensive NHS client acquisition, legal, UK GDPR, Caldicott
+   Principles, DSPT, and DTAC compliance guide in
+   `docs/NHS_CLIENT_ACQUISITION_AND_COMPLIANCE_GUIDE.md`.
+10. Compiled The Southgate Surgery leadership, ownership, and stakeholder
+    contact intelligence dossier in
+    `clients/southgatesurgery/PRACTICE_STAKEHOLDER_AND_CONTACT_DOSSIER.md`.
 
 ---
 
