@@ -23,15 +23,15 @@
    and verified all checks via `scripts/verify_site.py`.
 6. Configured production domain `heathandcity.com` (`CNAME`), synchronised
    repository remotes to `wazzuck/heathandcity`, and updated package metadata.
+7. Configured Spaceship Domain Name System (DNS) apex A records and www CNAME
+   record; confirmed live HTTPS serving on `https://heathandcity.com`.
 
 ---
 
 ## 2. Next
 
-1. Configure Spaceship Domain Name System (DNS) apex A records and www CNAME
-   record.
-2. Enable GitHub Pages on `main` branch with custom domain `heathandcity.com`
-   and enforce Hypertext Transfer Protocol Secure (HTTPS).
+1. Allow GitHub to finish issuing the multi-domain certificate expansion for
+   `www.heathandcity.com` (automated background job).
 
 ---
 
