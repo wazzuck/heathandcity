@@ -25,6 +25,11 @@
    repository remotes to `wazzuck/heathandcity`, and updated package metadata.
 7. Configured Spaceship Domain Name System (DNS) apex A records and www CNAME
    record; confirmed live HTTPS serving on `https://heathandcity.com`.
+8. Constructed a complete 63-page offline-first restoration mock-up and
+   cold-calling acquisition playbook for The Southgate Surgery
+   (`clients/southgatesurgery/`) following the Silicon Practice provider
+   collapse, covering all clinical rosters, opening hours, patient care
+   pathways, and National Health Service (NHS) Design System assets.
 
 ---
 
