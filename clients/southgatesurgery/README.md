@@ -70,19 +70,18 @@
 
 ---
 
-## 4. Local Preview and Demonstration Instructions
+## 4. Local and Remote Demonstration Instructions
 
 To inspect and demonstrate this mock-up during a client acquisition call:
 
-1. Open a terminal in this directory:
+1. Launch the server listening remotely across network interfaces on port 8085:
    ```bash
-   cd clients/southgatesurgery
+   python3 scripts/serve_southgate.py
    ```
-2. Launch a local Hypertext Transfer Protocol (HTTP) server:
-   ```bash
-   python3 -m http.server 8080
-   ```
-3. Open `http://localhost:8080` in any modern web browser.
+2. For local review on the host machine:
+   - Open `http://localhost:8085/`
+3. For remote review across the local network / Wi-Fi or forwarded gateway:
+   - Open `http://192.168.0.13:8085/`
 4. Alternatively, double-click `index.html` to inspect directly via the local
    file system.
 
