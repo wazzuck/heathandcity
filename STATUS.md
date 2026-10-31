@@ -21,18 +21,20 @@
    and Warm Paper theme).
 5. Recorded architecture and legal/licence compliance in `docs/ARCHITECTURE.md`
    and verified all checks via `scripts/verify_site.py`.
+6. Configured production domain `heathandcity.com` (`CNAME`), synchronised
+   repository remotes to `wazzuck/heathandcity`, and updated package metadata.
 
 ---
 
 ## 2. Next
 
-1. Replace the provisional To Be Confirmed (TBC) brand identity (`Heath & City
-   Systems Advisory`) and placeholder contact details in `js/config.js` once
-   the final trading name is chosen.
-2. Enable GitHub Pages on the `main` branch in repository settings.
+1. Configure Spaceship Domain Name System (DNS) apex A records and www CNAME
+   record.
+2. Enable GitHub Pages on `main` branch with custom domain `heathandcity.com`
+   and enforce Hypertext Transfer Protocol Secure (HTTPS).
 
 ---
 
 ## 3. Blocked
 
-1. Final practice brand name and domain selection (currently TBC by operator).
+1. None.
