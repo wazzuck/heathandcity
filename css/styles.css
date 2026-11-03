@@ -589,46 +589,130 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------
- * Step 8: Quiet Digital Filing Clerk Banner (Senior Messaging Rules).
+ * Step 8: Principal Section — Why Commodity Computer Systems Fail.
+ * Features hero-scale serif typography and colourised emphasis.
  * -------------------------------------------------------------------------- */
 #senior-principals {
-  padding-top: 1.75rem;
-  padding-bottom: 3.75rem;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.principal-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.35rem, 4.3vw, 3.75rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 0 0 1.25rem 0;
+  color: var(--text-primary);
+}
+
+.principal-title em {
+  font-style: italic;
+  color: var(--accent-gold);
+}
+
+.principal-lead {
+  font-size: 1.22rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 82ch;
+  margin: 0 0 2.25rem 0;
+}
+
+.principal-lead strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.principal-lead em {
+  font-style: italic;
+  color: var(--accent-gold);
 }
 
 .clerk-promises {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .promise-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-top: 3px solid var(--accent-gold);
+  border-top: 4px solid var(--accent-gold);
   border-radius: var(--radius-md);
-  padding: 1.6rem;
+  padding: 1.85rem 1.65rem;
   box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.promise-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(18, 24, 36, 0.12);
+}
+
+.promise-card--security {
+  border-top-color: var(--accent-emerald);
+}
+
+.promise-card--continuity {
+  border-top-color: var(--accent-amber);
 }
 
 .promise-card__num {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--accent-gold);
-  display: block;
-  margin-bottom: 0.45rem;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.promise-card--security .promise-card__num {
+  color: var(--accent-emerald);
+}
+
+.promise-card--continuity .promise-card__num {
+  color: var(--accent-amber);
 }
 
 .promise-card h3 {
   font-family: var(--font-serif);
-  font-size: 1.45rem;
-  margin: 0 0 0.65rem 0;
+  font-size: 1.55rem;
+  line-height: 1.25;
+  margin: 0 0 0.85rem 0;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.promise-card h3 em {
+  font-style: italic;
+  color: var(--accent-gold);
+}
+
+.promise-card--security h3 em {
+  color: var(--accent-emerald);
+}
+
+.promise-card--continuity h3 em {
+  color: var(--accent-amber);
 }
 
 .promise-card p {
   margin: 0;
   color: var(--text-secondary);
+  font-size: 1.02rem;
+  line-height: 1.62;
+}
+
+.promise-card p strong {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------
