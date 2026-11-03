@@ -632,6 +632,27 @@ a:hover {
   color: var(--accent-gold);
 }
 
+.principles-masthead {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 2rem;
+}
+
+.principles-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.85rem, 2.8vw, 2.45rem);
+  line-height: 1.2;
+  font-weight: 700;
+  margin: 0.5rem 0 0 0;
+  color: var(--text-primary);
+}
+
+.principles-title em {
+  font-style: italic;
+  color: var(--accent-gold);
+}
+
 .clerk-promises {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
