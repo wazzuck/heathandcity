@@ -331,74 +331,6 @@ function activateSceneModeUI(modeId, gpuController) {
   }
 }
 
-/**
- * Step 7: Initialise the Senior Readability & Comfort controls (Large Type
- * A/A+ toggle and High-Contrast Warm Parchment / Sovereign Vault Dark toggle).
- */
-function initReadabilityControls() {
-  const fontBtn = document.getElementById("toggle-font-size");
-  const themeBtn = document.getElementById("toggle-theme-mode");
-
-  // 1. Restore saved preferences from localStorage if available.
-  try {
-    if (localStorage.getItem("hc_large_type") === "1") {
-      document.documentElement.classList.add("large-type");
-      if (fontBtn) fontBtn.setAttribute("aria-pressed", "true");
-    }
-    const savedTheme = localStorage.getItem("hc_theme");
-    if (savedTheme === "vault") {
-      document.documentElement.removeAttribute("data-theme");
-      if (themeBtn) {
-        themeBtn.setAttribute("aria-pressed", "false");
-        themeBtn.textContent = "Theme: Vault Dark";
-      }
-    } else {
-      document.documentElement.setAttribute("data-theme", "parchment");
-      if (themeBtn) {
-        themeBtn.setAttribute("aria-pressed", "true");
-        themeBtn.textContent = "Theme: Warm Paper";
-      }
-    }
-  } catch (_err) {
-    // Ignore storage errors in private browsing modes.
-  }
-
-  // 2. Bind Large Type (A / A+) button.
-  if (fontBtn) {
-    fontBtn.addEventListener("click", () => {
-      const enabled = document.documentElement.classList.toggle("large-type");
-      fontBtn.setAttribute("aria-pressed", enabled ? "true" : "false");
-      fontBtn.textContent = enabled ? "Text Size: A+ (Large)" : "Text Size: A / A+";
-      try {
-        localStorage.setItem("hc_large_type", enabled ? "1" : "0");
-      } catch (_err) {
-        // Ignore storage errors.
-      }
-    });
-  }
-
-  // 3. Bind Theme Mode (Sovereign Night vs Warm Parchment Day) button.
-  if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      const current = document.documentElement.getAttribute("data-theme");
-      const nextTheme = current === "parchment" ? "vault" : "parchment";
-      if (nextTheme === "parchment") {
-        document.documentElement.setAttribute("data-theme", "parchment");
-        themeBtn.setAttribute("aria-pressed", "true");
-        themeBtn.textContent = "Theme: Warm Paper";
-      } else {
-        document.documentElement.removeAttribute("data-theme");
-        themeBtn.setAttribute("aria-pressed", "false");
-        themeBtn.textContent = "Theme: Vault Dark";
-      }
-      try {
-        localStorage.setItem("hc_theme", nextTheme);
-      } catch (_err) {
-        // Ignore storage errors.
-      }
-    });
-  }
-}
 
 /**
  * Step 8: Initialise the interactive Practice Time & Revenue Recovery
@@ -554,10 +486,7 @@ async function bootstrapApp() {
   renderSpecialistRoles();
   renderPricingSteps();
 
-  // 3. Initialise readability and theme controls.
-  initReadabilityControls();
-
-  // 4. Initialise the GPU 3D visual centrepiece controller.
+  // 3. Initialise the GPU 3D visual centrepiece controller.
   const canvas = document.getElementById("gpu-centrepiece-canvas");
   const engineBadge = document.getElementById("gpu-engine-badge");
   const fpsBadge = document.getElementById("gpu-fps-badge");
