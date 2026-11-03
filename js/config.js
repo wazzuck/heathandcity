@@ -32,14 +32,14 @@
  */
 export const SITE_CONFIG = Object.freeze({
   // Provisional brand name (marked TBC for effortless future replacement).
-  brandName: "Heath & City Systems Advisory",
+  brandName: "Heath & City Computer Systems Advisory",
   brandMonogram: "H·C",
   brandStatusBadge: "HAMPSTEAD NW3 · PRIVATE PRACTICE",
   brandTagline:
     "City-Grade Engineering & Private Systems for Hampstead Practices",
   principalRole: "Principal Systems & Sovereign Data Architect",
   experienceYears: 17,
-  primaryPostcodes: "NW3 · NW6 · NW8 · NW11 · N6",
+  primaryPostcodes: "NW3 · NW6 · NW8 · NW11 · N6 · The City",
   neighbourhoods: [
     "Hampstead Village (NW3)",
     "Belsize Park (NW3)",
@@ -48,7 +48,8 @@ export const SITE_CONFIG = Object.freeze({
     "Swiss Cottage (NW3)",
     "Highgate (N6)",
     "Hampstead Garden Suburb (NW11)",
-    "Golders Green (NW11)"
+    "Golders Green (NW11)",
+    "The City of London"
   ],
   contactEmail: "contactus@heathandcity.com",
   contactPhoneDisplay: "020 7946 0921",
