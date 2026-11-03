@@ -615,11 +615,11 @@ a:hover {
 }
 
 .principal-lead {
-  font-size: 1.22rem;
-  line-height: 1.7;
+  font-size: clamp(1.24rem, 1.85vw, 1.38rem);
+  line-height: 1.66;
   color: var(--text-secondary);
-  max-width: 82ch;
-  margin: 0 0 2.25rem 0;
+  max-width: 84ch;
+  margin: 0 0 2.5rem 0;
 }
 
 .principal-lead strong {
