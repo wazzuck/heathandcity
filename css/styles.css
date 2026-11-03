@@ -16,8 +16,8 @@
  * INVARIANTS:
  * 1. Maintains high contrast ratios meeting Web Content Accessibility
  *    Guidelines (WCAG) AA/AAA standards for senior (60+) readers.
- * 2. Supports two complete colour palettes: Sovereign Vault Dark (default)
- *    and Warm Parchment Stationery ([data-theme="parchment"]).
+ * 2. Supports two complete colour palettes: Warm Parchment Stationery
+ *    (default, [data-theme="parchment"]) and Sovereign Vault Dark.
  * 3. Supports a one-click Large Type mode (html.large-type) scaling all rem
  *    units proportionally.
  * ============================================================================

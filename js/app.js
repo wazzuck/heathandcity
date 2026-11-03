@@ -345,7 +345,14 @@ function initReadabilityControls() {
       document.documentElement.classList.add("large-type");
       if (fontBtn) fontBtn.setAttribute("aria-pressed", "true");
     }
-    if (localStorage.getItem("hc_theme") === "parchment") {
+    const savedTheme = localStorage.getItem("hc_theme");
+    if (savedTheme === "vault") {
+      document.documentElement.removeAttribute("data-theme");
+      if (themeBtn) {
+        themeBtn.setAttribute("aria-pressed", "false");
+        themeBtn.textContent = "Theme: Vault Dark";
+      }
+    } else {
       document.documentElement.setAttribute("data-theme", "parchment");
       if (themeBtn) {
         themeBtn.setAttribute("aria-pressed", "true");
