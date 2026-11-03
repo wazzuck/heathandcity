@@ -241,19 +241,23 @@ only; two uncommitted edits to one file can still lose one of them.
     - Do not claim a task is done because the code "looks right".
     - Report skipped checks and the reason, rather than hiding them.
 
-15. **Use British English for customer-facing text and documentation.**
-    - All language that is facing the customer, user or client, and all
-      repository documentation, comments and docstrings must use British
-      English conventions (for example: "summarisation", "prioritisation",
-      "categorisation", "customisation", "synchronise", "dialogue",
-      "colour", "behaviour", "licence" for noun, "practice" for noun,
-      "modelling", "centre", "programme").
+15. **Use British Professional English at all times.**
+    - This site and repository must at all times use British Professional
+      English conventions for all customer-facing copy, User Interface (UI)
+      text, marketing copy, documentation, code comments, and docstrings
+      (for example: "summarisation", "prioritisation", "categorisation",
+      "customisation", "synchronise", "dialogue", "colour", "behaviour",
+      "licence" for noun, "practice" for noun, "modelling", "centre",
+      "programme").
+    - Tone must remain institutional, understated, authoritative, and
+      professionally tailored for senior partners and principals.
     - Code identifiers, external library Application Programming
       Interface (API) names, protocol constants or JSON keys specified by
       external standards remain verbatim.
     - When drafting or editing Graphical User Interface (GUI) copy,
       prompts, reports, documentation or commit messages, standardise on
-      British English spelling and idioms.
+      British Professional English spelling, grammar, and idioms at all
+      times without exception.
 
 ---
 
@@ -323,3 +327,16 @@ explanations, and step-by-step embedded code documentation.
 
 The exchange-specific policies from that repository are deliberately
 absent. Add project-specific rules only where they apply.
+
+---
+
+## 9. Project facts (Heath & City)
+
+1. **Language & Tone:** This site must at all times use British
+   Professional English across all customer-facing copy, code comments,
+   and repository documentation.
+2. **Target Audience:** Established boutique professional practices,
+   senior partners, King's Counsel (KC), medical consultants, and
+   principals across North West (NW) London and The City.
+3. **Core Tech:** Static HTML5/CSS3/ES6 JavaScript, Three.js, WebGPU with
+   WebGL and 2D Canvas fallbacks, zero server or COOP/COEP dependencies.
