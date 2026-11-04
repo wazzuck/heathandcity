@@ -52,8 +52,8 @@ export const SITE_CONFIG = Object.freeze({
     "The City of London"
   ],
   contactEmail: "contactus@heathandcity.com",
-  contactPhoneDisplay: "020 7946 0921",
-  contactPhoneHref: "+442079460921",
+  contactPhoneDisplay: "+44 20 4520 9114",
+  contactPhoneHref: "+442045209114",
   officeLocation: "Hampstead Village, London NW3 (On-Site Visits by Appointment)",
   immediateSupportSite: "https://itoldyouso.tech",
   immediateSupportLabel: "itoldyouso.tech"

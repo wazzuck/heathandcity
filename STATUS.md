@@ -36,6 +36,8 @@
 10. Compiled The Southgate Surgery leadership, ownership, and stakeholder
     contact intelligence dossier in
     `clients/southgatesurgery/PRACTICE_STAKEHOLDER_AND_CONTACT_DOSSIER.md`.
+11. Updated the principal contact telephone number to `+44 20 4520 9114` in
+    the centralised brand configuration and the static contact fallback.
 
 ---
 
