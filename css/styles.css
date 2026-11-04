@@ -633,10 +633,10 @@ a:hover {
 }
 
 .principles-masthead {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   margin-bottom: 1.5rem;
   border-top: 1px solid var(--border-subtle);
-  padding-top: 2rem;
+  padding-top: 1.75rem;
 }
 
 .principles-title {
@@ -644,7 +644,7 @@ a:hover {
   font-size: clamp(1.85rem, 2.8vw, 2.45rem);
   line-height: 1.2;
   font-weight: 700;
-  margin: 0.5rem 0 0 0;
+  margin: 0;
   color: var(--text-primary);
 }
 
