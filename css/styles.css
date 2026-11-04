@@ -601,12 +601,18 @@ a:hover {
 
 .principal-title {
   font-family: var(--font-serif);
-  font-size: clamp(2.35rem, 4.3vw, 3.75rem);
-  line-height: 1.1;
+  font-size: clamp(1.75rem, 2.7vw, 2.7rem);
+  line-height: 1.15;
   font-weight: 700;
   letter-spacing: -0.015em;
   margin: 0 0 1.25rem 0;
   color: var(--text-primary);
+}
+
+@media (min-width: 1080px) {
+  .principal-title {
+    white-space: nowrap;
+  }
 }
 
 .principal-title em {
