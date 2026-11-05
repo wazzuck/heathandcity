@@ -37,7 +37,7 @@ export const SITE_CONFIG = Object.freeze({
   // Provisional brand name (marked TBC for effortless future replacement).
   brandName: "Heath & City Computer Systems Advisory",
   brandMonogram: "H·C",
-  brandStatusBadge: "HAMPSTEAD NW3 · TECHNOLOGY FOR PRIVATE PRACTICES",
+  brandStatusBadge: "TECHNOLOGY FOR PRIVATE PRACTICES",
   brandTagline:
     "Quiet, private systems for small London practices",
   principalRole: "Principal Systems & Sovereign Data Architect",
