@@ -5,13 +5,11 @@
  *
  * PURPOSE:
  * Primary User Interface (UI) controller for the Hampstead and North West (NW)
- * London consulting showcase website. Coordinates brand token injection, the
- * Three-Dimensional (3D) Web Graphics Processing Unit (WebGPU) and Three.js
- * scene switcher, the four-vertical "One Clean Daily Screen" simulator,
- * senior readability controls, and the interactive value calculator.
+ * London private practice website. Coordinates brand token injection, the
+ * four-practice "A typical morning" demo, the interactive return estimator,
+ * and the enquiry form builder.
  *
  * WHAT THIS FILE IS NOT FOR:
- * - Does not contain raw shader code (delegated to js/gpu-scene.js).
  * - Does not transmit user inputs to any external analytics or cloud server.
  *
  * INVARIANTS:
@@ -24,12 +22,10 @@
 
 import {
   SITE_CONFIG,
-  SCENE_MODES,
   VERTICAL_DEMOS,
   SPECIALIST_ROLES,
   PRICING_STEPS
 } from "./config.js";
-import { GPUSceneController } from "./gpu-scene.js";
 
 /**
  * Step 1: Define calculator multipliers for the Practice Recovery Estimator.
@@ -199,14 +195,12 @@ function renderPricingSteps() {
 }
 
 /**
- * Step 5: Render the selected vertical inside the interactive "One Clean Daily
- * Screen" simulator and synchronise the 3D GPU showcase mode.
+ * Step 5: Render the selected practice type inside the "A typical morning"
+ * demo panel.
  *
  * @param {string} verticalId - Key in VERTICAL_DEMOS.
- * @param {GPUSceneController} [gpuController] - Active 3D controller instance.
- * @param {boolean} [syncScene=true] - Whether to switch the 3D scene mode.
  */
-function selectVerticalDemo(verticalId, gpuController, syncScene = true) {
+function selectVerticalDemo(verticalId) {
   const demo = VERTICAL_DEMOS[verticalId];
   if (!demo) {
     return;
@@ -272,65 +266,7 @@ function selectVerticalDemo(verticalId, gpuController, syncScene = true) {
       .join("");
   }
 
-  // 5. Optionally synchronise the 3D GPU showcase mode.
-  if (syncScene && gpuController && demo.sceneMode) {
-    activateSceneModeUI(demo.sceneMode, gpuController);
-  }
 }
-
-/**
- * Step 6: Update the 3D Multi-Scene Showcase UI panel and notify the
- * GPUSceneController when the visitor switches between "lattice", "vault",
- * and "telemetry".
- *
- * @param {string} modeId - Scene identifier ("lattice", "vault", "telemetry").
- * @param {GPUSceneController} gpuController - Active 3D controller instance.
- */
-function activateSceneModeUI(modeId, gpuController) {
-  const mode = SCENE_MODES[modeId];
-  if (!mode) {
-    return;
-  }
-
-  // 1. Highlight the active scene mode button.
-  document.querySelectorAll("[data-scene-mode]").forEach((btn) => {
-    const active = btn.getAttribute("data-scene-mode") === modeId;
-    btn.classList.toggle("is-active", active);
-    btn.setAttribute("aria-pressed", active ? "true" : "false");
-  });
-
-  // 2. Update the overlay caption and technical telemetry readout.
-  const titleEl = document.getElementById("scene-caption-title");
-  const subEl = document.getElementById("scene-caption-subtitle");
-  const noteEl = document.getElementById("scene-caption-note");
-  const pipeEl = document.getElementById("telemetry-pipeline");
-  const speedEl = document.getElementById("telemetry-throughput");
-  const egressEl = document.getElementById("telemetry-egress");
-
-  if (titleEl) titleEl.textContent = mode.title;
-  if (subEl) subEl.textContent = mode.subtitle;
-  if (noteEl) noteEl.textContent = mode.technicalNote;
-  if (pipeEl) pipeEl.textContent = mode.metrics.pipeline;
-  if (speedEl) speedEl.textContent = mode.metrics.throughput;
-  if (egressEl) egressEl.textContent = mode.metrics.egress;
-
-  // 3. Synchronise the Entropy-to-Order slider value.
-  const slider = document.getElementById("order-slider");
-  const sliderVal = document.getElementById("order-slider-value");
-  const pct = Math.round(mode.defaultOrder * 100);
-  if (slider) {
-    slider.value = String(pct);
-  }
-  if (sliderVal) {
-    sliderVal.textContent = `${pct}% tidy`;
-  }
-
-  // 4. Instruct the GPU controller to transition smoothly to the new topology.
-  if (gpuController) {
-    gpuController.setMode(modeId, true);
-  }
-}
-
 
 /**
  * Step 8: Initialise the interactive Practice Time & Revenue Recovery
@@ -478,7 +414,7 @@ function initConsultationBuilder() {
 /**
  * Step 10: Bootstrap the application once the DOM is ready.
  */
-async function bootstrapApp() {
+function bootstrapApp() {
   // 1. Inject centralised brand tokens across the page.
   applyBrandConfig();
 
@@ -486,106 +422,18 @@ async function bootstrapApp() {
   renderSpecialistRoles();
   renderPricingSteps();
 
-  // 3. Initialise the GPU 3D visual centrepiece controller.
-  const canvas = document.getElementById("gpu-centrepiece-canvas");
-  const engineBadge = document.getElementById("gpu-engine-badge");
-  const fpsBadge = document.getElementById("gpu-fps-badge");
-  const pauseBtn = document.getElementById("gpu-pause-btn");
-
-  const gpuController = new GPUSceneController({
-    canvas,
-    onStatusChange: (status) => {
-      if (engineBadge) {
-        engineBadge.textContent = status.tierLabel;
-      }
-      if (fpsBadge) {
-        fpsBadge.textContent = status.isPaused
-          ? "STILL IMAGE"
-          : `${status.fps} FPS · RUNS IN YOUR BROWSER`;
-      }
-      if (pauseBtn) {
-        pauseBtn.textContent = status.isPaused
-          ? "Resume motion"
-          : "Pause motion";
-        pauseBtn.setAttribute(
-          "aria-pressed",
-          status.isPaused ? "true" : "false"
-        );
-      }
-    }
-  });
-
-  await gpuController.init();
-
-  // 5. Bind Multi-Scene Showcase mode buttons.
-  document.querySelectorAll("[data-scene-mode]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const modeId = btn.getAttribute("data-scene-mode");
-      activateSceneModeUI(modeId, gpuController);
-    });
-  });
-
-  // 6. Bind the live Entropy-to-Order slider and quick preset buttons.
-  const orderSlider = document.getElementById("order-slider");
-  const orderSliderVal = document.getElementById("order-slider-value");
-  if (orderSlider) {
-    orderSlider.addEventListener("input", () => {
-      const pct = Number(orderSlider.value) || 0;
-      if (orderSliderVal) {
-        orderSliderVal.textContent = `${pct}% tidy`;
-      }
-      gpuController.setOrderRatio(pct / 100.0);
-    });
-  }
-
-  const chaosBtn = document.getElementById("btn-simulate-chaos");
-  if (chaosBtn) {
-    chaosBtn.addEventListener("click", () => {
-      if (orderSlider) orderSlider.value = "8";
-      if (orderSliderVal) orderSliderVal.textContent = "8% tidy (the mess)";
-      gpuController.setOrderRatio(0.08);
-      gpuController.triggerPulse();
-    });
-  }
-
-  const orderBtn = document.getElementById("btn-simulate-order");
-  if (orderBtn) {
-    orderBtn.addEventListener("click", () => {
-      if (orderSlider) orderSlider.value = "96";
-      if (orderSliderVal) {
-        orderSliderVal.textContent = "96% tidy (sorted)";
-      }
-      gpuController.setOrderRatio(0.96);
-      gpuController.triggerPulse();
-    });
-  }
-
-  const pulseBtn = document.getElementById("btn-trigger-pulse");
-  if (pulseBtn) {
-    pulseBtn.addEventListener("click", () => {
-      gpuController.triggerPulse();
-    });
-  }
-
-  if (pauseBtn) {
-    pauseBtn.addEventListener("click", () => {
-      gpuController.toggleRunning();
-    });
-  }
-
-  // 7. Bind the four-vertical "One Clean Daily Screen" tabs.
+  // 3. Bind the four-practice "A typical morning" tabs.
   document.querySelectorAll("[data-vertical-tab]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const vId = btn.getAttribute("data-vertical-tab");
-      selectVerticalDemo(vId, gpuController, true);
+      selectVerticalDemo(vId);
     });
   });
 
-  // 8. Set initial scene and vertical states.
-  activateSceneModeUI("lattice", gpuController);
-  selectVerticalDemo("legal", gpuController, false);
+  // 4. Show the default practice type.
+  selectVerticalDemo("legal");
 
-  // 9. Initialise the ROI calculator and consultation form builder.
+  // 5. Initialise the return estimator and consultation form builder.
   initRecoveryCalculator();
   initConsultationBuilder();
 }

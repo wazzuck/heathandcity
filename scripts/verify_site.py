@@ -38,19 +38,16 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class ShowcaseHTMLValidator(HTMLParser):
     """
-    Lightweight HTML parser that records element identifiers and verifies
-    basic tag balance in index.html.
+    Lightweight HTML parser that records element identifiers in index.html.
 
     Attributes:
         element_ids (Set[str]): Set of all id="..." values encountered.
-        canvas_found (bool): True if the 3D GPU showcase canvas exists.
     """
 
     def __init__(self) -> None:
         """Initialise the HTML validator state."""
         super().__init__()
         self.element_ids: Set[str] = set()
-        self.canvas_found: bool = False
 
     def handle_starttag(
         self, tag: str, attrs: List[Tuple[str, str | None]]
@@ -66,8 +63,6 @@ class ShowcaseHTMLValidator(HTMLParser):
         el_id = attr_map.get("id")
         if el_id:
             self.element_ids.add(el_id)
-        if tag == "canvas" and el_id == "gpu-centrepiece-canvas":
-            self.canvas_found = True
 
 
 def check_required_files() -> List[str]:
@@ -82,7 +77,6 @@ def check_required_files() -> List[str]:
         "index.html",
         "css/styles.css",
         "js/config.js",
-        "js/gpu-scene.js",
         "js/app.js",
         "package.json",
         "docs/ARCHITECTURE.md",
@@ -116,13 +110,8 @@ def check_html_structure() -> List[str]:
     validator = ShowcaseHTMLValidator()
     validator.feed(content)
 
-    if not validator.canvas_found:
-        errors.append("Missing <canvas id='gpu-centrepiece-canvas'>")
-
     # 2. Check mandatory section and control IDs.
     required_ids = {
-        "gpu-centrepiece-canvas",
-        "order-slider",
         "daily-screen",
         "services-by-vertical",
         "specialist-roles",
@@ -159,34 +148,18 @@ def check_html_structure() -> List[str]:
     return errors
 
 
-def check_gpu_and_hosting_constraints() -> List[str]:
+def check_hosting_constraints() -> List[str]:
     """
-    Verify that the JavaScript modules implement WebGPU detection, Three.js
-    rendering, Canvas 2D fallback, and reduced-motion support without using
-    SharedArrayBuffer.
+    Verify that the JavaScript modules avoid SharedArrayBuffer and that the
+    package manifest is valid, so the site stays deployable on static hosts.
 
     Returns:
         List of error messages (empty if valid).
     """
     errors: List[str] = []
-    gpu_js = (REPO_ROOT / "js/gpu-scene.js").read_text(encoding="utf-8")
-
-    # 1. Confirm WebGPU, Three.js, Canvas fallback, and reduced-motion hooks.
-    required_tokens = [
-        "navigator.gpu",
-        "requestAdapter",
-        "WebGLRenderer",
-        "initCanvas3DFallback",
-        "prefers-reduced-motion",
-    ]
-    for token in required_tokens:
-        if token not in gpu_js:
-            errors.append(
-                f"js/gpu-scene.js missing required fallback token: {token}"
-            )
 
     # 2. Ensure SharedArrayBuffer is never instantiated in code.
-    for js_rel in ["js/config.js", "js/gpu-scene.js", "js/app.js"]:
+    for js_rel in ["js/config.js", "js/app.js"]:
         js_lines = (REPO_ROOT / js_rel).read_text(encoding="utf-8").splitlines()
         for lineno, line in enumerate(js_lines, start=1):
             stripped = line.strip()
@@ -233,7 +206,6 @@ def check_line_lengths() -> List[str]:
     # 2. Check comment lines in JavaScript, CSS, and Python files.
     code_files = [
         "js/config.js",
-        "js/gpu-scene.js",
         "js/app.js",
         "css/styles.css",
         "scripts/verify_site.py",
@@ -270,8 +242,8 @@ def main() -> int:
     all_errors.extend(check_required_files())
     # 2. Run HTML and strategy coverage checks.
     all_errors.extend(check_html_structure())
-    # 3. Run WebGPU/WebGL fallback and GitHub Pages constraint checks.
-    all_errors.extend(check_gpu_and_hosting_constraints())
+    # 3. Run static hosting constraint checks.
+    all_errors.extend(check_hosting_constraints())
     # 4. Run 80-column documentation and comment checks.
     all_errors.extend(check_line_lengths())
 
@@ -281,7 +253,7 @@ def main() -> int:
             print(f"  - {err}")
         return 1
 
-    print("ALL VERIFICATION CHECKS PASSED (files, HTML, GPU fallbacks, 80-col).")
+    print("ALL VERIFICATION CHECKS PASSED (files, HTML, hosting, 80-col).")
     return 0
 
 
