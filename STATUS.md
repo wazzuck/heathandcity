@@ -47,6 +47,8 @@
     `scripts/verify_site.py`. The page is now static text and layout only.
 14. Shortened the hero label to "TECHNOLOGY FOR PRIVATE PRACTICES"
     (`js/config.js`, `index.html`).
+15. Reworded the hero label to "STATE-OF-THE-ART TECHNOLOGY FOR SMALL
+    PRIVATE PRACTICES" (`js/config.js`, `index.html`).
 
 ---
 
