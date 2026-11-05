@@ -442,6 +442,7 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn is-active"
+            id="tab-legal"
             data-vertical-tab="legal"
             aria-selected="true"
           >
@@ -451,6 +452,7 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn"
+            id="tab-brokers"
             data-vertical-tab="brokers"
             aria-selected="false"
           >
@@ -460,6 +462,7 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn"
+            id="tab-composers"
             data-vertical-tab="composers"
             aria-selected="false"
           >
@@ -469,6 +472,7 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn"
+            id="tab-medical"
             data-vertical-tab="medical"
             aria-selected="false"
           >
@@ -478,6 +482,7 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn"
+            id="tab-family"
             data-vertical-tab="family"
             aria-selected="false"
           >
@@ -485,7 +490,12 @@ INVARIANTS:
           </button>
         </div>
 
-        <div class="daily-screen-frame" role="tabpanel">
+        <div
+          id="demo-panel"
+          class="daily-screen-frame"
+          role="tabpanel"
+          aria-labelledby="tab-legal"
+        >
           <div class="daily-screen__header">
             <div>
               <span id="demo-screen-badge" class="eyebrow">

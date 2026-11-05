@@ -177,12 +177,23 @@ function selectVerticalDemo(verticalId) {
     return;
   }
 
-  // 1. Update tab button active states and ARIA attributes.
+  // 1. Update the tab buttons and the panel label. Every button keeps its
+  //    own selected state, and the panel points at the button now
+  //    selected, so assistive technology announces which practice the
+  //    panel is describing.
   document.querySelectorAll("[data-vertical-tab]").forEach((btn) => {
     const isMatch = btn.getAttribute("data-vertical-tab") === verticalId;
     btn.classList.toggle("is-active", isMatch);
     btn.setAttribute("aria-selected", isMatch ? "true" : "false");
   });
+
+  const demoPanel = document.getElementById("demo-panel");
+  const activeTab = document.querySelector(
+    `[data-vertical-tab="${verticalId}"]`
+  );
+  if (demoPanel && activeTab && activeTab.id) {
+    demoPanel.setAttribute("aria-labelledby", activeTab.id);
+  }
 
   // 2. Populate header metadata inside the simulated daily screen.
   const badgeEl = document.getElementById("demo-screen-badge");
@@ -392,18 +403,51 @@ function bootstrapApp() {
   // 2. Render the pricing step cards from PRICING_STEPS.
   renderPricingSteps();
 
-  // 3. Bind the five-practice "A typical morning" tabs.
-  document.querySelectorAll("[data-vertical-tab]").forEach((btn) => {
+  // 3. Bind the five-practice "A typical morning" tabs. A mouse click, a
+  //    tap, or the Enter key on a focused button all arrive here.
+  const tabButtons = Array.from(
+    document.querySelectorAll("[data-vertical-tab]")
+  );
+  tabButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const vId = btn.getAttribute("data-vertical-tab");
       selectVerticalDemo(vId);
     });
   });
 
-  // 4. Show the default practice type.
+  // 4. Move between the practice tabs with the arrow keys. The Accessible
+  //    Rich Internet Applications (ARIA) authoring practices expect a tab
+  //    group to respond to arrow keys while the Tab key leaves the group.
+  //    Home and End jump to the first and last practice.
+  const tabList = document.querySelector('[role="tablist"]');
+  if (tabList) {
+    tabList.addEventListener("keydown", (event) => {
+      const current = tabButtons.indexOf(document.activeElement);
+      if (current === -1) {
+        return;
+      }
+      let next = current;
+      if (event.key === "ArrowRight") {
+        next = (current + 1) % tabButtons.length;
+      } else if (event.key === "ArrowLeft") {
+        next = (current - 1 + tabButtons.length) % tabButtons.length;
+      } else if (event.key === "Home") {
+        next = 0;
+      } else if (event.key === "End") {
+        next = tabButtons.length - 1;
+      } else {
+        return;
+      }
+      event.preventDefault();
+      tabButtons[next].focus();
+      selectVerticalDemo(tabButtons[next].getAttribute("data-vertical-tab"));
+    });
+  }
+
+  // 5. Show the default practice type.
   selectVerticalDemo("legal");
 
-  // 5. Initialise the return estimator and consultation form builder.
+  // 6. Initialise the return estimator and consultation form builder.
   initRecoveryCalculator();
   initConsultationBuilder();
 }
