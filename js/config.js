@@ -37,7 +37,7 @@ export const SITE_CONFIG = Object.freeze({
   // Provisional brand name (marked TBC for effortless future replacement).
   brandName: "Heath & City Technology",
   brandMonogram: "H·C",
-  brandStatusBadge: "STATE-OF-THE-ART TECHNOLOGY FOR SMALL PRIVATE PRACTICES",
+  brandStatusBadge: "PRIVATE PRACTICE SYSTEMS · HAMPSTEAD VILLAGE NW3",
   brandTagline:
     "Quiet, private systems for small London practices",
   principalRole: "Principal Systems & Sovereign Data Architect",
@@ -87,8 +87,8 @@ export const VERTICAL_DEMOS = Object.freeze({
     badge: "CHAMBERS & PRIVATE PRACTICE · NW3 / WC2",
     headline: "Barristers, King's Counsel & Arbitrators",
     summary:
-      "Find any old opinion in seconds, and see disclosure gaps before " +
-      "they cost you a hearing.",
+      "Find any old opinion in seconds, and see disclosure gaps flagged " +
+      "for your review.",
     stats: [
       { label: "Opinions Searchable", value: "20 Years", tone: "gold" },
       { label: "Disclosure Gaps Flagged", value: "3 Missing Periods", tone: "amber" },
@@ -101,7 +101,7 @@ export const VERTICAL_DEMOS = Object.freeze({
         client: "Your archive of opinions and skeleton arguments",
         matter: "Search: 'trust variation, offshore jurisdiction'",
         status: "Six matching opinions found, with paragraph references",
-        timer: "Found in 14 milliseconds",
+        timer: "Found in seconds",
         sourceRef: "Opinion_2014_Example.docx · Para 34"
       },
       {
@@ -260,64 +260,57 @@ export const VERTICAL_DEMOS = Object.freeze({
     guarantee:
       "Patient records are read on dedicated, encrypted hardware in your " +
       "study or clinic. No patient data is uploaded to public cloud AI."
+  },
+
+  family: {
+    id: "family",
+    tabLabel: "Family Offices & Property",
+    badge: "FAMILY OFFICE & PROPERTY · NW3 / NW11",
+    headline: "Family Offices & Property Principals",
+    summary:
+      "Statements and notices are read and matched against your own list, " +
+      "and every lease or compliance date stays visible.",
+    stats: [
+      { label: "Documents Read", value: "23 Statements", tone: "gold" },
+      { label: "Rent Reviews Coming Up", value: "3 In 90 Days", tone: "amber" },
+      { label: "Figures Sent to Public Cloud", value: "None", tone: "emerald" }
+    ],
+    digestTime: "Private system · Stays in your office",
+    queueItems: [
+      {
+        priority: "CAPITAL CALL · 10 DAYS",
+        client: "Private equity drawdown (illustrative)",
+        matter: "Called against your own cash schedule",
+        status: "Amount and deadline matched to the notice",
+        timer: "Due in 10 days",
+        sourceRef: "Capital_Call_Notice_Example.pdf"
+      },
+      {
+        priority: "RENT REVIEW · 60 DAYS",
+        client: "Let property in North West London (illustrative)",
+        matter: "Lease review window opening",
+        status: "Review date and break clause flagged for your adviser",
+        timer: "Window opens in 60 days",
+        sourceRef: "Lease_Example.pdf · Clause 4.2"
+      },
+      {
+        priority: "STATEMENTS MATCHED",
+        client: "Three private banks (illustrative)",
+        matter: "Statements against your own portfolio list",
+        status: "All balances agreed; one transfer left for you to check",
+        timer: "Reviewed this morning",
+        sourceRef: "Bank_Statements_Example.pdf"
+      }
+    ],
+    guarantee:
+      "We organise the paperwork and prepare drafts for your adviser. We " +
+      "do not give investment advice, and nothing leaves your office " +
+      "without your approval."
   }
 });
 
 /**
- * Step 3: Define SPECIALIST_ROLES.
- * Four ways of working together, written as short plain-English summaries.
- * Fields:
- * - number: Two-digit display ordinal.
- * - role: Short title, shown as the card heading.
- * - bestFor: Who the role suits, shown as "Designed for".
- * - summary: One or two sentences explaining what it does.
- * - architectureTag: Two short keywords shown as a badge on the card.
- */
-export const SPECIALIST_ROLES = Object.freeze([
-  {
-    number: "01",
-    role: "Private search for your records",
-    bestFor:
-      "Barristers, King's Counsel, surgeons and anyone with decades of files",
-    summary:
-      "Find any note, opinion or report in seconds. The search runs on a " +
-      "machine in your office, so your files never go to a public AI tool.",
-    architectureTag: "Private search · On-site machine"
-  },
-  {
-    number: "02",
-    role: "Money and paperwork, matched",
-    bestFor:
-      "Brokers, composers, family offices and anyone reconciling statements",
-    summary:
-      "Bank statements, remittances and royalty reports are checked against " +
-      "your own records, and differences are flagged for you to decide.",
-    architectureTag: "Reconciliation · Statement matching"
-  },
-  {
-    number: "03",
-    role: "A practice that runs without one person",
-    bestFor:
-      "Practices where one assistant holds everything in their inbox",
-    summary:
-      "Key tasks, deadlines and contacts are kept in one shared place, so " +
-      "holidays and sick days no longer stall the work.",
-    architectureTag: "Shared memory · No change to Outlook"
-  },
-  {
-    number: "04",
-    role: "Ongoing local support",
-    bestFor:
-      "Principals who want one named person, close by, who knows the practice",
-    summary:
-      "A monthly visit to your office in Hampstead, direct telephone access, " +
-      "and quick changes whenever your banks or insurers change formats.",
-    architectureTag: "Monthly visit · Priority response"
-  }
-]);
-
-/**
- * Step 4: Define PRICING_STEPS.
+ * Step 3: Define PRICING_STEPS.
  * Implements the three-step, fixed-fee engagement structure. Prices are
  * quoted in Pounds Sterling (£). Each entry is rendered as one pricing card.
  */
