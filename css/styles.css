@@ -4,65 +4,68 @@
  * ============================================================================
  *
  * PURPOSE:
- * Defines the visual design system, responsive grid layout, senior-friendly
- * typography scale, and Three-Dimensional (3D) Web Graphics Processing Unit
- * (WebGPU) / Web Graphics Library (WebGL) showcase framing for the Hampstead
- * and North West (NW) London private technology consulting website.
+ * Defines the visual design system, responsive grid layout, and reading
+ * typography for the Hampstead and North West (NW) London private technology
+ * website. The design favours calm space, one clear message per section, and
+ * large, high-contrast type, so that a time-poor reader can scan the page in
+ * a few minutes. The Three-Dimensional (3D) Web Graphics Processing Unit
+ * (WebGPU) / Web Graphics Library (WebGL) panel keeps its dark theatre look.
  *
  * WHAT THIS FILE IS NOT FOR:
  * - Does not rely on external Cascading Style Sheets (CSS) frameworks.
- * - Does not obscure service descriptions behind low-contrast effects.
+ * - Does not place body text on a low-contrast background or behind a
+ *   decorative effect.
  *
  * INVARIANTS:
- * 1. Maintains high contrast ratios meeting Web Content Accessibility
- *    Guidelines (WCAG) AA/AAA standards.
- * 2. Uses Warm Paper Stationery palette as the standard appearance.
+ * 1. Body text meets Web Content Accessibility Guidelines (WCAG) AA contrast
+ *    (at least 4.5:1). Headings and large labels are checked the same way.
+ * 2. One typeface family (Plus Jakarta Sans) carries headings and body text.
+ *    JetBrains Mono is reserved for small labels and telemetry readouts.
+ * 3. Every interactive control has a visible focus outline.
  * ============================================================================
  */
 
 /* --------------------------------------------------------------------------
- * Step 1: Define root design tokens and Warm Paper colour palette.
+ * Step 1: Define root design tokens: colours, type, radii, and widths.
  * -------------------------------------------------------------------------- */
 :root {
-  --bg-primary: #f6f2e9;
-  --bg-elevated: #ece6d8;
-  --bg-card: rgba(255, 253, 248, 0.96);
+  --bg-primary: #f7f5f0;
+  --bg-elevated: #efece4;
+  --bg-card: #ffffff;
   --bg-card-solid: #ffffff;
-  --bg-glass: rgba(246, 242, 233, 0.92);
+  --bg-glass: rgba(247, 245, 240, 0.94);
 
-  --text-primary: #121824;
-  --text-secondary: #2c3647;
-  --text-muted: #546175;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #5b6678;
 
-  --accent-gold: #8c651d;
-  --accent-gold-bright: #6e4d10;
-  --accent-gold-soft: rgba(140, 101, 29, 0.12);
+  --accent-gold: #8a5d12;
+  --accent-gold-bright: #6e4a0c;
+  --accent-gold-soft: rgba(138, 93, 18, 0.1);
   --accent-emerald: #0f766e;
-  --accent-emerald-soft: rgba(15, 118, 110, 0.12);
+  --accent-emerald-soft: rgba(15, 118, 110, 0.1);
   --accent-amber: #b45309;
   --accent-sapphire: #1d4ed8;
 
-  --border-subtle: rgba(18, 24, 36, 0.15);
-  --border-strong: rgba(140, 101, 29, 0.45);
-  --shadow-card: 0 14px 34px rgba(18, 24, 36, 0.08);
+  --border-subtle: rgba(15, 23, 42, 0.12);
+  --border-strong: rgba(138, 93, 18, 0.4);
+  --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.07);
 
-  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, sans-serif;
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 
-  --container-max: 1260px;
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
+  --container-max: 1200px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
 }
 
-/* Step 2: Global typography and document defaults. */
+/* Step 2: Global document defaults. Body text is large for easy reading. */
 html {
   font-size: 100%;
   scroll-behavior: smooth;
   box-sizing: border-box;
-}
 }
 
 *,
@@ -76,14 +79,23 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  line-height: 1.68;
-  font-size: 1.05rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
+/* Step 3: Keyboard focus is always visible. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--accent-sapphire);
+  outline-offset: 3px;
+}
+
 /* --------------------------------------------------------------------------
- * Step 4: Utility containers, section headers, and typography primitives.
+ * Step 4: Containers, sections, and typography primitives.
  * -------------------------------------------------------------------------- */
 .container {
   width: 100%;
@@ -93,7 +105,7 @@ body {
 }
 
 .section {
-  padding: 5.5rem 0;
+  padding: 5rem 0;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -107,11 +119,10 @@ body {
   gap: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent-gold);
   background: var(--accent-gold-soft);
-  border: 1px solid var(--border-subtle);
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
   margin-bottom: 1rem;
@@ -119,18 +130,19 @@ body {
 }
 
 .section-title {
-  font-family: var(--font-serif);
-  font-size: clamp(2.1rem, 3.6vw, 3.1rem);
-  font-weight: 600;
-  line-height: 1.16;
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin: 0 0 1rem 0;
   color: var(--text-primary);
 }
 
 .section-lead {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: var(--text-secondary);
-  max-width: 78ch;
+  max-width: 68ch;
   margin: 0 0 2.5rem 0;
 }
 
@@ -145,7 +157,7 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------
- * Step 5: Top navigation bar and Senior Readability Toolbar.
+ * Step 5: Sticky header, brand lockup, and navigation.
  * -------------------------------------------------------------------------- */
 .site-header {
   position: sticky;
@@ -162,28 +174,26 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.85rem 0;
-  flex-wrap: wrap;
+  padding: 0.8rem 0;
 }
 
 .brand-lockup {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.75rem;
   text-decoration: none;
   color: var(--text-primary);
+  min-width: 0;
 }
 
 .brand-monogram {
-  width: 2.6rem;
-  height: 2.6rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-strong);
-  background: var(--accent-gold-soft);
-  color: var(--accent-gold);
-  font-family: var(--font-serif);
-  font-weight: 700;
-  font-size: 1.15rem;
+  background: var(--text-primary);
+  color: #f5d98f;
+  font-weight: 800;
+  font-size: 0.95rem;
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -191,24 +201,23 @@ a:hover {
 
 .brand-text__name {
   display: block;
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: 1.02rem;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .brand-text__meta {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
   color: var(--text-muted);
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.35rem;
+  gap: 1.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -218,8 +227,8 @@ a:hover {
 .nav-links a {
   text-decoration: none;
   color: var(--text-secondary);
-  font-size: 0.94rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600;
   transition: color 0.15s ease;
 }
 
@@ -228,18 +237,68 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------
- * Step 6: Hero Split Layout & Interactive WebGPU / Three.js 3D Stage.
+ * Step 6: Buttons. Targets are large so they are easy to hit on a phone.
+ * -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.25rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn--compact {
+  min-height: 2.75rem;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, #d4af6a 0%, #b88b3b 100%);
+  color: #0b0f19;
+  box-shadow: 0 8px 22px rgba(184, 139, 59, 0.3);
+}
+
+.btn--primary:hover {
+  color: #0b0f19;
+  transform: translateY(-1px);
+}
+
+.btn--secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+.btn--secondary:hover {
+  background: var(--accent-gold-soft);
+  border-color: var(--border-strong);
+}
+
+/* --------------------------------------------------------------------------
+ * Step 7: Hero. A headline, three quick facts, and two buttons come first;
+ * the interactive visual sits beside them.
  * -------------------------------------------------------------------------- */
 .hero-section {
-  padding: 3rem 0 4.5rem 0;
+  padding: 3.5rem 0 4.5rem 0;
   border-bottom: 1px solid var(--border-subtle);
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.05fr 1.15fr;
-  gap: 2.5rem;
-  align-items: stretch;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 3rem;
+  align-items: center;
 }
 
 .hero-copy {
@@ -249,109 +308,76 @@ a:hover {
 }
 
 .hero-title {
-  font-family: var(--font-serif);
-  font-size: clamp(2.35rem, 4.1vw, 3.55rem);
-  line-height: 1.12;
-  font-weight: 600;
-  margin: 0 0 1.2rem 0;
+  font-size: clamp(2.5rem, 4.8vw, 4rem);
+  line-height: 1.06;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.25rem 0;
 }
 
 .hero-title em {
-  font-style: italic;
+  display: block;
+  font-style: normal;
   color: var(--accent-gold);
 }
 
 .hero-subtitle {
-  font-size: 1.14rem;
+  font-size: 1.22rem;
   color: var(--text-secondary);
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1.75rem 0;
+  max-width: 52ch;
 }
 
 .credibility-pillars {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.85rem;
-  margin: 0 0 1.75rem 0;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0 0 2rem 0;
+  padding: 0;
 }
 
 .pillar-chip {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-md);
+  padding: 1rem;
 }
 
 .pillar-chip__value {
   display: block;
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 800;
   color: var(--accent-gold);
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .pillar-chip__label {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
   color: var(--text-secondary);
-  margin-top: 0.2rem;
+  margin-top: 0.3rem;
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-bottom: 1.4rem;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.85rem 1.4rem;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  font-size: 0.98rem;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  border: 1px solid transparent;
-}
-
-.btn--primary {
-  background: linear-gradient(135deg, #d4af6a 0%, #b88b3b 100%);
-  color: #090d14;
-  box-shadow: 0 8px 24px rgba(212, 175, 106, 0.28);
-}
-
-.btn--primary:hover {
-  color: #090d14;
-  transform: translateY(-1px);
-}
-
-.btn--secondary {
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-}
-
-.btn--secondary:hover {
-  background: var(--accent-gold-soft);
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
 }
 
 .discretion-note {
-  font-size: 0.9rem;
-  color: var(--text-muted);
+  font-size: 1rem;
+  color: var(--text-secondary);
   border-left: 3px solid var(--accent-emerald);
-  padding-left: 0.85rem;
+  padding-left: 0.9rem;
   margin: 0;
 }
 
 /* --------------------------------------------------------------------------
- * Step 7: The Interactive 3D WebGPU / Three.js Showcase Theatre Panel.
- * Always keeps a deep obsidian background so additive GPU shaders shine even
- * when the page is switched to Warm Paper daylight mode.
+ * Step 8: Interactive 3D WebGPU / Three.js theatre. It keeps a dark
+ * background so the additive shaders stand out on the light page.
  * -------------------------------------------------------------------------- */
 .gpu-theatre {
   background: radial-gradient(
@@ -361,9 +387,8 @@ a:hover {
     #060911 100%
   );
   color: #f5f2eb;
-  border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.22);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -424,12 +449,12 @@ a:hover {
 
 .scene-tab-btn {
   background: rgba(20, 29, 46, 0.75);
-  color: #c4cddb;
+  color: #dbe2ee;
   border: 1px solid rgba(212, 175, 106, 0.22);
   border-radius: var(--radius-sm);
-  padding: 0.5rem 0.65rem;
+  padding: 0.55rem 0.7rem;
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
@@ -439,7 +464,7 @@ a:hover {
 .scene-tab-btn span {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   color: #d4af6a;
   margin-bottom: 0.12rem;
 }
@@ -454,7 +479,7 @@ a:hover {
 .gpu-viewport-wrap {
   position: relative;
   width: 100%;
-  height: 360px;
+  height: 380px;
   overflow: hidden;
 }
 
@@ -483,26 +508,27 @@ a:hover {
 }
 
 .gpu-caption-box {
-  background: rgba(8, 12, 20, 0.82);
+  background: rgba(8, 12, 20, 0.84);
   border: 1px solid rgba(212, 175, 106, 0.32);
   border-radius: var(--radius-sm);
-  padding: 0.65rem 0.85rem;
-  max-width: 390px;
+  padding: 0.7rem 0.9rem;
+  max-width: 380px;
   backdrop-filter: blur(8px);
 }
 
 .gpu-caption-box h2 {
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 700;
   margin: 0 0 0.2rem 0;
   color: #ecd095;
 }
 
 .gpu-caption-box p {
-  font-size: 0.8rem;
-  line-height: 1.42;
+  font-size: 0.88rem;
+  line-height: 1.45;
   margin: 0;
-  color: #d7dfeb;
+  color: #dbe2ee;
 }
 
 .gpu-telemetry-pills {
@@ -514,8 +540,8 @@ a:hover {
 
 .telemetry-pill {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  background: rgba(8, 12, 20, 0.84);
+  font-size: 0.66rem;
+  background: rgba(8, 12, 20, 0.86);
   border: 1px solid rgba(52, 211, 153, 0.35);
   color: #a7f3d0;
   padding: 0.22rem 0.55rem;
@@ -523,7 +549,7 @@ a:hover {
 }
 
 .gpu-controls-bar {
-  padding: 0.8rem 1rem;
+  padding: 0.85rem 1rem;
   background: rgba(8, 12, 20, 0.92);
   border-top: 1px solid rgba(212, 175, 106, 0.24);
   display: flex;
@@ -539,8 +565,7 @@ a:hover {
 }
 
 .slider-row label {
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: 0.9rem;
   color: #ecd095;
 }
 
@@ -553,9 +578,9 @@ a:hover {
 
 .slider-readout {
   font-family: var(--font-mono);
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   color: #34d399;
-  min-width: 85px;
+  min-width: 90px;
   text-align: right;
 }
 
@@ -572,9 +597,10 @@ a:hover {
   color: #f5f2eb;
   border: 1px solid rgba(212, 175, 106, 0.35);
   border-radius: 4px;
-  padding: 0.34rem 0.65rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  padding: 0.4rem 0.7rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -583,87 +609,45 @@ a:hover {
 }
 
 .gpu-note-line {
-  font-size: 0.76rem;
-  color: #9fb0c7;
+  font-size: 0.82rem;
+  color: #aebbd0;
   margin: 0;
 }
 
 /* --------------------------------------------------------------------------
- * Step 8: Principal Section — Why Commodity Computer Systems Fail.
- * Features hero-scale serif typography and colourised emphasis.
+ * Step 9: Three promises. Each card is short and has one clear claim.
  * -------------------------------------------------------------------------- */
 #senior-principals {
-  padding-top: 2rem;
-  padding-bottom: 4rem;
-  background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border-subtle);
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 .principal-title {
-  font-family: var(--font-serif);
-  font-size: clamp(1.75rem, 2.7vw, 2.7rem);
-  line-height: 1.15;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  margin: 0 0 1.25rem 0;
+  font-size: clamp(2.2rem, 3.8vw, 3.3rem);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0 0 1rem 0;
   color: var(--text-primary);
 }
 
-@media (min-width: 1080px) {
-  .principal-title {
-    white-space: nowrap;
-  }
-}
-
-.principal-title em {
-  font-style: italic;
-  color: var(--accent-gold);
-}
-
 .principal-lead {
-  font-size: clamp(1.24rem, 1.85vw, 1.38rem);
-  line-height: 1.66;
+  font-size: 1.25rem;
+  line-height: 1.6;
   color: var(--text-secondary);
-  max-width: 84ch;
+  max-width: 66ch;
   margin: 0 0 2.5rem 0;
 }
 
 .principal-lead strong {
   color: var(--text-primary);
-  font-weight: 600;
-}
-
-.principal-lead em {
-  font-style: italic;
-  color: var(--accent-gold);
-}
-
-.principles-masthead {
-  margin-top: 1.25rem;
-  margin-bottom: 1.5rem;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 1.75rem;
-}
-
-.principles-title {
-  font-family: var(--font-serif);
-  font-size: clamp(1.85rem, 2.8vw, 2.45rem);
-  line-height: 1.2;
   font-weight: 700;
-  margin: 0;
-  color: var(--text-primary);
-}
-
-.principles-title em {
-  font-style: italic;
-  color: var(--accent-gold);
 }
 
 .clerk-promises {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  gap: 1.25rem;
 }
 
 .promise-card {
@@ -671,14 +655,14 @@ a:hover {
   border: 1px solid var(--border-subtle);
   border-top: 4px solid var(--accent-gold);
   border-radius: var(--radius-md);
-  padding: 1.85rem 1.65rem;
+  padding: 1.75rem 1.6rem;
   box-shadow: var(--shadow-card);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .promise-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(18, 24, 36, 0.12);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.1);
 }
 
 .promise-card--security {
@@ -691,8 +675,8 @@ a:hover {
 
 .promise-card__num {
   font-family: var(--font-mono);
-  font-size: 0.76rem;
-  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent-gold);
   display: inline-block;
@@ -709,41 +693,28 @@ a:hover {
 }
 
 .promise-card h3 {
-  font-family: var(--font-serif);
-  font-size: 1.55rem;
+  font-size: 1.4rem;
   line-height: 1.25;
-  margin: 0 0 0.85rem 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.75rem 0;
   color: var(--text-primary);
-  font-weight: 700;
-}
-
-.promise-card h3 em {
-  font-style: italic;
-  color: var(--accent-gold);
-}
-
-.promise-card--security h3 em {
-  color: var(--accent-emerald);
-}
-
-.promise-card--continuity h3 em {
-  color: var(--accent-amber);
 }
 
 .promise-card p {
   margin: 0;
   color: var(--text-secondary);
   font-size: 1.02rem;
-  line-height: 1.62;
+  line-height: 1.6;
 }
 
 .promise-card p strong {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* --------------------------------------------------------------------------
- * Step 9: Interactive "One Clean Daily Screen" Vertical Simulator.
+ * Step 10: Interactive "A typical morning" simulator.
  * -------------------------------------------------------------------------- */
 .vertical-tabs {
   display: grid;
@@ -757,10 +728,10 @@ a:hover {
   color: var(--text-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 0.9rem 1rem;
+  padding: 0.95rem 1rem;
   font-family: var(--font-sans);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   text-align: left;
   transition: all 0.15s ease;
@@ -793,15 +764,16 @@ a:hover {
 }
 
 .daily-screen__title {
-  font-family: var(--font-serif);
   font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
   margin: 0.35rem 0 0.5rem 0;
 }
 
 .daily-screen__summary {
   margin: 0;
   color: var(--text-secondary);
-  max-width: 72ch;
+  max-width: 62ch;
 }
 
 .daily-screen__stats {
@@ -832,14 +804,14 @@ a:hover {
 
 .screen-stat__label {
   display: block;
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   color: var(--text-muted);
 }
 
 .screen-stat__value {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 1.35rem;
+  font-size: 1.3rem;
+  font-weight: 800;
   color: var(--text-primary);
   margin-top: 0.25rem;
 }
@@ -854,7 +826,7 @@ a:hover {
   background: var(--bg-primary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 1.1rem 1.25rem;
+  padding: 1.15rem 1.25rem;
 }
 
 .queue-row__meta {
@@ -877,14 +849,15 @@ a:hover {
 }
 
 .queue-row__client {
-  font-size: 1.08rem;
+  font-size: 1.12rem;
+  font-weight: 700;
   margin: 0 0 0.2rem 0;
 }
 
 .queue-row__matter {
   margin: 0 0 0.6rem 0;
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .queue-row__footer {
@@ -893,9 +866,9 @@ a:hover {
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
-  padding-top: 0.5rem;
+  padding-top: 0.55rem;
   border-top: 1px dashed var(--border-subtle);
-  font-size: 0.86rem;
+  font-size: 0.95rem;
 }
 
 .queue-row__status {
@@ -904,7 +877,7 @@ a:hover {
 
 .queue-row__ref {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--accent-gold);
   background: var(--accent-gold-soft);
   padding: 0.2rem 0.5rem;
@@ -912,35 +885,40 @@ a:hover {
 }
 
 .daily-screen__guarantee {
-  margin-top: 1.4rem;
-  padding: 0.95rem 1.2rem;
+  margin: 1.4rem 0 0 0;
+  padding: 1rem 1.2rem;
   background: var(--accent-emerald-soft);
   border: 1px solid var(--accent-emerald);
   border-radius: var(--radius-sm);
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 /* --------------------------------------------------------------------------
- * Step 10: High-Impact Vertical Deep-Dive Cards & Additional Practices.
+ * Step 11: "What we set up" cards, one per practice type.
  * -------------------------------------------------------------------------- */
 .verticals-catalog-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .vertical-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 1.85rem;
+  padding: 2rem;
   box-shadow: var(--shadow-card);
 }
 
+.vertical-card .eyebrow {
+  margin-bottom: 0.6rem;
+}
+
 .vertical-card h3 {
-  font-family: var(--font-serif);
-  font-size: 1.6rem;
-  margin: 0.3rem 0 0.85rem 0;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem 0;
 }
 
 .vertical-card ul {
@@ -950,27 +928,36 @@ a:hover {
 }
 
 .vertical-card li {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.9rem;
 }
 
 .vertical-card li strong {
+  display: block;
   color: var(--text-primary);
+  font-weight: 700;
+}
+
+.services-footnote {
+  margin: 2rem 0 0 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+  text-align: center;
 }
 
 /* --------------------------------------------------------------------------
- * Step 11: The 4 Specialist Roles Grid & 80/20 Architecture Diagram.
+ * Step 12: Four ways to work together, and the folded technical detail.
  * -------------------------------------------------------------------------- */
 .roles-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .role-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 1.85rem;
+  padding: 1.75rem;
   box-shadow: var(--shadow-card);
 }
 
@@ -980,19 +967,19 @@ a:hover {
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.7rem;
 }
 
 .role-card__number {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--accent-gold);
   font-weight: 700;
 }
 
 .role-card__tag {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   background: var(--accent-gold-soft);
   color: var(--accent-gold);
   padding: 0.2rem 0.55rem;
@@ -1000,66 +987,106 @@ a:hover {
 }
 
 .role-card__title {
-  font-family: var(--font-serif);
-  font-size: 1.6rem;
-  margin: 0 0 0.6rem 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem 0;
 }
 
 .role-card__best-for {
-  font-size: 0.92rem;
-  color: var(--text-secondary);
-  margin: 0 0 1rem 0;
+  font-size: 0.98rem;
+  color: var(--text-muted);
+  margin: 0 0 0.9rem 0;
 }
 
-.role-card__pitch {
+.role-card__summary {
   margin: 0;
-  padding: 1rem 1.15rem;
-  background: var(--bg-primary);
-  border-left: 3px solid var(--accent-gold);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.tech-details {
+  margin-top: 3rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0 1.5rem;
+}
+
+.tech-details summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 1.25rem 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: var(--text-primary);
+}
+
+.tech-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.tech-details summary::after {
+  content: "+";
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--accent-gold);
+}
+
+.tech-details[open] summary::after {
+  content: "−";
+}
+
+.tech-details__body {
+  padding: 0 0 1.5rem 0;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.5rem;
+}
+
+.tech-details__body .section-lead {
+  margin-bottom: 1.5rem;
 }
 
 .architecture-layers {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  margin-top: 2rem;
 }
 
 .arch-layer {
-  background: var(--bg-card);
+  background: var(--bg-primary);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 1.4rem;
+  border-radius: var(--radius-sm);
+  padding: 1.2rem;
 }
 
 .arch-layer__step {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--accent-emerald);
 }
 
 .arch-layer h4 {
-  font-family: var(--font-serif);
-  font-size: 1.3rem;
+  font-size: 1.1rem;
+  font-weight: 700;
   margin: 0.35rem 0 0.5rem 0;
 }
 
 .arch-layer p {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
 }
 
 /* --------------------------------------------------------------------------
- * Step 12: Three-Step Pricing Grid & Interactive ROI Calculator.
+ * Step 13: Fixed-fee pricing cards and the return estimator.
  * -------------------------------------------------------------------------- */
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .pricing-card {
@@ -1074,20 +1101,22 @@ a:hover {
 
 .pricing-card--featured {
   border-color: var(--accent-gold);
-  box-shadow: 0 0 0 1px var(--accent-gold), var(--shadow-card);
+  box-shadow: 0 0 0 2px var(--accent-gold), var(--shadow-card);
 }
 
 .pricing-card__step {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: var(--accent-gold);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .pricing-card__title {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  margin: 0 0 0.9rem 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem 0;
 }
 
 .pricing-card__price-row {
@@ -1098,22 +1127,20 @@ a:hover {
 
 .pricing-card__price {
   display: block;
-  font-family: var(--font-serif);
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.85rem;
+  font-weight: 800;
   color: var(--accent-gold);
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .pricing-card__duration {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
 }
 
 .pricing-card__desc {
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 1rem;
   margin: 0 0 1.2rem 0;
 }
 
@@ -1121,7 +1148,7 @@ a:hover {
   margin: auto 0 0 0;
   padding-left: 1.2rem;
   color: var(--text-secondary);
-  font-size: 0.92rem;
+  font-size: 0.97rem;
 }
 
 .pricing-card__item {
@@ -1133,23 +1160,35 @@ a:hover {
   background: var(--bg-card-solid);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg);
-  padding: 2rem;
+  padding: 2.25rem;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 2rem;
+  gap: 2.25rem;
   align-items: center;
 }
 
+.calc-title {
+  font-size: clamp(1.7rem, 2.6vw, 2.2rem);
+  margin-bottom: 0.75rem;
+}
+
+.calc-intro {
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
+}
+
 .calc-field {
-  margin-bottom: 1.15rem;
+  margin-bottom: 1.25rem;
 }
 
 .calc-field label {
   display: flex;
   justify-content: space-between;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  font-size: 0.95rem;
+  gap: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.45rem;
+  font-size: 1rem;
+  flex-wrap: wrap;
 }
 
 .calc-field select,
@@ -1160,53 +1199,59 @@ a:hover {
 .calc-field select,
 .form-input {
   width: 100%;
+  min-height: 3rem;
   padding: 0.7rem 0.85rem;
   background: var(--bg-primary);
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   font-family: var(--font-sans);
-  font-size: 0.98rem;
+  font-size: 1rem;
 }
 
 .calc-results {
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 1.6rem;
+  padding: 1.75rem;
 }
 
 .calc-metric {
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.25rem;
 }
 
 .calc-metric__label {
   display: block;
-  font-size: 0.84rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
 }
 
 .calc-metric__value {
   display: block;
-  font-family: var(--font-serif);
-  font-size: 2.15rem;
-  font-weight: 700;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   color: var(--accent-gold);
 }
 
+.calc-note {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
 /* --------------------------------------------------------------------------
- * Step 13: Local Hampstead Presence, Contact Form & Footer.
+ * Step 14: Contact section, local presence, enquiry form, and footer.
  * -------------------------------------------------------------------------- */
 .postcode-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.55rem;
   margin: 1.25rem 0;
 }
 
 .postcode-pill {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   padding: 0.4rem 0.8rem;
@@ -1220,11 +1265,55 @@ a:hover {
   align-items: start;
 }
 
+.contact-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.contact-card h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem 0;
+}
+
+.contact-card p {
+  margin: 0.35rem 0;
+}
+
+.contact-card__support {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-top: 0.9rem;
+}
+
 .enquiry-form {
   background: var(--bg-card);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   padding: 2rem;
+}
+
+.enquiry-form__title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.4rem 0;
+}
+
+.enquiry-form__intro {
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
+}
+
+.enquiry-form__status {
+  font-size: 0.95rem;
+  color: var(--accent-emerald);
+  margin: 0.9rem 0 0 0;
+  min-height: 1.4em;
 }
 
 .form-group {
@@ -1233,30 +1322,56 @@ a:hover {
 
 .form-group label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 0.35rem;
-  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  font-size: 0.98rem;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
 }
 
 .site-footer {
   padding: 3rem 0;
   background: var(--bg-elevated);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
 }
 
 .site-footer__inner {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
+  align-items: flex-start;
+  gap: 2rem;
   flex-wrap: wrap;
 }
 
+.site-footer strong {
+  color: var(--text-primary);
+}
+
+.site-footer__tagline {
+  margin-top: 0.25rem;
+}
+
+.site-footer__meta {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.site-footer__disclaimer {
+  max-width: 44ch;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
 /* --------------------------------------------------------------------------
- * Step 14: Responsive Media Queries for Tablet and Mobile Viewports.
+ * Step 15: Responsive layout for tablet and mobile viewports.
  * -------------------------------------------------------------------------- */
-@media (max-width: 1080px) {
+@media (max-width: 1000px) {
   .hero-grid,
   .calculator-box,
   .contact-grid {
@@ -1268,9 +1383,16 @@ a:hover {
     grid-template-columns: 1fr;
   }
 
-  .architecture-layers,
+  .architecture-layers {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .vertical-tabs {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .nav-links {
+    display: none;
   }
 }
 
@@ -1286,6 +1408,38 @@ a:hover {
   }
 
   .gpu-viewport-wrap {
-    height: 300px;
+    height: 320px;
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+
+  .site-header__inner {
+    flex-wrap: wrap;
+  }
+
+  .brand-text__meta {
+    display: none;
+  }
+
+  .site-header .btn--compact {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Step 16: Respect the reader's motion setting. Animations and smooth
+ * scrolling stop for anyone who has asked their device to reduce motion.
+ * -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
   }
 }
