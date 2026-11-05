@@ -51,6 +51,8 @@
     PRIVATE PRACTICES" (`js/config.js`, `index.html`).
 16. Renamed the brand to "Heath & City Technology" in the header, footer,
     page title and README (`js/config.js`, `index.html`, `README.md`).
+17. Replaced the header "Book a coffee" button with the telephone number
+    (`index.html`).
 
 ---
 

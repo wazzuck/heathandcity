@@ -50,7 +50,7 @@ INVARIANTS:
 <body>
   <!-- =======================================================================
        Step 3: Sticky header with brand, short navigation, and one clear
-       call to action.
+       call to action: the telephone number.
        ======================================================================= -->
   <header class="site-header" role="banner">
     <div class="container site-header__inner">
@@ -75,8 +75,12 @@ INVARIANTS:
         </ul>
       </nav>
 
-      <a href="#contact" class="btn btn--primary btn--compact">
-        Book a coffee
+      <a
+        href="tel:02045209114"
+        class="btn btn--primary btn--compact"
+        data-brand-phone-link
+      >
+        <span data-brand-phone>020 4520 9114</span>
       </a>
     </div>
   </header>
