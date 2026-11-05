@@ -6,7 +6,7 @@
  * PURPOSE:
  * Primary User Interface (UI) controller for the Hampstead and North West (NW)
  * London private practice website. Coordinates brand token injection, the
- * four-practice "A typical morning" demo, the interactive return estimator,
+ * five-practice "A typical morning" demo, the interactive return estimator,
  * and the enquiry form builder.
  *
  * WHAT THIS FILE IS NOT FOR:
@@ -23,7 +23,6 @@
 import {
   SITE_CONFIG,
   VERTICAL_DEMOS,
-  SPECIALIST_ROLES,
   PRICING_STEPS
 } from "./config.js";
 
@@ -134,35 +133,7 @@ function applyBrandConfig() {
 }
 
 /**
- * Step 3: Render the four Specialist Roles cards from SPECIALIST_ROLES.
- */
-function renderSpecialistRoles() {
-  const container = document.getElementById("specialist-roles-grid");
-  if (!container) {
-    return;
-  }
-  container.innerHTML = "";
-
-  SPECIALIST_ROLES.forEach((item) => {
-    const card = document.createElement("article");
-    card.className = "role-card";
-    card.innerHTML = `
-      <div class="role-card__header">
-        <span class="role-card__number">OPTION ${item.number}</span>
-        <span class="role-card__tag">${item.architectureTag}</span>
-      </div>
-      <h3 class="role-card__title">${item.role}</h3>
-      <p class="role-card__best-for">
-        <strong>Best for:</strong> ${item.bestFor}
-      </p>
-      <p class="role-card__summary">${item.summary}</p>
-    `;
-    container.appendChild(card);
-  });
-}
-
-/**
- * Step 4: Render the Three-Step Pricing Architecture cards from PRICING_STEPS.
+ * Step 3: Render the Three-Step Pricing Architecture cards from PRICING_STEPS.
  */
 function renderPricingSteps() {
   const container = document.getElementById("pricing-steps-grid");
@@ -195,7 +166,7 @@ function renderPricingSteps() {
 }
 
 /**
- * Step 5: Render the selected practice type inside the "A typical morning"
+ * Step 4: Render the selected practice type inside the "A typical morning"
  * demo panel.
  *
  * @param {string} verticalId - Key in VERTICAL_DEMOS.
@@ -269,7 +240,7 @@ function selectVerticalDemo(verticalId) {
 }
 
 /**
- * Step 8: Initialise the interactive Practice Time & Revenue Recovery
+ * Step 5: Initialise the interactive Practice Time & Revenue Recovery
  * Calculator so principals can quantify their Return on Investment (ROI).
  */
 function initRecoveryCalculator() {
@@ -333,7 +304,7 @@ function initRecoveryCalculator() {
 }
 
 /**
- * Step 9: Initialise the Private Hampstead Consultation & Audit Enquiry form.
+ * Step 6: Initialise the Private Hampstead Consultation & Audit Enquiry form.
  * Generates a formatted, zero-cloud local email or clipboard brief.
  */
 function initConsultationBuilder() {
@@ -412,17 +383,16 @@ function initConsultationBuilder() {
 }
 
 /**
- * Step 10: Bootstrap the application once the DOM is ready.
+ * Step 7: Bootstrap the application once the DOM is ready.
  */
 function bootstrapApp() {
   // 1. Inject centralised brand tokens across the page.
   applyBrandConfig();
 
-  // 2. Render dynamic Specialist Roles and Pricing Step cards.
-  renderSpecialistRoles();
+  // 2. Render the pricing step cards from PRICING_STEPS.
   renderPricingSteps();
 
-  // 3. Bind the four-practice "A typical morning" tabs.
+  // 3. Bind the five-practice "A typical morning" tabs.
   document.querySelectorAll("[data-vertical-tab]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const vId = btn.getAttribute("data-vertical-tab");

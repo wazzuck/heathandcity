@@ -121,7 +121,6 @@ def check_html_structure() -> List[str]:
         "about",
         "daily-screen",
         "services-by-vertical",
-        "specialist-roles",
         "architecture",
         "pricing",
         "contact",
@@ -146,7 +145,7 @@ def check_html_structure() -> List[str]:
         "£3,000",
         "£350",
         "Outlook",
-        "Single-PA Fragility",
+        "single point of failure",
     ]
     for phrase in required_phrases:
         if phrase not in combined_text:
