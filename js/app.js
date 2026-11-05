@@ -39,41 +39,41 @@ import { GPUSceneController } from "./gpu-scene.js";
  * Consumed by: updateCalculator().
  */
 const CALCULATOR_PROFILES = Object.freeze({
-  insurance: {
-    label: "Boutique Insurance / Mortgage Brokerage",
-    hourlyRateGbp: 185,
-    leakageFactor: 0.035,
-    efficiencyGain: 0.72,
-    note:
-      "Reflects automated renewal retention, underwriter chaser tracking, " +
-      "and elimination of manual Outlook thread forwarding."
-  },
-  medical: {
-    label: "Senior Medical Consultant / Medico-Legal Practice",
-    hourlyRateGbp: 550,
-    leakageFactor: 0.065,
-    efficiencyGain: 0.78,
-    note:
-      "Reflects automated 2,000-page PDF bundle chronology extraction plus " +
-      "recovery of under-reimbursed Bupa, AXA, and Vitality procedures."
-  },
   legal: {
-    label: "King's Counsel (KC) / Arbitrator / Boutique Law Partner",
+    label: "Barrister / King's Counsel",
     hourlyRateGbp: 600,
     leakageFactor: 0.04,
     efficiencyGain: 0.75,
     note:
-      "Reflects instant 20-year private precedent retrieval and automated " +
-      "financial disclosure discrepancy detection across PDF bundles."
+      "Assumes faster precedent searches and fewer disclosure checks done by " +
+      "hand. Use your own hourly rate to refine the estimate."
   },
-  family_office: {
-    label: "Family Office / Multi-SPV Property Principal",
-    hourlyRateGbp: 420,
-    leakageFactor: 0.045,
-    efficiencyGain: 0.8,
+  brokers: {
+    label: "Insurance / Stock Broker",
+    hourlyRateGbp: 250,
+    leakageFactor: 0.035,
+    efficiencyGain: 0.72,
     note:
-      "Reflects multi-bank PDF statement normalisation and 90/60/30-day " +
-      "commercial lease-break, rent review, and compliance protection."
+      "Assumes fewer missed renewals, fewer manual chasers, and less time " +
+      "spent forwarding Outlook threads and filing trade records."
+  },
+  composers: {
+    label: "Composer / Music Publisher",
+    hourlyRateGbp: 120,
+    leakageFactor: 0.05,
+    efficiencyGain: 0.7,
+    note:
+      "Assumes royalty statements are matched automatically and missed " +
+      "differences are flagged early, with less time on spreadsheets."
+  },
+  medical: {
+    label: "Surgeon / Consultant",
+    hourlyRateGbp: 550,
+    leakageFactor: 0.065,
+    efficiencyGain: 0.78,
+    note:
+      "Assumes long bundles are read on-site and possible insurer " +
+      "underpayments are flagged for recovery."
   }
 });
 
@@ -152,14 +152,14 @@ function renderSpecialistRoles() {
     card.className = "role-card";
     card.innerHTML = `
       <div class="role-card__header">
-        <span class="role-card__number">ROLE ${item.number}</span>
+        <span class="role-card__number">OPTION ${item.number}</span>
         <span class="role-card__tag">${item.architectureTag}</span>
       </div>
       <h3 class="role-card__title">${item.role}</h3>
       <p class="role-card__best-for">
-        <strong>Designed for:</strong> ${item.bestFor}
+        <strong>Best for:</strong> ${item.bestFor}
       </p>
-      <blockquote class="role-card__pitch">"${item.pitch}"</blockquote>
+      <p class="role-card__summary">${item.summary}</p>
     `;
     container.appendChild(card);
   });
@@ -322,7 +322,7 @@ function activateSceneModeUI(modeId, gpuController) {
     slider.value = String(pct);
   }
   if (sliderVal) {
-    sliderVal.textContent = `${pct}% Order`;
+    sliderVal.textContent = `${pct}% tidy`;
   }
 
   // 4. Instruct the GPU controller to transition smoothly to the new topology.
@@ -354,7 +354,7 @@ function initRecoveryCalculator() {
   function updateCalculator() {
     const profile =
       CALCULATOR_PROFILES[verticalSelect.value] ||
-      CALCULATOR_PROFILES.insurance;
+      CALCULATOR_PROFILES.brokers;
     const weeklyHours = Number(hoursInput.value) || 10;
     const annualRevenueMillions = Number(revenueInput.value) || 1.2;
 
@@ -420,13 +420,13 @@ function initConsultationBuilder() {
       (document.getElementById("enquiry-postcode") || {}).value || "NW3";
     const bottleneck =
       (document.getElementById("enquiry-bottleneck") || {}).value ||
-      "Step 1 Read-Only Inbox & Workflow Audit (£750–£1,500)";
+      "Step 1: Two-week trial on my own documents (£750–£1,500)";
 
     const subject = `Private Consultation (${postcode}) — ${practice}`;
     const body = [
-      `Dear Principal Architect (${SITE_CONFIG.brandName}),`,
+      `Hello ${SITE_CONFIG.brandName},`,
       "",
-      `I would like to arrange a discreet 20-minute coffee or on-site discussion in ${postcode}.`,
+      `I would like to arrange a short, discreet coffee or on-site discussion in ${postcode}.`,
       "",
       `Principal / Partner: ${name}`,
       `Practice / Chambers: ${practice}`,
@@ -500,13 +500,13 @@ async function bootstrapApp() {
       }
       if (fpsBadge) {
         fpsBadge.textContent = status.isPaused
-          ? "STATIC MODE"
-          : `${status.fps} FPS · ZERO COOP/COEP`;
+          ? "STILL IMAGE"
+          : `${status.fps} FPS · RUNS IN YOUR BROWSER`;
       }
       if (pauseBtn) {
         pauseBtn.textContent = status.isPaused
-          ? "Resume 3D Motion"
-          : "Pause 3D Motion";
+          ? "Resume motion"
+          : "Pause motion";
         pauseBtn.setAttribute(
           "aria-pressed",
           status.isPaused ? "true" : "false"
@@ -532,7 +532,7 @@ async function bootstrapApp() {
     orderSlider.addEventListener("input", () => {
       const pct = Number(orderSlider.value) || 0;
       if (orderSliderVal) {
-        orderSliderVal.textContent = `${pct}% Order`;
+        orderSliderVal.textContent = `${pct}% tidy`;
       }
       gpuController.setOrderRatio(pct / 100.0);
     });
@@ -542,7 +542,7 @@ async function bootstrapApp() {
   if (chaosBtn) {
     chaosBtn.addEventListener("click", () => {
       if (orderSlider) orderSlider.value = "8";
-      if (orderSliderVal) orderSliderVal.textContent = "8% Order (Inbox Chaos)";
+      if (orderSliderVal) orderSliderVal.textContent = "8% tidy (the mess)";
       gpuController.setOrderRatio(0.08);
       gpuController.triggerPulse();
     });
@@ -553,7 +553,7 @@ async function bootstrapApp() {
     orderBtn.addEventListener("click", () => {
       if (orderSlider) orderSlider.value = "96";
       if (orderSliderVal) {
-        orderSliderVal.textContent = "96% Order (Reconciled Ledger)";
+        orderSliderVal.textContent = "96% tidy (sorted)";
       }
       gpuController.setOrderRatio(0.96);
       gpuController.triggerPulse();
@@ -583,7 +583,7 @@ async function bootstrapApp() {
 
   // 8. Set initial scene and vertical states.
   activateSceneModeUI("lattice", gpuController);
-  selectVerticalDemo("insurance", gpuController, false);
+  selectVerticalDemo("legal", gpuController, false);
 
   // 9. Initialise the ROI calculator and consultation form builder.
   initRecoveryCalculator();
