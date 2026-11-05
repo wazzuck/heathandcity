@@ -472,7 +472,7 @@ a:hover {
  * -------------------------------------------------------------------------- */
 .about-grid {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 280px 1fr;
   gap: 3.5rem;
   align-items: flex-start;
 }
@@ -483,8 +483,8 @@ a:hover {
 }
 
 .about-photo {
-  width: 200px;
-  height: 200px;
+  width: 260px;
+  height: 260px;
   border-radius: var(--radius-md);
   object-fit: cover;
   border: 2px solid var(--border-strong);
