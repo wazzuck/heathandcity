@@ -24,7 +24,7 @@ practices across Hampstead and North West (NW) London (`NW3`, `NW6`, `NW8`,
 ## 2. Changing the Provisional Brand Name (Step by Step)
 
 The brand name is currently set to a provisional placeholder (`Heath & City
-Computer Systems Advisory`) while the final name is To Be Confirmed (TBC).
+Technology`) while the final name is To Be Confirmed (TBC).
 
 1. Open `js/config.js` in your editor.
 2. Locate the `SITE_CONFIG` object at step 1 of the file.
