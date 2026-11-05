@@ -32,17 +32,19 @@ The single page (`index.html`) runs top to bottom in this order:
 
 1. **Hero**: headline, three quick facts, and two calls to action.
 2. **Three promises**: no disruption, privacy, and continuity.
-3. **Demo**: a sample "typical morning" summary, with one tab per practice
+3. **About the founder**: background of Neville Bryce, 17+ years in
+   institutional financial systems, and verified credentials.
+4. **Demo**: a sample "typical morning" summary, with one tab per practice
    type. All names and figures are invented and labelled illustrative.
-4. **Services**: one card per practice type, with three short benefits each.
-5. **Ways to work together**: four options, plus a collapsed technical panel
+5. **Services**: one card per practice type, with three short benefits each.
+6. **Ways to work together**: four options, plus a collapsed technical panel
    describing the build.
-6. **Pricing**: three fixed-fee steps and an interactive return estimator.
-7. **Questions and answers**: eight short, self-contained answers, also
+7. **Pricing**: three fixed-fee steps and an interactive return estimator.
+8. **Questions and answers**: eight short, self-contained answers, also
    published as `FAQPage` structured data.
-8. **Contact**: local details and a short enquiry form. The form opens the
+9. **Contact**: local details and a short enquiry form. The form opens the
    reader's own email application, and sends no data to a web server.
-9. **Footer**: brand, locations, and the professional-services disclaimer.
+10. **Footer**: brand, locations, and the professional-services disclaimer.
 
 ---
 
@@ -51,6 +53,7 @@ The single page (`index.html`) runs top to bottom in this order:
 | Path                     | Responsibility                                   |
 | ------------------------ | ------------------------------------------------ |
 | `index.html`             | Semantic single-page structure and content.      |
+| `img/neville-bryce.jpg`   | Founder portrait image for About and JSON-LD.    |
 | `css/styles.css`         | Typography, colour, responsive layout, motion.   |
 | `js/config.js`           | Brand settings, demo data, roles, and pricing.   |
 | `js/app.js`              | UI state, demo tabs, estimator, and enquiry form.|
