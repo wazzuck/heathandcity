@@ -49,6 +49,8 @@
     (`js/config.js`, `index.html`).
 15. Reworded the hero label to "STATE-OF-THE-ART TECHNOLOGY FOR SMALL
     PRIVATE PRACTICES" (`js/config.js`, `index.html`).
+16. Renamed the brand to "Heath & City Technology" in the header, footer,
+    page title and README (`js/config.js`, `index.html`, `README.md`).
 
 ---
 
