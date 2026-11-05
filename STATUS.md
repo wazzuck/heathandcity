@@ -59,6 +59,10 @@
     JavaScript-built content, FAQ, structured data, canonical and Open
     Graph tags, `robots.txt`, `sitemap.xml`, `llms.txt`, and verifier
     checks.
+20. Added About the Founder section with portrait image
+    (`img/neville-bryce.jpg`), verified 17+ years low-latency financial
+    systems background from LinkedIn, credibility chips, and Schema.org
+    `Person` JSON-LD entity.
 
 ---
 
@@ -67,8 +71,7 @@
 1. Visibility phase 3 (one page per profession) awaits a decision.
 2. Visibility phase 4 (off-page): Google Business Profile, Search Console,
    Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
-3. Add a social preview image and the founder `Person` data once the
-   operator supplies a photo, name and official profile links.
+3. Add a bespoke social preview Open Graph image (`og:image`).
 4. Allow GitHub to finish issuing the multi-domain certificate expansion for
    `www.heathandcity.com` (automated background job).
 
