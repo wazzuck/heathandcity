@@ -38,6 +38,10 @@
     `clients/southgatesurgery/PRACTICE_STAKEHOLDER_AND_CONTACT_DOSSIER.md`.
 11. Updated the principal contact telephone number to `+44 20 4520 9114` in
     the centralised brand configuration and the static contact fallback.
+12. Rewrote the landing page for time-poor principals: barristers, insurance
+    and stock brokers, composers, and surgeons. Plain-English hero, three
+    promises, four-practice demo, fixed-fee pricing, and a collapsed technical
+    panel (`index.html`, `css/styles.css`, `js/config.js`, `js/app.js`).
 
 ---
 
