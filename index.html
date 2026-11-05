@@ -18,10 +18,8 @@ WHAT THIS FILE IS NOT FOR:
 
 INVARIANTS:
 1. Compatible out-of-the-box with GitHub Pages and Cloudflare Pages.
-2. Degrades gracefully across WebGPU, Web Graphics Library (WebGL), Two-
-   Dimensional (2D) Canvas, and static reduced-motion modes.
-3. All customer-facing copy uses British English conventions.
-4. Every element id and data-brand-* hook is read by js/app.js or
+2. All customer-facing copy uses British English conventions.
+3. Every element id and data-brand-* hook is read by js/app.js or
    scripts/verify_site.py. Do not rename one without updating both.
 ==============================================================================
 -->
@@ -89,7 +87,7 @@ INVARIANTS:
          this, and why should I care?" in under ten seconds.
          ===================================================================== -->
     <section class="hero-section" aria-labelledby="hero-heading">
-      <div class="container hero-grid">
+      <div class="container">
         <div class="hero-copy">
           <div class="eyebrow" data-brand-badge>
             HAMPSTEAD NW3 · TECHNOLOGY FOR PRIVATE PRACTICES
@@ -138,139 +136,6 @@ INVARIANTS:
             <strong>You stay in charge.</strong> Nothing is sent to your
             clients, counterparties or colleagues without your approval.
           </p>
-        </div>
-
-        <!-- Interactive 3D visual. The copy is kept short so it reads at a
-             glance. Scene logic lives in js/gpu-scene.js. -->
-        <div
-          class="gpu-theatre"
-          aria-label="Interactive 3D visualisation of how documents are sorted"
-        >
-          <div class="gpu-theatre__topbar">
-            <div class="gpu-status-group">
-              <span class="status-dot" aria-hidden="true"></span>
-              <span id="gpu-engine-badge" class="gpu-badge">
-                LOADING VISUAL…
-              </span>
-              <span id="gpu-fps-badge" class="gpu-badge gpu-badge--muted">
-                RUNS IN YOUR BROWSER
-              </span>
-            </div>
-            <button
-              type="button"
-              id="gpu-pause-btn"
-              class="gpu-mini-btn"
-              aria-pressed="false"
-            >
-              Pause motion
-            </button>
-          </div>
-
-          <div
-            class="gpu-mode-tabs"
-            role="group"
-            aria-label="Choose a visual"
-          >
-            <button
-              type="button"
-              class="scene-tab-btn is-active"
-              data-scene-mode="lattice"
-              aria-pressed="true"
-            >
-              <span>01 · DOCUMENTS</span>
-              Order from chaos
-            </button>
-            <button
-              type="button"
-              class="scene-tab-btn"
-              data-scene-mode="vault"
-              aria-pressed="false"
-            >
-              <span>02 · ARCHIVE</span>
-              Your private archive
-            </button>
-            <button
-              type="button"
-              class="scene-tab-btn"
-              data-scene-mode="telemetry"
-              aria-pressed="false"
-            >
-              <span>03 · MONEY</span>
-              Money and deadlines
-            </button>
-          </div>
-
-          <div class="gpu-viewport-wrap">
-            <canvas
-              id="gpu-centrepiece-canvas"
-              aria-label="Animated visual of documents being sorted"
-            ></canvas>
-
-            <div class="gpu-hud-overlay">
-              <div class="gpu-caption-box">
-                <h2 id="scene-caption-title">Order from chaos</h2>
-                <p id="scene-caption-subtitle">
-                  Emails, bundles and statements come in messy and leave sorted
-                  by client and deadline.
-                </p>
-              </div>
-              <div class="gpu-telemetry-pills">
-                <span id="telemetry-pipeline" class="telemetry-pill">
-                  SORTED BY CLIENT &amp; DEADLINE
-                </span>
-                <span id="telemetry-throughput" class="telemetry-pill">
-                  2,400 PAGES / MIN ON-SITE
-                </span>
-                <span id="telemetry-egress" class="telemetry-pill">
-                  0 BYTES SENT TO PUBLIC CLOUD
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="gpu-controls-bar">
-            <div class="slider-row">
-              <label for="order-slider">Tidy-up level:</label>
-              <input
-                type="range"
-                id="order-slider"
-                min="0"
-                max="100"
-                value="78"
-              />
-              <span id="order-slider-value" class="slider-readout">
-                78% tidy
-              </span>
-            </div>
-            <div class="gpu-action-row">
-              <div>
-                <button
-                  type="button"
-                  id="btn-simulate-chaos"
-                  class="gpu-mini-btn"
-                >
-                  Show the mess
-                </button>
-                <button
-                  type="button"
-                  id="btn-simulate-order"
-                  class="gpu-mini-btn"
-                >
-                  Show it tidied
-                </button>
-                <button
-                  type="button"
-                  id="btn-trigger-pulse"
-                  class="gpu-mini-btn"
-                >
-                  Re-check
-                </button>
-              </div>
-              <p id="scene-caption-note" class="gpu-note-line">
-                Move your cursor over the visual to look closer.
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -408,7 +273,7 @@ INVARIANTS:
               </p>
             </div>
             <div>
-              <span id="demo-screen-digest" class="gpu-badge">
+              <span id="demo-screen-digest" class="digest-badge">
                 Private system · Stays in your office
               </span>
             </div>

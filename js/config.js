@@ -13,8 +13,6 @@
  *
  * WHAT THIS FILE IS NOT FOR:
  * - This file does not perform Document Object Model (DOM) manipulation.
- * - This file does not execute Web Graphics Processing Unit (WebGPU) or Web
- *   Graphics Library (WebGL) rendering calls.
  * - This file does not store any confidential client, patient or personal
  *   data. Every client name, figure and reference below is invented for
  *   illustration.
@@ -65,90 +63,7 @@ export const SITE_CONFIG = Object.freeze({
 });
 
 /**
- * Step 2: Define SCENE_MODES.
- * Configures the three interactive Three-Dimensional (3D) GPU visual
- * centrepiece modes. The copy is deliberately plain: the visitor is a busy
- * professional, not an engineer. The technical wording is kept in
- * technicalNote for the reader who wants it.
- *
- * Fields and units:
- * - id: Unique string key consumed by the GPU scene controller.
- * - number: Display ordinal ("01", "02", "03").
- * - title: Human-readable scene title, under about six words.
- * - subtitle: One-sentence plain-English explanation of the visual.
- * - technicalNote: Explanation of the underlying architecture represented.
- * - defaultOrder: Initial Entropy-to-Order ratio (float in [0.0, 1.0]).
- * - primaryHex: Primary brass/gold or highlight colour in hexadecimal integer.
- * - secondaryHex: Secondary emerald or slate colour in hexadecimal integer.
- * - accentCss: Cascading Style Sheets (CSS) colour string for UI badges.
- * - metrics: Short telemetry labels displayed in the heads-up overlay.
- *   Consumed by: js/app.js (activateSceneModeUI).
- */
-export const SCENE_MODES = Object.freeze({
-  lattice: {
-    id: "lattice",
-    number: "01",
-    title: "Order from chaos",
-    subtitle:
-      "Emails, bundles and statements come in messy and leave sorted by " +
-      "client and deadline.",
-    technicalNote:
-      "Illustrates automated entity extraction (client, matter, deadline, " +
-      "urgency) turning unstructured documents into an ordered list.",
-    defaultOrder: 0.78,
-    primaryHex: 0xd4af6a,
-    secondaryHex: 0x34d399,
-    accentCss: "#d4af6a",
-    metrics: {
-      pipeline: "SORTED BY CLIENT & DEADLINE",
-      throughput: "2,400 PAGES / MIN ON-SITE",
-      egress: "0 BYTES SENT TO PUBLIC CLOUD"
-    }
-  },
-  vault: {
-    id: "vault",
-    number: "02",
-    title: "Your private archive",
-    subtitle:
-      "Decades of notes, opinions and records, searchable in seconds on a " +
-      "machine in your own office.",
-    technicalNote:
-      "Illustrates Two-Tower neural search combined with keyword indexing, " +
-      "running inside a private network with no public cloud involved.",
-    defaultOrder: 0.88,
-    primaryHex: 0x60a5fa,
-    secondaryHex: 0xd4af6a,
-    accentCss: "#60a5fa",
-    metrics: {
-      pipeline: "PRIVATE SEARCH, NO CLOUD",
-      throughput: "< 18 MS SEARCH TIME",
-      egress: "CONFIDENTIAL · STAYS ON SITE"
-    }
-  },
-  telemetry: {
-    id: "telemetry",
-    number: "03",
-    title: "Money and deadlines in one view",
-    subtitle:
-      "Statements, royalty reports and key dates matched against each other, " +
-      "so nothing is missed.",
-    technicalNote:
-      "Illustrates ledger reconciliation across bank statements, insurer " +
-      "remittances, royalty statements and deadline calendars.",
-    defaultOrder: 0.84,
-    primaryHex: 0x34d399,
-    secondaryHex: 0xd4af6a,
-    accentCss: "#34d399",
-    metrics: {
-      pipeline: "STATEMENTS MATCHED TO LEDGER",
-      throughput: "MISMATCHES FLAGGED AUTOMATICALLY",
-      egress: "ALERTS AT 90 / 60 / 30 DAYS"
-    }
-  }
-});
-
-/**
- * Step 3: Define VERTICAL_DEMOS.
+ * Step 2: Define VERTICAL_DEMOS.
  * Provides interactive data for the "A typical morning" simulation. Each entry
  * is one practice type. Every name, figure and reference is invented and is
  * labelled as illustrative on the page.
@@ -159,7 +74,6 @@ export const SCENE_MODES = Object.freeze({
  * - badge: Small uppercase label above the headline.
  * - headline: Practice type, shown as the panel title.
  * - summary: One plain sentence describing the benefit.
- * - sceneMode: Scene in SCENE_MODES that is shown alongside this demo.
  * - stats: Three key figures, each with a tone used for colour coding.
  * - digestTime: Label for the daily summary timing.
  * - queueItems: Three rows, each with priority, client, matter, status, timer
@@ -175,7 +89,6 @@ export const VERTICAL_DEMOS = Object.freeze({
     summary:
       "Find any old opinion in seconds, and see disclosure gaps before " +
       "they cost you a hearing.",
-    sceneMode: "vault",
     stats: [
       { label: "Opinions Searchable", value: "20 Years", tone: "gold" },
       { label: "Disclosure Gaps Flagged", value: "3 Missing Periods", tone: "amber" },
@@ -221,7 +134,6 @@ export const VERTICAL_DEMOS = Object.freeze({
     summary:
       "Renewals and trade records stay on schedule, and your team keeps " +
       "working in Outlook as usual.",
-    sceneMode: "lattice",
     stats: [
       { label: "Needs Reply Today", value: "4 Items", tone: "amber" },
       { label: "Waiting on Underwriter", value: "7 Chasers", tone: "gold" },
@@ -267,7 +179,6 @@ export const VERTICAL_DEMOS = Object.freeze({
     summary:
       "Royalty statements are checked against your own records, and every " +
       "commission deadline stays visible.",
-    sceneMode: "telemetry",
     stats: [
       { label: "Statements Matched", value: "18 Reports", tone: "gold" },
       { label: "Unmatched Works", value: "2 To Review", tone: "amber" },
@@ -314,7 +225,6 @@ export const VERTICAL_DEMOS = Object.freeze({
     summary:
       "Long medical bundles become a dated chronology, and underpaid " +
       "private procedures are flagged for recovery.",
-    sceneMode: "vault",
     stats: [
       { label: "Bundle Read On-Site", value: "2,140 Pages", tone: "gold" },
       { label: "Weekend Hours Saved", value: "12.5 Hours", tone: "emerald" },
@@ -354,7 +264,7 @@ export const VERTICAL_DEMOS = Object.freeze({
 });
 
 /**
- * Step 4: Define SPECIALIST_ROLES.
+ * Step 3: Define SPECIALIST_ROLES.
  * Four ways of working together, written as short plain-English summaries.
  * Fields:
  * - number: Two-digit display ordinal.
@@ -407,7 +317,7 @@ export const SPECIALIST_ROLES = Object.freeze([
 ]);
 
 /**
- * Step 5: Define PRICING_STEPS.
+ * Step 4: Define PRICING_STEPS.
  * Implements the three-step, fixed-fee engagement structure. Prices are
  * quoted in Pounds Sterling (£). Each entry is rendered as one pricing card.
  */

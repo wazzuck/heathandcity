@@ -1,9 +1,8 @@
 # Hampstead & North West London Private Technology Showcase
 
-Single-page static website with an interactive Web Graphics Processing Unit
-(WebGPU) and Three.js Three-Dimensional (3D) visual centrepiece advertising
-bespoke systems engineering for senior principals across Hampstead and North
-West (NW) London (`NW3`, `NW6`, `NW8`, `NW11`, `N6`).
+Single-page static website describing private, simple systems for small
+practices across Hampstead and North West (NW) London (`NW3`, `NW6`, `NW8`,
+`NW11`, `N6`). It has no animated graphics and no build step.
 
 ---
 
