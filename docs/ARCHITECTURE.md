@@ -5,10 +5,11 @@
 1. This document defines the technical architecture of the static showcase
    website for the Hampstead and North West (NW) London private technology
    consulting practice.
-2. The website targets senior, non-technical principals across NW3, NW6, NW8,
-   NW11, and N6, including boutique insurance brokers, senior medical
-   consultants, King's Counsel (KC), boutique law partners, family offices,
-   and multi-Special Purpose Vehicle (SPV) property principals.
+2. The website targets time-poor, non-technical principals across NW3,
+   NW6, NW8, NW11, and N6: barristers and King's Counsel (KC), insurance and
+   stock brokers, composers and music publishers, and surgeons and senior
+   consultants. Copy is plain English, and the technical detail sits in a
+   collapsed panel that the reader can skip.
 3. The system combines an institutional-grade editorial layout with a
    high-impact, interactive Three-Dimensional (3D) visual centrepiece powered
    by Web Graphics Processing Unit (WebGPU), Three.js, and Web Graphics
@@ -67,7 +68,7 @@ implements a four-tier graceful degradation pipeline:
 
 The user can switch live between three interactive 3D GPU scenes:
 
-1. **Scene 1: Order from Chaos (Autonomous Inbox & Document Lattice)**
+1. **Scene 1: Order from Chaos (Documents Lattice)**
    - Models unsorted email threads, 2,000-page PDF bundles, and insurer
      remittances entering a central normalisation ring and snapping into an
      ordered emerald-and-brass architectural ledger.
@@ -78,7 +79,7 @@ The user can switch live between three interactive 3D GPU scenes:
      concentric rings of 20-year precedent archives.
    - Cursor proximity fires synaptic retrieval beams across the vector space
      while an outer shield deflects external public-cloud egress.
-3. **Scene 3: City-to-Heath Precision (Financial & Property Telemetry)**
+3. **Scene 3: Money and Deadlines (Ledger & Deadline Telemetry)**
    - Models ultra-low-latency City of London market data pipelines merged with
      Hampstead topographical contours, reconciling multi-bank PDF statements
      and 90/60/30-day property compliance horizons.
@@ -103,7 +104,7 @@ The user can switch live between three interactive 3D GPU scenes:
 
 1. **Three.js (`0.170.0`)**: Consumed under the permissive Massachusetts
    Institute of Technology (MIT) Licence.
-2. **Typography**: Google Fonts (`Cormorant Garamond`, `Plus Jakarta Sans`,
+2. **Typography**: Google Fonts (`Plus Jakarta Sans`,
    `JetBrains Mono`) are licensed under the Open Font License (OFL) with
    system font stacks as instant fallbacks.
 3. **Standards**: WebGPU, WebGL, HTML5, and Cascading Style Sheets (CSS) are
@@ -111,3 +112,17 @@ The user can switch live between three interactive 3D GPU scenes:
 4. **Original Code**: All shader algorithms, 3D geometries, copy, and user
    interface components in this repository are original works free of third-
    party patent claims or proprietary data dependencies.
+5. **Practice-Type Copy (legal and regulatory check, November 2026)**:
+   - The site provides technology and administrative services only. The
+     footer states that it gives no legal, medical, investment or insurance
+     advice. Broker copy says the firm does not give regulated advice.
+   - Record-keeping wording refers to "the period your regulator requires"
+     rather than naming a fixed retention period.
+   - Collection-society names (for example, PRS for Music) are used only to
+     describe the statements the system reads. The site makes no claim of
+     affiliation, endorsement, or integration with any society.
+   - All client, patient and royalty figures in the demonstration panel are
+     invented and labelled as illustrative.
+   - No risk requiring a stop-and-decide was identified.
+   - Fee-estimator hourly rates and leakage factors in `js/app.js` are
+     assumptions, shown to the reader as conservative estimates.
