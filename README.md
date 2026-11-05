@@ -21,10 +21,10 @@ practices across Hampstead and North West (NW) London (`NW3`, `NW6`, `NW8`,
 
 ---
 
-## 2. Changing the Provisional Brand Name (Step by Step)
+## 2. Changing the Brand Name (Step by Step)
 
-The brand name is currently set to a provisional placeholder (`Heath & City
-Technology`) while the final name is To Be Confirmed (TBC).
+The brand name (`Heath & City Technology`) is final. The steps below
+stay in place should the practice ever need to rename itself again.
 
 1. Open `js/config.js` in your editor.
 2. Locate the `SITE_CONFIG` object at step 1 of the file.

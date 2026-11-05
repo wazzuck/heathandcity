@@ -5,9 +5,9 @@
 1. This document defines the technical architecture of the static website
    for the Hampstead and North West (NW) London private technology practice.
 2. The website targets time-poor, non-technical principals across NW3,
-   NW6, NW8, NW11, and N6: barristers and King's Counsel (KC), insurance and
-   stock brokers, composers and music publishers, and surgeons and senior
-   consultants.
+   NW6, NW8, NW11, and N6: barristers and King's Counsel (KC), insurance
+   and stock brokers, composers and music publishers, surgeons and
+   senior consultants, and family offices and property principals.
 3. Copy is plain English. Technical detail sits in a collapsed panel that the
    reader can skip. The page has no animated graphics.
 
@@ -34,17 +34,19 @@ The single page (`index.html`) runs top to bottom in this order:
 2. **Three promises**: no disruption, privacy, and continuity.
 3. **About the founder**: background of Neville Bryce, 17+ years in
    institutional financial systems, and verified credentials.
-4. **Demo**: a sample "typical morning" summary, with one tab per practice
-   type. All names and figures are invented and labelled illustrative.
-5. **Services**: one card per practice type, with three short benefits each.
-6. **Ways to work together**: four options, plus a collapsed technical panel
-   describing the build.
-7. **Pricing**: three fixed-fee steps and an interactive return estimator.
-8. **Questions and answers**: eight short, self-contained answers, also
+4. **Demo**: a sample "typical morning" summary, with one tab per
+   practice type, including family offices and property principals. All
+   names and figures are invented and labelled illustrative.
+5. **Services**: one card per practice type, with three short benefits
+   each, followed by a collapsed technical panel describing the build.
+6. **Pricing**: three fixed-fee steps and an interactive return estimator.
+7. **Questions and answers**: six short, self-contained answers, also
    published as `FAQPage` structured data.
-9. **Contact**: local details and a short enquiry form. The form opens the
-   reader's own email application, and sends no data to a web server.
-10. **Footer**: brand, locations, and the professional-services disclaimer.
+8. **Contact**: local details and a short enquiry form. The form opens
+   the reader's own email application, and sends no data to a web
+   server.
+9. **Footer**: brand, locations, and the professional-services
+   disclaimer.
 
 ---
 
@@ -55,7 +57,7 @@ The single page (`index.html`) runs top to bottom in this order:
 | `index.html`             | Semantic single-page structure and content.      |
 | `img/neville-bryce.jpg`   | Founder portrait image for About and JSON-LD.    |
 | `css/styles.css`         | Typography, colour, responsive layout, motion.   |
-| `js/config.js`           | Brand settings, demo data, roles, and pricing.   |
+| `js/config.js`           | Brand settings, demo data, and pricing.          |
 | `js/app.js`              | UI state, demo tabs, estimator, and enquiry form.|
 | `robots.txt`             | Lets every crawler, including AI assistants, in. |
 | `sitemap.xml`            | Lists the pages for search engines.              |
@@ -70,7 +72,7 @@ The single page (`index.html`) runs top to bottom in this order:
 ## 5. Search and AI-Assistant Discoverability
 
 1. **No-JavaScript rule**: many crawlers do not run scripts. Every fact a
-   reader needs (prices, the four ways to work, postcodes, the first demo
+   reader needs (prices, the service set-ups, postcodes, the first demo
    panel, the questions and answers) is written into `index.html`.
    `js/app.js` renders the same data again from `js/config.js`.
 2. **Two copies, one guard**: because the data now exists in `js/config.js`

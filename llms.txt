@@ -1,8 +1,9 @@
 # Heath & City Technology
 
-> Private IT and document systems for small practices in Hampstead and
-> North West London: barristers and King's Counsel, insurance and stock
-> brokers, composers and music publishers, and surgeons and consultants.
+> Private document systems for small practices in Hampstead and North
+> West London: barristers and King's Counsel, insurance and stock
+> brokers, composers and music publishers, surgeons and consultants,
+> and family offices and property principals.
 > Client, patient and fund records are never uploaded to public AI tools;
 > systems run on a machine in the client's office or in a private UK vault.
 > Technology and administrative services only; no legal, medical,
