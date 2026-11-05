@@ -1,19 +1,15 @@
-# Architecture: Hampstead & North West London Consulting Showcase
+# Architecture: Hampstead & North West London Private Practice Website
 
 ## 1. Purpose and Scope
 
-1. This document defines the technical architecture of the static showcase
-   website for the Hampstead and North West (NW) London private technology
-   consulting practice.
+1. This document defines the technical architecture of the static website
+   for the Hampstead and North West (NW) London private technology practice.
 2. The website targets time-poor, non-technical principals across NW3,
    NW6, NW8, NW11, and N6: barristers and King's Counsel (KC), insurance and
    stock brokers, composers and music publishers, and surgeons and senior
-   consultants. Copy is plain English, and the technical detail sits in a
-   collapsed panel that the reader can skip.
-3. The system combines an institutional-grade editorial layout with a
-   high-impact, interactive Three-Dimensional (3D) visual centrepiece powered
-   by Web Graphics Processing Unit (WebGPU), Three.js, and Web Graphics
-   Library (WebGL) shaders.
+   consultants.
+3. Copy is plain English. Technical detail sits in a collapsed panel that the
+   reader can skip. The page has no animated graphics.
 
 ---
 
@@ -26,93 +22,54 @@
    (HTTP) response headers are required.
 3. The application explicitly avoids `SharedArrayBuffer`, Cross-Origin Opener
    Policy (COOP), and Cross-Origin Embedder Policy (COEP) headers.
-4. All visual physics, particle transformations, and shader effects run on
-   single-page client graphics pipelines without multi-threaded WebAssembly
-   (WASM) compute dependencies.
+4. No build step, bundler, or third-party JavaScript library is used.
 
 ---
 
-## 3. Multi-Tier Graphics Architecture
+## 3. Page Structure
 
-To guarantee both visual impact on modern hardware and 100% reliability on
-older or locked-down client machines, the rendering engine (`js/gpu-scene.js`)
-implements a four-tier graceful degradation pipeline:
+The single page (`index.html`) runs top to bottom in this order:
 
-```text
-+--------------------------------------------------------------------------+
-|                     Browser Hardware Capability Probe                    |
-+--------------------------------------------------------------------------+
-         |
-         +--> [Tier 1: WebGPU Adapter + Device Available]
-         |    Initialises navigator.gpu device, compiles WebGPU Shading
-         |    Language (WGSL) verification kernel, and pairs with the
-         |    Three.js / WebGL2 3D hardware shader pipeline.
-         |
-         +--> [Tier 2: Three.js WebGL2 Custom Shader Pipeline]
-         |    Renders 12,000+ GPU-animated particles, 3D architectural
-         |    lattice geometries, and interactive cursor raycasting.
-         |
-         +--> [Tier 3: Zero-Dependency 2D Canvas Projection Engine]
-         |    If external CDN modules are blocked or WebGL is unavailable,
-         |    projects 3D particle and lattice coordinates onto an HTML5
-         |    Two-Dimensional (2D) Canvas at 60 Frames Per Second (FPS).
-         |
-         +--> [Tier 4: Accessible Static Architectural Fallback]
-              Activated when prefers-reduced-motion is requested or all
-              canvas contexts are disabled.
-```
+1. **Hero**: headline, three quick facts, and two calls to action.
+2. **Three promises**: no disruption, privacy, and continuity.
+3. **Demo**: a sample "typical morning" summary, with one tab per practice
+   type. All names and figures are invented and labelled illustrative.
+4. **Services**: one card per practice type, with three short benefits each.
+5. **Ways to work together**: four options, plus a collapsed technical panel
+   describing the build.
+6. **Pricing**: three fixed-fee steps and an interactive return estimator.
+7. **Contact**: local details and a short enquiry form. The form opens the
+   reader's own email application, and sends no data to a web server.
+8. **Footer**: brand, locations, and the professional-services disclaimer.
 
 ---
 
-## 4. Interactive Visual Centrepiece Modes
-
-The user can switch live between three interactive 3D GPU scenes:
-
-1. **Scene 1: Order from Chaos (Documents Lattice)**
-   - Models unsorted email threads, 2,000-page PDF bundles, and insurer
-     remittances entering a central normalisation ring and snapping into an
-     ordered emerald-and-brass architectural ledger.
-   - Controlled via the live "Entropy to Order" slider, cursor movement, and
-     scroll position.
-2. **Scene 2: The Sovereign Vault (Private Two-Tower Neural Retrieval)**
-   - Models an on-premises Hampstead Linux and GPU vault surrounded by
-     concentric rings of 20-year precedent archives.
-   - Cursor proximity fires synaptic retrieval beams across the vector space
-     while an outer shield deflects external public-cloud egress.
-3. **Scene 3: Money and Deadlines (Ledger & Deadline Telemetry)**
-   - Models ultra-low-latency City of London market data pipelines merged with
-     Hampstead topographical contours, reconciling multi-bank PDF statements
-     and 90/60/30-day property compliance horizons.
-
----
-
-## 5. Module Inventory
+## 4. Module Inventory
 
 | Path                     | Responsibility                                   |
 | ------------------------ | ------------------------------------------------ |
 | `index.html`             | Semantic single-page structure and content.      |
-| `css/styles.css`         | Bespoke styling, themes, and responsive layout.  |
-| `js/config.js`           | Centralised brand settings and vertical data.    |
-| `js/gpu-scene.js`        | WebGPU, Three.js, WebGL, and Canvas 3D engine.   |
-| `js/app.js`              | User Interface (UI) state, demos, and controls.  |
-| `package.json`           | Dependency manifest and verification commands.   |
-| `scripts/verify_site.py` | Automated quality, constraint, and column guard. |
+| `css/styles.css`         | Typography, colour, responsive layout, motion.   |
+| `js/config.js`           | Brand settings, demo data, roles, and pricing.   |
+| `js/app.js`              | UI state, demo tabs, estimator, and enquiry form.|
+| `package.json`           | Manifest and verification command. No runtime    |
+|                          | dependencies.                                    |
+| `scripts/verify_site.py` | Automated structure, hosting, and 80-column      |
+|                          | guard.                                           |
 
 ---
 
-## 6. Legal, Licence, and Patent Record
+## 5. Legal, Licence, and Patent Record
 
-1. **Three.js (`0.170.0`)**: Consumed under the permissive Massachusetts
-   Institute of Technology (MIT) Licence.
-2. **Typography**: Google Fonts (`Plus Jakarta Sans`,
-   `JetBrains Mono`) are licensed under the Open Font License (OFL) with
-   system font stacks as instant fallbacks.
-3. **Standards**: WebGPU, WebGL, HTML5, and Cascading Style Sheets (CSS) are
-   royalty-free World Wide Web Consortium (W3C) and Khronos Group standards.
-4. **Original Code**: All shader algorithms, 3D geometries, copy, and user
-   interface components in this repository are original works free of third-
-   party patent claims or proprietary data dependencies.
-5. **Practice-Type Copy (legal and regulatory check, November 2026)**:
+1. **Typography**: Google Fonts (`Plus Jakarta Sans`, `JetBrains Mono`) are
+   licensed under the Open Font License (OFL) with system font stacks as
+   instant fallbacks.
+2. **Standards**: HTML5 and Cascading Style Sheets (CSS) are royalty-free
+   World Wide Web Consortium (W3C) standards.
+3. **Original Code**: All copy, user interface components, and scripts in this
+   repository are original works free of third-party patent claims or
+   proprietary data dependencies.
+4. **Practice-Type Copy (legal and regulatory check, November 2026)**:
    - The site provides technology and administrative services only. The
      footer states that it gives no legal, medical, investment or insurance
      advice. Broker copy says the firm does not give regulated advice.
@@ -126,3 +83,6 @@ The user can switch live between three interactive 3D GPU scenes:
    - No risk requiring a stop-and-decide was identified.
    - Fee-estimator hourly rates and leakage factors in `js/app.js` are
      assumptions, shown to the reader as conservative estimates.
+5. **Removed 3D Engine (November 2026)**: The Three.js visual, its WebGPU and
+   WebGL shader code, and the `three` dependency were removed. No third-party
+   code remains in the repository.

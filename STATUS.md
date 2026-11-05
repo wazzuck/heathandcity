@@ -42,6 +42,9 @@
     and stock brokers, composers, and surgeons. Plain-English hero, three
     promises, four-practice demo, fixed-fee pricing, and a collapsed technical
     panel (`index.html`, `css/styles.css`, `js/config.js`, `js/app.js`).
+13. Removed the animated Three.js and WebGPU visual, its engine module
+    (`js/gpu-scene.js`), the `three` dependency, and the matching checks in
+    `scripts/verify_site.py`. The page is now static text and layout only.
 
 ---
 
