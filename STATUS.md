@@ -45,6 +45,8 @@
 13. Removed the animated Three.js and WebGPU visual, its engine module
     (`js/gpu-scene.js`), the `three` dependency, and the matching checks in
     `scripts/verify_site.py`. The page is now static text and layout only.
+14. Shortened the hero label to "TECHNOLOGY FOR PRIVATE PRACTICES"
+    (`js/config.js`, `index.html`).
 
 ---
 
