@@ -55,12 +55,21 @@
     (`index.html`).
 18. Header button now reads "Book an in-person coffee" with the telephone
     number (`index.html`).
+19. Search and AI-assistant visibility (phases 1 and 2): static HTML for
+    JavaScript-built content, FAQ, structured data, canonical and Open
+    Graph tags, `robots.txt`, `sitemap.xml`, `llms.txt`, and verifier
+    checks.
 
 ---
 
 ## 2. Next
 
-1. Allow GitHub to finish issuing the multi-domain certificate expansion for
+1. Visibility phase 3 (one page per profession) awaits a decision.
+2. Visibility phase 4 (off-page): Google Business Profile, Search Console,
+   Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
+3. Add a social preview image and the founder `Person` data once the
+   operator supplies a photo, name and official profile links.
+4. Allow GitHub to finish issuing the multi-domain certificate expansion for
    `www.heathandcity.com` (automated background job).
 
 ---
