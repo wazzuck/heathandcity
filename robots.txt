@@ -1,0 +1,6 @@
+# Heath & City Technology: all crawlers, including AI assistants, may read
+# the whole site. Blocking them would remove the site from their answers.
+User-agent: *
+Allow: /
+
+Sitemap: https://heathandcity.com/sitemap.xml
