@@ -7,9 +7,9 @@
  * Centralised configuration, brand identity tokens, interactive simulation
  * presets, and plain-English domain data for the Hampstead and North West (NW)
  * London private technology showcase website. The audience is time-poor
- * professional principals: barristers and King's Counsel (KC), insurance and
- * stock brokers, composers and music publishers, and surgeons and senior
- * consultants.
+ * professional principals: barristers and King's Counsel (KC), insurance
+ * and stock brokers, composers and music publishers, surgeons and senior
+ * consultants, and family offices and property principals.
  *
  * WHAT THIS FILE IS NOT FOR:
  * - This file does not perform Document Object Model (DOM) manipulation.
