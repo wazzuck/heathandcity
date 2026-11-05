@@ -86,6 +86,7 @@ def check_required_files() -> List[str]:
         "robots.txt",
         "sitemap.xml",
         "llms.txt",
+        "img/neville-bryce.jpg",
     ]
     # 1. Iterate through each required relative path and check existence.
     for rel_path in required_paths:
@@ -117,6 +118,7 @@ def check_html_structure() -> List[str]:
 
     # 2. Check mandatory section and control IDs.
     required_ids = {
+        "about",
         "daily-screen",
         "services-by-vertical",
         "specialist-roles",
@@ -206,7 +208,7 @@ def check_discoverability() -> List[str]:
     except ValueError as exc:
         return errors + [f"JSON-LD is invalid JSON: {exc}"]
     kinds = {node.get("@type") for node in graph}
-    for needed in ("ProfessionalService", "FAQPage"):
+    for needed in ("ProfessionalService", "FAQPage", "Person"):
         if needed not in kinds:
             errors.append(f"JSON-LD is missing a {needed} entry")
 
