@@ -37,14 +37,13 @@ export const SITE_CONFIG = Object.freeze({
   // Provisional brand name (marked TBC for effortless future replacement).
   brandName: "Heath & City Technology",
   brandMonogram: "H·C",
-  brandStatusBadge: "PRIVATE PRACTICE SYSTEMS · HAMPSTEAD VILLAGE NW3",
+  brandStatusBadge: "PRIVATE PRACTICE SYSTEMS · HAMPSTEAD GARDEN SUBURB NW11",
   brandTagline:
     "Quiet, private systems for small London practices",
   principalRole: "Principal Systems & Sovereign Data Architect",
   experienceYears: 17,
   primaryPostcodes: "NW3 · NW6 · NW8 · NW11 · N6 · The City",
   neighbourhoods: [
-    "Hampstead Village (NW3)",
     "Belsize Park (NW3)",
     "St John's Wood (NW8)",
     "West Hampstead (NW6)",
@@ -57,7 +56,7 @@ export const SITE_CONFIG = Object.freeze({
   contactEmail: "contactus@heathandcity.com",
   contactPhoneDisplay: "020 4520 9114",
   contactPhoneHref: "02045209114",
-  officeLocation: "Hampstead Village, London NW3 (visits by appointment)",
+  officeLocation: "Hampstead Garden Suburb, London NW11 (visits by appointment)",
   immediateSupportSite: "https://itoldyouso.tech",
   immediateSupportLabel: "itoldyouso.tech"
 });
