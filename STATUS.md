@@ -53,6 +53,8 @@
     page title and README (`js/config.js`, `index.html`, `README.md`).
 17. Replaced the header "Book a coffee" button with the telephone number
     (`index.html`).
+18. Header button now reads "Book an in-person coffee" with the telephone
+    number (`index.html`).
 
 ---
 
