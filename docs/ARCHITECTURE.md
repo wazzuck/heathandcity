@@ -111,6 +111,10 @@ The single page (`index.html`) runs top to bottom in this order:
      affiliation, endorsement, or integration with any society.
    - All client, patient and royalty figures in the demonstration panel are
      invented and labelled as illustrative.
+   - The family office and property copy, added with the five-practice
+     rewrite, describes reading, matching and flagging only. Its
+     demonstration guarantee states that no investment advice is given
+     and that nothing leaves the office without approval.
    - No risk requiring a stop-and-decide was identified.
    - Fee-estimator hourly rates and leakage factors in `js/app.js` are
      assumptions, shown to the reader as conservative estimates.
