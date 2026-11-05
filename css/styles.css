@@ -1187,6 +1187,38 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------
+ * Step 14a: Question and answer list. Each item is a white card with the
+ * question as a bold heading and a short answer beneath it. The same
+ * text is published as FAQPage structured data in index.html.
+ * -------------------------------------------------------------------------- */
+.faq-list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-top: 2rem;
+}
+
+.faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+}
+
+.faq-item h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 0.5rem 0;
+}
+
+.faq-item p {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
  * Step 15: Respect the reader's motion setting. Animations and smooth
  * scrolling stop for anyone who has asked their device to reduce motion.
  * -------------------------------------------------------------------------- */

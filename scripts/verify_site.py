@@ -20,9 +20,11 @@ INVARIANTS:
 ==============================================================================
 """
 
+import html
 from html.parser import HTMLParser
 import json
 from pathlib import Path
+import re
 import sys
 from typing import List, Set, Tuple
 
@@ -81,6 +83,9 @@ def check_required_files() -> List[str]:
         "package.json",
         "docs/ARCHITECTURE.md",
         "README.md",
+        "robots.txt",
+        "sitemap.xml",
+        "llms.txt",
     ]
     # 1. Iterate through each required relative path and check existence.
     for rel_path in required_paths:
@@ -144,6 +149,86 @@ def check_html_structure() -> List[str]:
     for phrase in required_phrases:
         if phrase not in combined_text:
             errors.append(f"Missing strategy phrase: '{phrase}'")
+
+    return errors
+
+
+def _plain_text(markup: str) -> str:
+    """
+    Reduce HTML or JSON text to comparable plain text.
+
+    Args:
+        markup: Raw text that may contain HTML entities and tags.
+
+    Returns:
+        The text with tags removed, entities decoded and runs of white space
+        collapsed to single spaces.
+    """
+    # 1. Drop tags, 2. decode entities such as &amp;, 3. collapse spacing.
+    no_tags = re.sub(r"<[^>]+>", " ", markup)
+    return re.sub(r"\s+", " ", html.unescape(no_tags)).strip()
+
+
+def check_discoverability() -> List[str]:
+    """
+    Check the signals that let search engines and AI assistants find, read
+    and cite the page: crawler files, canonical and Open Graph tags,
+    structured data, and content that exists without JavaScript.
+
+    Returns:
+        List of error messages (empty if every signal is present).
+    """
+    errors: List[str] = []
+    raw = (REPO_ROOT / "index.html").read_text(encoding="utf-8")
+    page_text = _plain_text(raw)
+
+    # 1. robots.txt must allow crawling and point at the sitemap.
+    robots = (REPO_ROOT / "robots.txt").read_text(encoding="utf-8")
+    if "Sitemap: https://heathandcity.com/sitemap.xml" not in robots:
+        errors.append("robots.txt must link to the sitemap")
+    if re.search(r"(?im)^\s*Disallow:\s*/\s*$", robots):
+        errors.append("robots.txt must not block the whole site")
+
+    # 2. Canonical link and Open Graph title must be in the head.
+    if 'rel="canonical"' not in raw:
+        errors.append("index.html is missing a canonical link")
+    if 'property="og:title"' not in raw:
+        errors.append("index.html is missing Open Graph tags")
+
+    # 3. JSON-LD must parse, and name the business and the FAQ.
+    blocks = re.findall(
+        r'<script type="application/ld\+json">(.*?)</script>', raw, re.S
+    )
+    if len(blocks) != 1:
+        return errors + ["index.html needs exactly one JSON-LD block"]
+    try:
+        graph = json.loads(blocks[0]).get("@graph", [])
+    except ValueError as exc:
+        return errors + [f"JSON-LD is invalid JSON: {exc}"]
+    kinds = {node.get("@type") for node in graph}
+    for needed in ("ProfessionalService", "FAQPage"):
+        if needed not in kinds:
+            errors.append(f"JSON-LD is missing a {needed} entry")
+
+    # 4. Every FAQ question and answer in the JSON-LD must be visible text.
+    for node in graph:
+        if node.get("@type") != "FAQPage":
+            continue
+        for question in node.get("mainEntity", []):
+            answer = question["acceptedAnswer"]["text"]
+            for text in (question["name"], answer):
+                if text not in page_text:
+                    errors.append(f"FAQ text not visible on page: {text[:50]}")
+
+    # 5. Content filled by JavaScript must also exist in the raw HTML, so
+    #    crawlers that do not run scripts can read it.
+    config = (REPO_ROOT / "js/config.js").read_text(encoding="utf-8")
+    keys = r"(?:price|role|title)"
+    wanted = re.findall(rf'^\s+{keys}:\s*"([^"]+)"', config, re.M)
+    wanted += re.findall(r'^\s+"([^"]+\(N[W0-9]+\))",?$', config, re.M)
+    for value in wanted:
+        if value not in page_text:
+            errors.append(f"Config text missing from raw HTML: {value}")
 
     return errors
 
@@ -246,6 +331,8 @@ def main() -> int:
     all_errors.extend(check_hosting_constraints())
     # 4. Run 80-column documentation and comment checks.
     all_errors.extend(check_line_lengths())
+    # 5. Run search and AI-assistant discoverability checks.
+    all_errors.extend(check_discoverability())
 
     if all_errors:
         print("VERIFICATION FAILED:")
@@ -253,7 +340,8 @@ def main() -> int:
             print(f"  - {err}")
         return 1
 
-    print("ALL VERIFICATION CHECKS PASSED (files, HTML, hosting, 80-col).")
+    print("ALL VERIFICATION CHECKS PASSED (files, HTML, hosting, 80-col, "
+          "discoverability).")
     return 0
 
 
