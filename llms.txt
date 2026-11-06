@@ -1,11 +1,12 @@
 # Heath & City Technology
 
-> Private IT and document systems for small practices in Hampstead and
-> North West London: barristers and King's Counsel, insurance and stock
-> brokers, composers and music publishers, and surgeons and consultants.
-> Client, patient and fund records are never uploaded to public AI tools;
-> systems run on a machine in the client's office or in a private UK vault.
-> Technology and administrative services only; no legal, medical,
+> Private Information Technology (IT) and document systems for boutique
+> professional practices in Hampstead and North West (NW) London: barristers
+> and King's Counsel (KC), insurance and stock brokers, composers and music
+> publishers, and surgeons and medical consultants. Client, patient and fund
+> records are never uploaded to public Artificial Intelligence (AI) tools;
+> systems run on sovereign hardware in the client's office or in a private UK
+> vault. Technology and administrative services only; no legal, medical,
 > investment or insurance advice.
 
 ## Details
@@ -16,7 +17,7 @@
 - Telephone: 020 4520 9114
 - Email: contactus@heathandcity.com
 
-## Fixed fees
+## Fixed Fees
 
 - Two-week trial on your own documents: GBP 750 to 1,500
 - Full set-up in your office: GBP 3,000 to 10,000+ (three to six weeks)
@@ -34,3 +35,14 @@
 ## Pages
 
 - [Home, with questions and answers](https://heathandcity.com/)
+- [Full Technical and AI Reference](https://heathandcity.com/llms-full.txt)
+
+## Sister Practices
+
+- [TillSwift Payment Consultation](https://tillswift.com/):
+  Independent payment consultation and three-year Total Cost of Ownership
+  (TCO) calculator modelling merchant transaction fees, interchange rates,
+  and card machine costs for UK practices and enterprises.
+- [IToldYouSo Computing](https://itoldyouso.tech/):
+  Fast, same-day local IT support, hardware diagnostics, network Wi-Fi
+  optimisation, and home office systems across NW London.
