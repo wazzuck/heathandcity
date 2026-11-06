@@ -80,6 +80,14 @@
     - Enlarged golden leaf by 1.85x with anti-aliased smooth contours.
     - Made upper golden maze wall continuous and anchored stem flush to base.
     - Framed header emblem as crisp 56px square with 1px black rim border.
+24. Added high-impact practice automations section & polished copy:
+    - Added "If you have the data, we can build it" section with a vertical
+      stack of three focused practice use cases (shared inbox matter tracking,
+      100% private offline AI, and automated fee reconciliation).
+    - Removed all orange pill badges across the entire site for cleaner visual
+      hierarchy.
+    - Retitled About section to "The Person Behind Heath & City" with a clean,
+      grounded name label.
 
 ---
 
