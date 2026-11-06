@@ -75,6 +75,11 @@
       and 'Continuity'.
     - Integrated labyrinth & seedling brand logo into header and browser
       favicon.
+23. Refined brand emblem artwork and framing:
+    - Removed tight inner labyrinth wall to open central sanctuary courtyard.
+    - Enlarged golden leaf by 1.85x with anti-aliased smooth contours.
+    - Made upper golden maze wall continuous and anchored stem flush to base.
+    - Framed header emblem as crisp 56px square with 1px black rim border.
 
 ---
 
