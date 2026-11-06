@@ -97,10 +97,10 @@ select:focus-visible {
  * Step 4: Containers, sections, and typography primitives.
  * -------------------------------------------------------------------------- */
 .container {
-  width: 100%;
-  max-width: var(--container-max);
+  width: 92%;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
 }
 
 .section {
@@ -273,6 +273,24 @@ a:hover {
   transform: translateY(-1px);
 }
 
+.btn--header-phone {
+  background: #f1ebd8;
+  color: #0f172a;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.btn--header-phone:hover {
+  background: #2496ed;
+  color: #ffffff;
+  border-color: #1d78be;
+  box-shadow: 0 4px 12px rgba(36, 150, 237, 0.35);
+  transform: translateY(-1px);
+}
+
 .btn--secondary {
   background: var(--bg-card);
   color: var(--text-primary);
@@ -288,20 +306,26 @@ a:hover {
  * Step 7: Hero. A headline, three quick facts, and two buttons come first.
  * -------------------------------------------------------------------------- */
 .hero-section {
-  padding: 3.5rem 0 4.5rem 0;
+  padding: 2.8rem 0 4.5rem 0;
   border-bottom: 1px solid var(--border-subtle);
 }
 
-.hero-copy {
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.hero-main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 760px;
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 4.8vw, 4rem);
-  line-height: 1.06;
+  font-size: clamp(2.5rem, 4.2vw, 3.8rem);
+  line-height: 1.08;
   font-weight: 800;
   letter-spacing: -0.03em;
   margin: 0 0 1.25rem 0;
@@ -315,56 +339,100 @@ a:hover {
 
 .hero-subtitle {
   font-size: 1.22rem;
+  line-height: 1.6;
   color: var(--text-secondary);
-  margin: 0 0 1.75rem 0;
-  max-width: 52ch;
-}
-
-.credibility-pillars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  list-style: none;
   margin: 0 0 2rem 0;
-  padding: 0;
-}
-
-.pillar-chip {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 1rem;
-}
-
-.pillar-chip__value {
-  display: block;
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--accent-gold);
-  line-height: 1.2;
-}
-
-.pillar-chip__label {
-  display: block;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: var(--text-secondary);
-  margin-top: 0.3rem;
+  max-width: 58ch;
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.85rem;
-  margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
-.discretion-note {
-  font-size: 1rem;
+/* Feature card on the right side of the hero */
+.hero-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.hero-card__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+.hero-card__title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.5rem 0;
+  color: var(--text-primary);
+}
+
+.hero-card__pillars {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.hero-card__pillar {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.pillar-bullet {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.pillar-title {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+}
+
+.pillar-desc {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.45;
   color: var(--text-secondary);
+}
+
+.hero-card__reassurance {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
   border-left: 3px solid var(--accent-emerald);
-  padding-left: 0.9rem;
-  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+@media (max-width: 1000px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
 }
 
 /* --------------------------------------------------------------------------
