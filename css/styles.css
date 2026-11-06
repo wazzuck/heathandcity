@@ -492,6 +492,85 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------
+ * Step 7b: Practice bottlenecks & shared inbox use cases. A four-card grid
+ * contrasting common operational failure points with quiet automation fixes.
+ * -------------------------------------------------------------------------- */
+#practice-use-cases {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background: var(--bg-primary);
+}
+
+.use-cases-intro-label {
+  margin-top: 1.75rem;
+  margin-bottom: -1rem;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+}
+
+.use-case-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  margin-top: 2rem;
+  max-width: 900px;
+}
+
+.use-case-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  padding: 1.4rem 1.75rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.use-case-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.use-case-card:nth-child(2) {
+  border-left-color: var(--accent-emerald);
+}
+
+.use-case-card:nth-child(3) {
+  border-left-color: var(--accent-amber);
+}
+
+.use-case-card h3 {
+  font-size: 1.25rem;
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.use-case-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.use-cases-footer-note {
+  margin-top: 2rem;
+  margin-bottom: 0;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 900px;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+/* --------------------------------------------------------------------------
  * Step 8: Three promises. Each card is short and has one clear claim.
  * -------------------------------------------------------------------------- */
 #senior-principals {
