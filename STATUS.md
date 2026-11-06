@@ -63,10 +63,18 @@
     (`img/neville-bryce.jpg`), verified 17+ years low-latency financial
     systems background from LinkedIn, credibility chips, and Schema.org
     `Person` JSON-LD entity.
-21. Redesigned desktop layout: widened container to 92% (1600px cap),
-    restructured hero into a balanced two-column split layout with "The
-    Practice Standard" feature card, and updated top-right header phone button
-    styling.
+21. Redesigned desktop layout: widened container to 92% (1600px cap) and
+    added root scroll-padding-top clearance for the sticky header.
+22. Refined opening hero & brand identity:
+    - Updated primary headline to "Your information automated. Your time back."
+    - Refined sales pitch copy with 50% larger typography.
+    - Streamlined hero by moving coffee booking button to About section and
+      removing practice standard card and secondary demo button.
+    - Symmetrical vertical spacing above and below hero copy.
+    - Replaced 'Promise 01-03' card headers with 'No Disruption', 'Privacy',
+      and 'Continuity'.
+    - Integrated labyrinth & seedling brand logo into header and browser
+      favicon.
 
 ---
 
