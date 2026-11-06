@@ -63,6 +63,10 @@
     (`img/neville-bryce.jpg`), verified 17+ years low-latency financial
     systems background from LinkedIn, credibility chips, and Schema.org
     `Person` JSON-LD entity.
+21. Redesigned desktop layout: widened container to 92% (1600px cap),
+    restructured hero into a balanced two-column split layout with "The
+    Practice Standard" feature card, and updated top-right header phone button
+    styling.
 
 ---
 

@@ -235,10 +235,9 @@ INVARIANTS:
 
       <a
         href="tel:02045209114"
-        class="btn btn--primary btn--compact"
+        class="btn btn--header-phone btn--compact"
         data-brand-phone-link
       >
-        Book an in-person coffee ·
         <span data-brand-phone>020 4520 9114</span>
       </a>
     </div>
@@ -250,11 +249,8 @@ INVARIANTS:
          this, and why should I care?" in under ten seconds.
          ===================================================================== -->
     <section class="hero-section" aria-labelledby="hero-heading">
-      <div class="container">
-        <div class="hero-copy">
-          <div class="eyebrow" data-brand-badge>
-            STATE-OF-THE-ART TECHNOLOGY FOR SMALL PRIVATE PRACTICES
-          </div>
+      <div class="container hero-grid">
+        <div class="hero-main">
           <h1 id="hero-heading" class="hero-title">
             Your admin, quietly sorted.
             <em>Your time, back.</em>
@@ -267,27 +263,6 @@ INVARIANTS:
             disruption.
           </p>
 
-          <ul class="credibility-pillars">
-            <li class="pillar-chip">
-              <span class="pillar-chip__value">10 minutes</span>
-              <span class="pillar-chip__label">
-                a day to review what needs you
-              </span>
-            </li>
-            <li class="pillar-chip">
-              <span class="pillar-chip__value">Private</span>
-              <span class="pillar-chip__label">
-                your data stays in your office or a UK vault
-              </span>
-            </li>
-            <li class="pillar-chip">
-              <span class="pillar-chip__value">Local</span>
-              <span class="pillar-chip__label">
-                a person in Hampstead, in person
-              </span>
-            </li>
-          </ul>
-
           <div class="hero-actions">
             <a href="#contact" class="btn btn--primary">
               Book a 20-minute coffee
@@ -296,12 +271,47 @@ INVARIANTS:
               See a typical morning
             </a>
           </div>
-
-          <p class="discretion-note">
-            <strong>You stay in charge.</strong> Nothing is sent to your
-            clients, counterparties or colleagues without your approval.
-          </p>
         </div>
+
+        <aside class="hero-card" aria-label="Key Commitments">
+          <div class="hero-card__eyebrow">SOVEREIGN &amp; LOCAL</div>
+          <h2 class="hero-card__title">The Practice Standard</h2>
+
+          <ul class="hero-card__pillars">
+            <li class="hero-card__pillar">
+              <span class="pillar-bullet">01</span>
+              <div>
+                <strong class="pillar-title">10 minutes a day</strong>
+                <span class="pillar-desc">
+                  One simple morning summary to review what needs you.
+                </span>
+              </div>
+            </li>
+            <li class="hero-card__pillar">
+              <span class="pillar-bullet">02</span>
+              <div>
+                <strong class="pillar-title">Completely Private</strong>
+                <span class="pillar-desc">
+                  Your files stay in your office or an air-gapped UK vault. Never public AI.
+                </span>
+              </div>
+            </li>
+            <li class="hero-card__pillar">
+              <span class="pillar-bullet">03</span>
+              <div>
+                <strong class="pillar-title">Hampstead Based</strong>
+                <span class="pillar-desc">
+                  A named local specialist, on-site in person across NW London.
+                </span>
+              </div>
+            </li>
+          </ul>
+
+          <div class="hero-card__reassurance">
+            <strong>You stay in charge.</strong> Nothing is sent to clients,
+            counterparties, or colleagues without your direct approval.
+          </div>
+        </aside>
       </div>
     </section>
 
