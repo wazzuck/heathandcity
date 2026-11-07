@@ -373,10 +373,6 @@ a:hover {
   border-bottom: 1px solid var(--border-subtle);
 }
 
-.hero-container {
-  max-width: 1100px;
-}
-
 .hero-title {
   font-size: clamp(2.5rem, 4.2vw, 3.8rem);
   line-height: 1.08;
@@ -398,7 +394,7 @@ a:hover {
   letter-spacing: -0.015em;
   color: #1e293b;
   margin: 0;
-  max-width: 48ch;
+  max-width: 86ch;
 }
 
 .hero-actions {
@@ -498,7 +494,6 @@ a:hover {
 #practice-use-cases {
   padding-top: 5rem;
   padding-bottom: 5rem;
-  background: var(--bg-primary);
 }
 
 .use-cases-intro-label {
@@ -518,8 +513,7 @@ a:hover {
 
 .use-case-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid var(--accent-gold);
+  border: 1px solid #000000;
   border-radius: var(--radius-md);
   padding: 1.4rem 1.75rem;
   box-shadow: var(--shadow-card);
@@ -532,14 +526,6 @@ a:hover {
 .use-case-card:hover {
   transform: translateX(4px);
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-}
-
-.use-case-card:nth-child(2) {
-  border-left-color: var(--accent-emerald);
-}
-
-.use-case-card:nth-child(3) {
-  border-left-color: var(--accent-amber);
 }
 
 .use-case-card h3 {
@@ -709,6 +695,59 @@ a:hover {
   font-size: 1.05rem;
   line-height: 1.65;
   margin-bottom: 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+ * Step 8b: Founder credentials. A vertical, typography-led ledger with
+ * subtle hairline dividers instead of box cards, matching institutional tone.
+ * -------------------------------------------------------------------------- */
+.credibility-pillars {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 1.75rem 0 2rem 0;
+  padding: 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pillar-chip {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pillar-chip:last-child {
+  border-bottom: none;
+}
+
+.pillar-chip__value {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--accent-gold);
+  line-height: 1.3;
+}
+
+.pillar-chip__label {
+  display: block;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  margin-top: 0;
+}
+
+@media (max-width: 600px) {
+  .pillar-chip {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.8rem 0;
+  }
 }
 
 .about-actions {
@@ -921,7 +960,7 @@ a:hover {
 /* --------------------------------------------------------------------------
  * Step 10: "What we set up" cards, one per practice type.
  * -------------------------------------------------------------------------- */
-.verticals-catalog-grid {
+.verticals-catalogue-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
@@ -1361,7 +1400,8 @@ a:hover {
 
 .site-footer {
   padding: 3rem 0;
-  background: var(--bg-elevated);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-subtle);
   font-size: 0.95rem;
   color: var(--text-muted);
 }
@@ -1421,9 +1461,8 @@ a:hover {
 }
 
 @media (max-width: 720px) {
-  .credibility-pillars,
   .daily-screen__stats,
-  .verticals-catalog-grid,
+  .verticals-catalogue-grid,
   .roles-grid,
   .architecture-layers,
   .vertical-tabs {

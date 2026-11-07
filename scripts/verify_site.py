@@ -235,6 +235,51 @@ def check_discoverability() -> List[str]:
     return errors
 
 
+def check_british_english() -> List[str]:
+    """
+    Verify that all customer-facing text strictly adheres to British
+    Professional English spelling conventions per AGENTS.md Policy 15.
+
+    Returns:
+        List of error messages describing any American spellings detected.
+    """
+    errors: List[str] = []
+    raw = (REPO_ROOT / "index.html").read_text(encoding="utf-8")
+    page_text = _plain_text(raw).lower()
+
+    # List of common American spellings that must not appear in customer copy.
+    american_words = [
+        "behavior",
+        "behaviors",
+        "customize",
+        "customized",
+        "customizing",
+        "organize",
+        "organized",
+        "organizing",
+        "prioritize",
+        "prioritized",
+        "prioritizing",
+        "summarize",
+        "summarized",
+        "summarizing",
+        "analyze",
+        "analyzed",
+        "analyzing",
+        "rigor",
+        "catalog",
+    ]
+
+    for word in american_words:
+        if re.search(rf"\b{word}\b", page_text):
+            errors.append(
+                f"American English spelling '{word}' detected in index.html; "
+                f"use British English spelling instead."
+            )
+
+    return errors
+
+
 def check_hosting_constraints() -> List[str]:
     """
     Verify that the JavaScript modules avoid SharedArrayBuffer and that the
@@ -335,6 +380,8 @@ def main() -> int:
     all_errors.extend(check_line_lengths())
     # 5. Run search and AI-assistant discoverability checks.
     all_errors.extend(check_discoverability())
+    # 6. Run British Professional English spelling compliance checks.
+    all_errors.extend(check_british_english())
 
     if all_errors:
         print("VERIFICATION FAILED:")
@@ -343,7 +390,7 @@ def main() -> int:
         return 1
 
     print("ALL VERIFICATION CHECKS PASSED (files, HTML, hosting, 80-col, "
-          "discoverability).")
+          "discoverability, British English).")
     return 0
 
 

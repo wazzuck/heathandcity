@@ -88,6 +88,26 @@
       hierarchy.
     - Retitled About section to "The Person Behind Heath & City" with a clean,
       grounded name label.
+25. Refined layout alignment, section themes, typography, and copy:
+    - Removed jump links from sticky top header banner.
+    - Left-aligned opening hero narrative with 1600px main container.
+    - Replaced "Hampstead Village" with "Hampstead" across all copy and configs.
+    - Implemented alternating section background colours (light and darker)
+      from top to bottom.
+    - Added crisp 1px black borders around practice automation example cards.
+    - Added business postal address (Flat 25, Corringham Court, Corringham
+      Road, London NW11 7BY) to Direct contact card, footer, and configs.
+    - Widened hero subtitle measure to 86ch for a clean two-line flow.
+    - Updated hero pitch to "We work with you in person to quietly automate
+      what makes sense..."
+    - Updated practice automation card copy and retitled to "Email organisation
+      and task tracking".
+    - Added founder BSc (Hons) Software Engineering credential and redesigned
+      all four founder credentials from cards into a vertical hairline ledger.
+    - Standardised "City-Grade" chip and eliminated Americanisms ("rigor" ->
+      "rigour", "catalog" -> "catalogue").
+    - Enforced British English in AGENTS.md and automated check in
+      verify_site.py.
 
 ---
 
