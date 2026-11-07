@@ -83,8 +83,9 @@ INVARIANTS:
         "email": "contactus@heathandcity.com",
         "address": {
           "@type": "PostalAddress",
-          "addressLocality": "Hampstead",
-          "addressRegion": "London",
+          "streetAddress": "Flat 25, Corringham Court, Corringham Road",
+          "addressLocality": "London",
+          "postalCode": "NW11 7BY",
           "addressCountry": "GB"
         },
         "areaServed": [
@@ -141,7 +142,7 @@ INVARIANTS:
             "name": "Where are you based?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Hampstead Village, London NW3. Visits to chambers, clinics, studios and offices in NW3, NW6, NW8, NW11, N6 and the City are by appointment."
+              "text": "Hampstead, London NW3. Visits to chambers, clinics, studios and offices in NW3, NW6, NW8, NW11, N6 and the City are by appointment."
             }
           },
           {
@@ -231,8 +232,7 @@ INVARIANTS:
 </head>
 <body>
   <!-- =======================================================================
-       Step 3: Sticky header with brand, short navigation, and one clear
-       call to action: an in-person coffee, booked by telephone.
+       Step 3: Sticky header with brand lockup and direct telephone line.
        ======================================================================= -->
   <header class="site-header" role="banner">
     <div class="container site-header__inner">
@@ -253,16 +253,6 @@ INVARIANTS:
           </span>
         </span>
       </a>
-
-      <nav aria-label="Primary navigation">
-        <ul class="nav-links">
-          <li><a href="#senior-principals">How it helps</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#daily-screen">Demo</a></li>
-          <li><a href="#services-by-vertical">Services</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-        </ul>
-      </nav>
 
       <a
         href="tel:02045209114"
@@ -286,13 +276,13 @@ INVARIANTS:
          this, and why should I care?" in under ten seconds.
          ===================================================================== -->
     <section class="hero-section" aria-labelledby="hero-heading">
-      <div class="container hero-container">
+      <div class="container">
         <h1 id="hero-heading" class="hero-title">
           Your information automated.
           <em>Your time back.</em>
         </h1>
         <p class="hero-subtitle">
-          We examine how you work today and quietly automate what makes
+          We work with you in person to quietly automate what makes
           sense—giving you clarity, instant access to your records, and
           total control over your data.
         </p>
@@ -306,7 +296,7 @@ INVARIANTS:
          ===================================================================== -->
     <section
       id="practice-use-cases"
-      class="section"
+      class="section section--alt"
       aria-labelledby="use-cases-heading"
     >
       <div class="container">
@@ -314,21 +304,22 @@ INVARIANTS:
           If you have the data, we can build it.
         </h2>
         <p class="section-lead">
-          With modern computing and private systems, virtually anything is
-          possible with your records. You are limited only by the data you can
-          gather.
+          With modern computing, virtually anything is possible. You are
+          limited only by the data that you can gather.
         </p>
         <p class="use-cases-intro-label">
-          <strong>A few examples:</strong>
+          <strong>A few examples of automation:</strong>
         </p>
 
         <div class="use-case-stack">
           <article class="use-case-card">
-            <h3>Shared inbox &amp; matter tracking</h3>
+            <h3>Email organisation and task tracking</h3>
             <p>
-              Incoming emails and quotes are automatically tagged with unique
-              references, owners, and follow-up deadlines—keeping Outlook
-              untouched while preventing matters from ever slipping.
+              Automatically sort large volumes of email across the whole team,
+              pull out the key details — like how urgent something is,
+              payments, and deadlines — and extract important tasks and
+              details into one organised system designed specifically for
+              shuffling busy workloads without losing anything ever again.
             </p>
           </article>
 
@@ -366,7 +357,7 @@ INVARIANTS:
          ===================================================================== -->
     <section
       id="senior-principals"
-      class="section section--alt"
+      class="section"
       aria-labelledby="why-heading"
     >
       <div class="container">
@@ -419,7 +410,7 @@ INVARIANTS:
          Step 5a: About the founder. Background, experience in institutional
          financial engineering and machine learning, and verifiable credentials.
          ===================================================================== -->
-    <section id="about" class="section" aria-labelledby="about-heading">
+    <section id="about" class="section section--alt" aria-labelledby="about-heading">
       <div class="container about-grid">
         <div class="about-image-wrap">
           <img
@@ -438,7 +429,7 @@ INVARIANTS:
             With over 17 years of experience engineering mission-critical,
             ultra-low-latency financial data infrastructure for institutions
             including Bank of America Merrill Lynch, Nomura, and Exegy, Neville
-            brings institutional rigor, deterministic accuracy, and deep
+            brings institutional rigour, deterministic accuracy, and deep
             technical diligence to North West London practices.
           </p>
           <p class="about-bio">
@@ -455,7 +446,7 @@ INVARIANTS:
               </span>
             </li>
             <li class="pillar-chip">
-              <span class="pillar-chip__value">Bank-Grade</span>
+              <span class="pillar-chip__value">City-Grade</span>
               <span class="pillar-chip__label">
                 BAML, Nomura &amp; Exegy infrastructure
               </span>
@@ -464,6 +455,12 @@ INVARIANTS:
               <span class="pillar-chip__value">Advanced AI</span>
               <span class="pillar-chip__label">
                 ML Institute &amp; sovereign models
+              </span>
+            </li>
+            <li class="pillar-chip">
+              <span class="pillar-chip__value">BSc (Hons)</span>
+              <span class="pillar-chip__label">
+                Bachelor's in Software Engineering
               </span>
             </li>
           </ul>
@@ -638,17 +635,17 @@ INVARIANTS:
     <section
       id="services-by-vertical"
       class="section section--alt"
-      aria-labelledby="catalog-heading"
+      aria-labelledby="catalogue-heading"
     >
       <div class="container">
-        <h2 id="catalog-heading" class="section-title">
+        <h2 id="catalogue-heading" class="section-title">
           Three things, for your kind of practice
         </h2>
         <p class="section-lead">
           Each set-up solves one problem that generic software handles badly.
         </p>
 
-        <div class="verticals-catalog-grid">
+        <div class="verticals-catalogue-grid">
           <article class="vertical-card">
             <h3>Chambers and private client work</h3>
             <ul>
@@ -1025,7 +1022,7 @@ INVARIANTS:
           </div>
           <div class="faq-item">
             <h3>Where are you based?</h3>
-            <p>Hampstead Village, London NW3. Visits to chambers, clinics, studios and offices in NW3, NW6, NW8, NW11, N6 and the City are by appointment.</p>
+            <p>Hampstead, London NW3. Visits to chambers, clinics, studios and offices in NW3, NW6, NW8, NW11, N6 and the City are by appointment.</p>
           </div>
           <div class="faq-item">
             <h3>Will my team have to learn new software?</h3>
@@ -1051,7 +1048,7 @@ INVARIANTS:
          Step 10: Contact. A short, plain form that opens the reader's own
          email app, with no data sent to a web server.
          ===================================================================== -->
-    <section id="contact" class="section" aria-labelledby="contact-heading">
+    <section id="contact" class="section section--alt" aria-labelledby="contact-heading">
       <div class="container contact-grid">
         <div>
           <h2 id="contact-heading" class="section-title">
@@ -1064,7 +1061,7 @@ INVARIANTS:
           </p>
 
           <div id="neighbourhood-pills" class="postcode-pills">
-            <span class="postcode-pill">Hampstead Village (NW3)</span>
+            <span class="postcode-pill">Hampstead (NW3)</span>
             <span class="postcode-pill">Belsize Park (NW3)</span>
             <span class="postcode-pill">St John's Wood (NW8)</span>
             <span class="postcode-pill">West Hampstead (NW6)</span>
@@ -1078,9 +1075,15 @@ INVARIANTS:
           <div class="contact-card">
             <h3>Direct contact</h3>
             <p>
+              <strong>Address:</strong>
+              <span data-brand-address>
+                Flat 25, Corringham Court, Corringham Road, London NW11 7BY
+              </span>
+            </p>
+            <p>
               <strong>Base:</strong>
               <span data-brand-location>
-                Hampstead Village, London NW3 (visits by appointment)
+                Hampstead, London NW3 (visits by appointment)
               </span>
             </p>
             <p>
@@ -1225,7 +1228,8 @@ INVARIANTS:
           Quiet, private systems for small London practices
         </div>
         <div class="site-footer__meta">
-          Serving <span data-brand-postcodes>NW3 · NW6 · NW8 · NW11 · N6 · The City</span>
+          <span data-brand-address>Flat 25, Corringham Court, Corringham Road, London NW11 7BY</span>
+          · Serving <span data-brand-postcodes>NW3 · NW6 · NW8 · NW11 · N6 · The City</span>
           · Sister support service:
           <a
             href="https://itoldyouso.tech"

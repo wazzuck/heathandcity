@@ -44,7 +44,7 @@ export const SITE_CONFIG = Object.freeze({
   experienceYears: 17,
   primaryPostcodes: "NW3 · NW6 · NW8 · NW11 · N6 · The City",
   neighbourhoods: [
-    "Hampstead Village (NW3)",
+    "Hampstead (NW3)",
     "Belsize Park (NW3)",
     "St John's Wood (NW8)",
     "West Hampstead (NW6)",
@@ -57,7 +57,9 @@ export const SITE_CONFIG = Object.freeze({
   contactEmail: "contactus@heathandcity.com",
   contactPhoneDisplay: "020 4520 9114",
   contactPhoneHref: "02045209114",
-  officeLocation: "Hampstead Village, London NW3 (visits by appointment)",
+  officeAddress:
+    "Flat 25, Corringham Court, Corringham Road, London NW11 7BY",
+  officeLocation: "Hampstead, London NW3 (visits by appointment)",
   immediateSupportSite: "https://itoldyouso.tech",
   immediateSupportLabel: "itoldyouso.tech"
 });

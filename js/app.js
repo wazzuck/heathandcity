@@ -90,6 +90,7 @@ function applyBrandConfig() {
     "brand-email": SITE_CONFIG.contactEmail,
     "brand-phone": SITE_CONFIG.contactPhoneDisplay,
     "brand-location": SITE_CONFIG.officeLocation,
+    "brand-address": SITE_CONFIG.officeAddress,
     "brand-support-label": SITE_CONFIG.immediateSupportLabel
   };
 

@@ -139,7 +139,7 @@ Your Hampstead insurance brokerage client emails property managers, commercial l
 
 ### Channel 3: "Brass Plaque" Scouting Walks & Printed Letters (ADHD-Friendly)
 Combine your interest in long walks, architecture, and local business analysis into a structured prospecting habit:
-* **Where to Look:** Walk the commercial streets of Hampstead Village (Heath St, Rosslyn Hill, High St), Belsize Park (Haverstock Hill, England's Lane), South End Green, Swiss Cottage, West Hampstead (West End Lane), St John's Wood High Street, and Golders Green Road.
+* **Where to Look:** Walk the commercial streets of Hampstead (Heath St, Rosslyn Hill, High St), Belsize Park (Haverstock Hill, England's Lane), South End Green, Swiss Cottage, West Hampstead (West End Lane), St John's Wood High Street, and Golders Green Road.
 * **Target the Upper Floors:** Look for the brass plaques and buzzers beside ground-floor shops—first- and second-floor offices housing 3-to-15 person firms of solicitors, accountants, surveyors, brokers, and property managers.
 * **Outreach Medium:** Never send cold emails to people suffering from email overload. Hand-deliver or post a concise, high-quality printed letter on heavy stock addressed personally to the Senior Partner/Principal, referencing your Hampstead address, your 17 years in City financial systems, and the system you just built for a neighbouring Hampstead firm.
 

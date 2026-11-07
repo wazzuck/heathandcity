@@ -332,9 +332,14 @@ absent. Add project-specific rules only where they apply.
 
 ## 9. Project facts (Heath & City)
 
-1. **Language & Tone:** This site must at all times use British
-   Professional English across all customer-facing copy, code comments,
-   and repository documentation.
+1. **Language & Tone (Strict British Professional English):** This site and
+   every page in this repository must at all times use British Professional
+   English conventions across all customer-facing copy, HTML headings, body
+   paragraphs, code comments, and documentation without exception (for example:
+   "-ise" endings like "organise", "prioritise", "customise"; "colour",
+   "behaviour", "centre", "programme", "licence" for noun, "practice" for noun;
+   and adverbial "in person" without a hyphen). American English spellings or
+   idioms are defects and will fail verification.
 2. **Target Audience:** Established boutique professional practices,
    senior partners, King's Counsel (KC), medical consultants, and
    principals across North West (NW) London and The City.
