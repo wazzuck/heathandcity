@@ -108,6 +108,15 @@
       "rigour", "catalog" -> "catalogue").
     - Enforced British English in AGENTS.md and automated check in
       verify_site.py.
+26. Refined practice automations copy, section headers, and founder typography:
+    - Retitled Card 2 to "Private document classification" with human-centred
+      copy.
+    - Retitled Card 3 to "Preparation of financial accounts" with grounded
+      copy.
+    - Set single-line gap above "A few examples of automation:" in styles.css.
+    - Shortened about heading to "Behind Heath & City".
+    - Updated founder credential chips to "BofA" and "SOTA Computing".
+    - Increased founder name ("Neville Bryce") font size by 50% to 1.425rem.
 
 ---
 

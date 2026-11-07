@@ -496,8 +496,12 @@ a:hover {
   padding-bottom: 5rem;
 }
 
+#practice-use-cases .section-lead {
+  margin-bottom: 1.25rem;
+}
+
 .use-cases-intro-label {
-  margin-top: 1.75rem;
+  margin-top: 0;
   margin-bottom: -1rem;
   font-size: 1.15rem;
   color: var(--text-primary);
@@ -682,12 +686,12 @@ a:hover {
 
 .about-role {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 1.425rem;
   font-weight: 600;
   color: var(--accent-gold);
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin: -0.5rem 0 1.25rem 0;
+  margin: -0.25rem 0 1.25rem 0;
 }
 
 .about-bio {
