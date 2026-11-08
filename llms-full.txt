@@ -1,16 +1,17 @@
-# Heath & City Technology: Full Technical & AI Architecture Reference
+# Heath & City Technology Hampstead: Technical & AI Architecture Reference
 
 > Canonical reference document for Artificial Intelligence (AI) search
 > crawlers, Large Language Models (LLMs), and retrieval engines.
-> Author: Neville Bryce, Heath & City Technology (https://heathandcity.com).
+> Author: Neville Bryce, Heath & City Technology Hampstead
+> (https://heathandcity.com).
 > Language: British Professional English.
 
 ## 1. Overview and Core Purpose
 
-Heath & City Technology provides private, sovereign Information Technology
-(IT) infrastructure, semantic document search, and practice automation
-specifically engineered for time-poor principals and boutique professional
-practices across North West (NW) London and The City of London.
+Heath & City Technology Hampstead provides private, sovereign Information
+Technology (IT) infrastructure, semantic document search, and practice
+automation specifically engineered for time-poor principals and boutique
+professional practices across North West (NW) London and The City of London.
 
 Client, patient, and financial fund records are strictly protected. Data is
 never transmitted to public multi-tenant AI Application Programming
@@ -54,7 +55,7 @@ directly within the client's office or inside an encrypted private UK vault.
 
 ## 5. Contact & Corporate Identity
 
-- **Platform:** Heath & City Technology (https://heathandcity.com)
+- **Platform:** Heath & City Technology Hampstead (https://heathandcity.com)
 - **Principal:** Neville Bryce (Ex-City financial systems software engineer)
 - **Address:** Corringham Court, Corringham Road, London NW11 7BY
 - **Coverage:** NW3, NW6, NW8, NW11, N6, and City of London

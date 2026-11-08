@@ -1,4 +1,4 @@
-# robots.txt for Heath & City Technology (https://heathandcity.com)
+# robots.txt for Heath & City Technology Hampstead (https://heathandcity.com)
 # All crawlers, including Artificial Intelligence (AI) assistants and search
 # agents, may index and read the whole site.
 
