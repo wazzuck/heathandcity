@@ -16,7 +16,7 @@ professional practices across North West (NW) London and The City of London.
 Client, patient, and financial fund records are strictly protected. Data is
 never transmitted to public multi-tenant AI Application Programming
 Interfaces (APIs). Systems operate entirely on dedicated hardware deployed
-directly within the client's office or inside an encrypted private UK vault.
+directly within the client's office or inside an encrypted private UK data vault.
 
 ## 2. Target Client Practices
 
