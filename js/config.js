@@ -58,7 +58,7 @@ export const SITE_CONFIG = Object.freeze({
   contactPhoneDisplay: "020 4520 9114",
   contactPhoneHref: "02045209114",
   officeAddress:
-    "Flat 25, Corringham Court, Corringham Road, London NW11 7BY",
+    "Corringham Court, Corringham Road, London NW11 7BY",
   officeLocation: "Hampstead, London NW3 (visits by appointment)",
   immediateSupportSite: "https://itoldyouso.tech",
   immediateSupportLabel: "itoldyouso.tech"
