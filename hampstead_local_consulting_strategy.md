@@ -85,7 +85,7 @@ Instead, lead with your **17 years of City financial systems reliability** and H
 
 ### Role 1: The "Private AI & Sovereign Data Architect"
 * **Best For:** KCs, Arbitrators, Boutique Law Firms, Private Consultants/Psychiatrists, Family Offices.
-* **The Pitch:** *"You want AI to search 20 years of your files and summarise 1,000-page bundles in seconds—but legally and reputationally, you cannot upload confidential client or patient data into public ChatGPT. I build locked-down, private AI search and document systems on dedicated hardware right in your office (or a private UK vault) where zero data ever leaves your control."*
+* **The Pitch:** *"You want AI to search 20 years of your files and summarise 1,000-page bundles in seconds—but legally and reputationally, you cannot upload confidential client or patient data into public ChatGPT. I build locked-down, private AI search and document systems on dedicated hardware right in your office (or a private UK data vault) where zero data ever leaves your control."*
 * **Why You Win:** Combines your Linux, GPU, Docker, and deep learning training (Two-Tower search, Transformers, LoRA) with physical on-site installation in Hampstead.
 
 ### Role 2: The "Financial & Document Data Normalisation Engineer"

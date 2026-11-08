@@ -350,7 +350,7 @@ export const PRICING_STEPS = Object.freeze([
       "vault, tailored to your templates, insurers, banks and clients. Your " +
       "team is shown how to use it in short sessions.",
     deliverables: [
-      "A private machine in your office, or a private UK vault",
+      "A private machine in your office, or a private UK data vault",
       "Your past documents indexed for search",
       "Rules set up for your own forms, bundles and deadlines",
       "A daily summary, plus short training for your team"
