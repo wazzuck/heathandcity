@@ -117,6 +117,16 @@
     - Shortened about heading to "Behind Heath & City".
     - Updated founder credential chips to "BofA" and "SOTA Computing".
     - Increased founder name ("Neville Bryce") font size by 50% to 1.425rem.
+27. Refined card hierarchy, terminology dictionaries, address, and credentials:
+    - Retitled Card 2 to "Private document management" and moved to top of
+      stack.
+    - Highlighted custom practice dictionaries for nuanced terminology.
+    - Removed "bespoke" from use-cases footer note.
+    - Simplified address to "Corringham Court, Corringham Road" (removed
+      Flat 25) across index.html, js/config.js, llms.txt, and llms-full.txt.
+    - Removed redundant "Base" line from direct contact card and LLM specs.
+    - Updated founder credential chips to "Algorithmic Trading & High
+      Performance Computing" and standardised Title Case across all chips.
 
 ---
 
