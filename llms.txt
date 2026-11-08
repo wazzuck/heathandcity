@@ -1,4 +1,4 @@
-# Heath & City Technology
+# Heath & City Technology Hampstead
 
 > Private Information Technology (IT) and document systems for boutique
 > professional practices in Hampstead and North West (NW) London: barristers
@@ -26,8 +26,8 @@
 ## Founder
 
 - Neville Bryce: Founder and Principal Systems Technologist
-- Experience: Over 17 years engineering mission-critical, ultra-low-latency
-  financial market infrastructure for institutions including Bank of America
+- Experience: Over 17 years engineering mission-critical financial
+  market infrastructure for institutions including Bank of America
   Merrill Lynch, Nomura, and Exegy.
 - Education: Bachelor's in Software Engineering (University of Ulster).
 - Training: Advanced AI and deep learning at The Machine Learning Institute.

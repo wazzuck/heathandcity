@@ -127,6 +127,19 @@
     - Removed redundant "Base" line from direct contact card and LLM specs.
     - Updated founder credential chips to "Algorithmic Trading & High
       Performance Computing" and standardised Title Case across all chips.
+28. Added governance section, rebrand, and founder/header refinements:
+    - Added "Contractual safeguards & the small print" section (Data
+      Processing Agreement, Non-Disclosure Agreement, Technical and
+      Organisational Measures, right to independent scrutiny).
+    - Renamed the company to "Heath & City Technology Hampstead" across
+      the page, metadata, config, robots.txt and llms files.
+    - Reworded the founder bio in plain language and removed
+      "ultra-low-latency"; edited card and footer-note copy.
+    - Styled the LinkedIn button in LinkedIn blue; aligned and equalised
+      the founder action buttons.
+    - Aligned the header logo with the page content edge.
+    - Direct line button now pulses between white and the section
+      background colour (stops for reduced-motion readers).
 
 ---
 
