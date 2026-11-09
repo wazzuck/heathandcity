@@ -286,6 +286,21 @@ a:hover {
   transform: translateY(-1px);
 }
 
+/* Founder-section "Book a 20-minute coffee" button: a solid colour in
+   place of the shared gradient. It uses the site's gold accent
+   (#8a5d12) with white text, a contrast ratio of about 5.9:1, and
+   darkens on hover. The contact form's submit button is unchanged. */
+.about-actions .btn--primary {
+  background: var(--accent-gold);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(138, 93, 18, 0.25);
+}
+
+.about-actions .btn--primary:hover {
+  background: var(--accent-gold-bright);
+  color: #ffffff;
+}
+
 /* Modern Pill Phone Button in Header */
 .header-phone-btn {
   display: inline-flex;
