@@ -128,6 +128,51 @@ export const VERTICAL_DEMOS = Object.freeze({
       "The system finds and prepares; you decide."
   },
 
+  "family-office": {
+    id: "family-office",
+    tabLabel: "Family Offices",
+    badge: "PRIVATE WEALTH & ESTATES · NW3 / W1",
+    headline: "Single-Family Offices & Private Trustees",
+    summary:
+      "Consolidate multi-custodian bank statements, track capital calls, " +
+      "and approve confidential supplier disbursements in minutes.",
+    stats: [
+      { label: "Entities Monitored", value: "14 Trusts & SPVs", tone: "gold" },
+      { label: "Capital Calls Pending", value: "£1.2m Due Soon", tone: "amber" },
+      { label: "Data Outside Private Vault", value: "Zero", tone: "emerald" }
+    ],
+    digestTime: "08:30 daily executive digest · Private vault",
+    queueItems: [
+      {
+        priority: "CAPITAL CALL · 5 DAYS",
+        client: "Private equity fund investment (illustrative)",
+        matter: "Notice of drawdown against secondary liquidity account",
+        status: "Drawdown notice verified; cash balance confirmed at private bank",
+        timer: "Due in 5 days",
+        sourceRef: "Capital_Call_Notice_Fund_IV.pdf · Page 1"
+      },
+      {
+        priority: "TRUST DISTRIBUTION REVIEW",
+        client: "Discretionary family settlement (illustrative)",
+        matter: "Quarterly beneficiary distribution and tax deduction schedule",
+        status: "Trustee resolution drafted for approval; bank transfer pre-staged",
+        timer: "Awaiting trustee sign-off",
+        sourceRef: "Trustee_Resolution_Draft.docx"
+      },
+      {
+        priority: "ESTATE DISBURSEMENTS",
+        client: "Residential property & staff payroll (illustrative)",
+        matter: "Monthly contractor invoices and private aircraft maintenance",
+        status: "All 22 supplier invoices cross-checked against approved budgets",
+        timer: "Reviewed 08:20 today",
+        sourceRef: "Estate_Disbursements_Summary.xlsx"
+      }
+    ],
+    guarantee:
+      "Your family's assets, trusts, and personal affairs stay inside your " +
+      "private office on dedicated hardware. We do not handle funds or " +
+      "advise; the system consolidates paperwork."
+  },
   estate: {
     id: "estate",
     tabLabel: "Estate Agents",
@@ -266,6 +311,51 @@ export const VERTICAL_DEMOS = Object.freeze({
       "system automates documentation and reconciliation."
   },
 
+  accountants: {
+    id: "accountants",
+    tabLabel: "Accountants & Tax",
+    badge: "CHARTERED PRACTICE & TAX · NW3 / CITY",
+    headline: "Chartered Accountants & Tax Advisers",
+    summary:
+      "Cross-check client accounts against statutory deadlines, catch " +
+      "ledger anomalies, and prepare self-assessment chasers automatically.",
+    stats: [
+      { label: "Client Files Monitored", value: "85 Entities", tone: "gold" },
+      { label: "Filing Deadline Alerts", value: "4 Approaching", tone: "amber" },
+      { label: "Ledger Discrepancies", value: "2 To Reconcile", tone: "emerald" }
+    ],
+    digestTime: "08:00 daily practice briefing · Local hardware",
+    queueItems: [
+      {
+        priority: "FILING DEADLINE · 14 DAYS",
+        client: "Consultancy partnership (illustrative)",
+        matter: "Corporation tax return and statutory accounts submission",
+        status: "Draft accounts balanced; director confirmation statement pending",
+        timer: "Deadline in 14 days",
+        sourceRef: "Draft_Statutory_Accounts_2025.xlsx"
+      },
+      {
+        priority: "MISSING DIVIDEND VOUCHERS",
+        client: "High-earner Self-Assessment bundle (illustrative)",
+        matter: "Foreign dividend income cross-check against custodian vouchers",
+        status: "Two overseas dividend vouchers missing; polite chaser email drafted",
+        timer: "Waiting 6 days",
+        sourceRef: "Self_Assessment_Checklist.xlsx"
+      },
+      {
+        priority: "HMRC COMPLIANCE NOTICE",
+        client: "Property management company (illustrative)",
+        matter: "Quarterly VAT returns reconciliation against HMRC gateway",
+        status: "Quarterly VAT ledgers matched against HMRC gateway submission",
+        timer: "Verified 07:50 today",
+        sourceRef: "HMRC_Gateway_Receipt_Q3.pdf"
+      }
+    ],
+    guarantee:
+      "We organise records, track statutory deadlines, and prepare draft " +
+      "schedules. We do not provide statutory audit or regulated tax advice; " +
+      "the system automates preparation for your sign-off."
+  },
   composers: {
     id: "composers",
     tabLabel: "Composers & Music",

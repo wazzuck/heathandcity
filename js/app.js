@@ -43,6 +43,15 @@ const CALCULATOR_PROFILES = Object.freeze({
       "Assumes faster precedent searches and fewer disclosure checks done by " +
       "hand. Use your own hourly rate to refine the estimate."
   },
+  "family-office": {
+    label: "Family Office / Private Trustee",
+    hourlyRateGbp: 450,
+    leakageFactor: 0.05,
+    efficiencyGain: 0.76,
+    note:
+      "Assumes instant capital call tracking, faster trust reconciliations, " +
+      "and reduced manual filing across multiple entities."
+  },
   estate: {
     label: "Prime Estate Agent / Surveyor",
     hourlyRateGbp: 220,
@@ -69,6 +78,15 @@ const CALCULATOR_PROFILES = Object.freeze({
     note:
       "Assumes instant contract note matching, zero custodian breaks, " +
       "and early notification of corporate actions."
+  },
+  accountants: {
+    label: "Chartered Accountant / Tax Adviser",
+    hourlyRateGbp: 280,
+    leakageFactor: 0.04,
+    efficiencyGain: 0.74,
+    note:
+      "Assumes automated chasing of missing client vouchers, faster " +
+      "statutory cross-checks, and fewer deadline scrambles."
   },
   composers: {
     label: "Composer / Music Publisher",
