@@ -218,8 +218,21 @@
           </summary>
           <div class="mt-3">
             <p class="panel-description">
-              Enter your Google Cloud OAuth 2.0 Client credentials. Authorised redirect URI:
-              <code style="color: var(--gold-accent);">http://127.0.0.1:8080/api/google/callback</code>
+              Create your OAuth 2.0 Client credentials in the
+              <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener" style="color: var(--gold-accent); text-decoration: underline;">
+                Google Cloud Console Credentials Page &nearr;
+              </a>. Ensure both
+              <a href="https://console.cloud.google.com/apis/library/gmail.googleapis.com" target="_blank" rel="noopener" style="color: var(--gold-accent); text-decoration: underline;">
+                Gmail API &nearr;
+              </a> and
+              <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com" target="_blank" rel="noopener" style="color: var(--gold-accent); text-decoration: underline;">
+                Google Drive API &nearr;
+              </a> are enabled for your project.
+            </p>
+            <p class="panel-description">
+              Set Application Type to <strong>Web application</strong> and add this exact Authorised Redirect URI:
+              <br>
+              <code style="color: var(--gold-accent); background-color: var(--bg-primary); padding: 0.25rem 0.5rem; display: inline-block; margin-top: 0.35rem;">http://127.0.0.1:8080/api/google/callback</code>
             </p>
             <form id="google-config-form">
               <div class="form-row">
