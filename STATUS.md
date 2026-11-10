@@ -165,6 +165,11 @@
       data across all 9 target practices.
     - Authored comprehensive on-premises appliance technical architecture
       specification in docs/PRODUCT_SPECIFICATION.md.
+    - Added Section 5 (Implementation Blueprint & AI Build Instructions)
+      to docs/PRODUCT_SPECIFICATION.md, providing target directory structure,
+      prerequisites setup script, five phased build milestones, automated test
+      criteria, and copy-paste AI master build prompt for the Lenovo
+      ThinkCentre M720q Tiny prototype.
 
 ---
 
