@@ -56,7 +56,7 @@ class SystemSettings(BaseModel):
         description="Local Ollama daemon endpoint.",
     )
     llm_model: str = Field(
-        default="llama3.2:3b",
+        default="qwen3.5:4b",
         description="Primary 4-bit quantised local instruction model.",
     )
     embed_model: str = Field(
@@ -64,26 +64,37 @@ class SystemSettings(BaseModel):
         description="Default local CPU vector embedding model.",
     )
     data_dir: Path = Field(
-        default_factory=lambda: Path(__file__).resolve().parent.parent.parent
-        / "data",
-        description="Persistent data root directory.",
+        default_factory=lambda: (
+            Path("/home/neville/practice-vault-data")
+            if Path("/home/neville/practice-vault-data").exists()
+            else Path(__file__).resolve().parent.parent.parent / "data"
+        ),
+        description="Persistent external data root directory.",
     )
     lancedb_dir: Path = Field(
-        default_factory=lambda: Path(__file__).resolve().parent.parent.parent
-        / "data"
-        / "lancedb",
+        default_factory=lambda: (
+            Path("/home/neville/practice-vault-data/lancedb")
+            if Path("/home/neville/practice-vault-data").exists()
+            else Path(__file__).resolve().parent.parent.parent
+            / "data"
+            / "lancedb"
+        ),
         description="LanceDB persistent storage directory.",
     )
     sample_docs_dir: Path = Field(
         default_factory=lambda: Path(__file__).resolve().parent.parent.parent
         / "data"
         / "sample_docs",
-        description="Directory holding practice documentation.",
+        description="Directory holding mock sample practice documentation.",
     )
     inbox_staging_dir: Path = Field(
-        default_factory=lambda: Path(__file__).resolve().parent.parent.parent
-        / "data"
-        / "inbox_staging",
+        default_factory=lambda: (
+            Path("/home/neville/practice-vault-data/inbox_staging")
+            if Path("/home/neville/practice-vault-data").exists()
+            else Path(__file__).resolve().parent.parent.parent
+            / "data"
+            / "inbox_staging"
+        ),
         description="Staging inbox for email triage.",
     )
     static_dir: Path = Field(
@@ -104,15 +115,23 @@ class SystemSettings(BaseModel):
         description="Authorised Google OAuth2 redirect URI.",
     )
     google_credentials_file: Path = Field(
-        default_factory=lambda: Path(__file__).resolve().parent.parent.parent
-        / "data"
-        / "google_credentials.json",
+        default_factory=lambda: (
+            Path("/home/neville/vunderland/keys/heathandcity_token.json")
+            if Path("/home/neville/vunderland/keys/heathandcity_token.json").exists()
+            else Path(__file__).resolve().parent.parent.parent
+            / "data"
+            / "google_credentials.json"
+        ),
         description="Local on-disk Google OAuth2 token storage.",
     )
     google_client_config_file: Path = Field(
-        default_factory=lambda: Path(__file__).resolve().parent.parent.parent
-        / "data"
-        / "google_client_config.json",
+        default_factory=lambda: (
+            Path("/home/neville/practice-vault-data/google_client_config.json")
+            if Path("/home/neville/practice-vault-data").exists()
+            else Path(__file__).resolve().parent.parent.parent
+            / "data"
+            / "google_client_config.json"
+        ),
         description="Local on-disk Google OAuth2 client secrets storage.",
     )
 

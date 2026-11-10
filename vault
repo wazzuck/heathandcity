@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Sovereign Practice Vault CLI Launcher
+# Heath & City Practice Vault
+# ==============================================================================
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYTHON_EXEC="${SCRIPT_DIR}/practice-vault/venv/bin/python"
+CLI_SCRIPT="${SCRIPT_DIR}/practice-vault/scripts/vault_cli.py"
+
+if [[ ! -x "${PYTHON_EXEC}" ]]; then
+  PYTHON_EXEC="python3"
+fi
+
+exec "${PYTHON_EXEC}" "${CLI_SCRIPT}" "$@"

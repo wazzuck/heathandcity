@@ -17,6 +17,7 @@ Invariants:
 """
 
 import os
+import re
 from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
@@ -28,6 +29,7 @@ from .indexer import HybridIndexEngine
 from .ingest import DocumentIngestionPipeline
 from .rag import RAGEngine
 from .tracker import job_tracker, stats_service
+from .transactions import TransactionStore
 from .triage import InboxTriageEngine, TriageResult
 
 router = APIRouter(prefix="/api")
@@ -35,7 +37,8 @@ router = APIRouter(prefix="/api")
 # Shared service singletons.
 ingest_pipeline = DocumentIngestionPipeline()
 index_engine = HybridIndexEngine()
-rag_engine = RAGEngine(indexer=index_engine)
+tx_store = TransactionStore()
+rag_engine = RAGEngine(indexer=index_engine, tx_store=tx_store)
 triage_engine = InboxTriageEngine()
 google_service = GoogleWorkspaceSyncService()
 
@@ -62,6 +65,10 @@ class QueryRequest(BaseModel):
 
     query: str = Field(..., description="Plain-English question for practice.")
     top_k: int = Field(default=5, ge=1, le=20, description="Context chunk count.")
+    model: Optional[str] = Field(
+        default=None,
+        description="Optional model override tag.",
+    )
 
 
 class TriageRequest(BaseModel):
@@ -135,7 +142,11 @@ def answer_question(payload: QueryRequest) -> Dict[str, Any]:
     """
     Execute full RAG pipeline returning answer with exact source citations.
     """
-    resp = rag_engine.query(payload.query, top_k=payload.top_k)
+    resp = rag_engine.query(
+        payload.query,
+        top_k=payload.top_k,
+        model_override=payload.model,
+    )
     return {
         "query": resp.query,
         "answer": resp.answer,
@@ -305,23 +316,50 @@ def disconnect_google() -> Dict[str, Any]:
 
 
 @router.post("/google/sync-gmail")
-def sync_gmail() -> Dict[str, Any]:
+def sync_gmail(max_messages: int = 100, use_checkpoint: bool = True) -> Dict[str, Any]:
     """
-    Synchronise recent emails from Gmail and index into practice vault.
+    Synchronise messages from Gmail using checkpointed pagination sweeps.
     """
-    job = job_tracker.create_job(source_type="gmail", total_items=50)
+    job = job_tracker.create_job(source_type="gmail", total_items=max_messages)
     try:
-        chunks = google_service.fetch_and_parse_gmails(max_messages=50)
-        job.update_progress(
-            processed_items=len(chunks),
-            chunks_generated=len(chunks),
-            total_items=len(chunks) or 1,
+        existing_ids = index_engine.get_indexed_ids()
+
+        def on_progress(proc: int, total: int, gen: int) -> None:
+            job.update_progress(
+                processed_items=proc,
+                total_items=total or max_messages,
+                chunks_generated=gen,
+            )
+
+        chunks = google_service.fetch_and_parse_gmails(
+            max_messages=max_messages,
+            use_checkpoint=use_checkpoint,
+            existing_chunk_ids=existing_ids,
+            progress_callback=on_progress,
         )
         indexed = index_engine.index_chunks(chunks)
         job_tracker.finish_job(job.job_id, chunks_indexed=indexed)
 
-        all_chunks = index_engine.get_all_chunks()
-        stats_service.calculate_statistics(all_chunks, index_engine.count())
+        # Update stats incrementally without heap deserialisation.
+        stats_service.update_incremental(chunks, index_engine.count())
+
+        # Extract transactions from newly indexed correspondence into ledger.
+        for c in chunks:
+            subj_m = re.search(r"Subject:\s*(.+)", c.text)
+            subj = subj_m.group(1).strip() if subj_m else c.file_name
+            from_m = re.search(r"From:\s*(.+)", c.text)
+            sender = from_m.group(1).strip() if from_m else ""
+            date_m = re.search(r"Date:\s*(.+)", c.text)
+            date_h = date_m.group(1).strip() if date_m else ""
+            tx = tx_store.extract_from_email(
+                chunk_id=c.chunk_id,
+                subject=subj,
+                sender=sender,
+                date_header=date_h,
+                text=c.text,
+            )
+            if tx:
+                tx_store.insert_transaction(tx)
 
         return {
             "status": "success",
@@ -336,23 +374,49 @@ def sync_gmail() -> Dict[str, Any]:
 
 
 @router.post("/google/sync-docs")
-def sync_google_docs() -> Dict[str, Any]:
+def sync_google_docs(max_files: Optional[int] = None) -> Dict[str, Any]:
     """
-    Synchronise Google Docs from Google Drive and index into practice vault.
+    Synchronise Google Docs from Google Drive across entire corpus.
     """
-    job = job_tracker.create_job(source_type="google_docs", total_items=30)
+    job = job_tracker.create_job(source_type="google_docs", total_items=191)
     try:
-        chunks = google_service.fetch_and_parse_google_docs(max_files=30)
-        job.update_progress(
-            processed_items=len(chunks),
-            chunks_generated=len(chunks),
-            total_items=len(chunks) or 1,
+        existing_ids = index_engine.get_indexed_ids()
+
+        def on_progress(proc: int, total: int, gen: int) -> None:
+            job.update_progress(
+                processed_items=proc,
+                total_items=total or 191,
+                chunks_generated=gen,
+            )
+
+        chunks = google_service.fetch_and_parse_google_docs(
+            max_files=max_files,
+            existing_chunk_ids=existing_ids,
+            progress_callback=on_progress,
         )
         indexed = index_engine.index_chunks(chunks)
         job_tracker.finish_job(job.job_id, chunks_indexed=indexed)
 
-        all_chunks = index_engine.get_all_chunks()
-        stats_service.calculate_statistics(all_chunks, index_engine.count())
+        # Update stats incrementally without heap deserialisation.
+        stats_service.update_incremental(chunks, index_engine.count())
+
+        # Extract transactions from newly indexed correspondence into ledger.
+        for c in chunks:
+            subj_m = re.search(r"Subject:\s*(.+)", c.text)
+            subj = subj_m.group(1).strip() if subj_m else c.file_name
+            from_m = re.search(r"From:\s*(.+)", c.text)
+            sender = from_m.group(1).strip() if from_m else ""
+            date_m = re.search(r"Date:\s*(.+)", c.text)
+            date_h = date_m.group(1).strip() if date_m else ""
+            tx = tx_store.extract_from_email(
+                chunk_id=c.chunk_id,
+                subject=subj,
+                sender=sender,
+                date_header=date_h,
+                text=c.text,
+            )
+            if tx:
+                tx_store.insert_transaction(tx)
 
         return {
             "status": "success",
