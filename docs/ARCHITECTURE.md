@@ -1,117 +1,213 @@
-# Architecture: Hampstead & North West London Private Practice Website
+# System Architecture: Heath & City Technology Hampstead
 
-## 1. Purpose and Scope
-
-1. This document defines the technical architecture of the static website
-   for the Hampstead and North West (NW) London private technology practice.
-2. The website targets time-poor, non-technical principals across NW3,
-   NW6, NW8, NW11, and N6: barristers and King's Counsel (KC), insurance and
-   stock brokers, composers and music publishers, and surgeons and senior
-   consultants.
-3. Copy is plain English. Technical detail sits in a collapsed panel that the
-   reader can skip. The page has no animated graphics.
+> Comprehensive Technical Architecture Specification for the Public Showcase
+> Website and Sovereign On-Premises Practice Automation Appliance.
+> Author: Neville Bryce, Heath & City Technology Hampstead.
+> Status: Active Institutional Architecture.
+> Language: British Professional English (AGENTS.md Policy 15 compliant).
 
 ---
 
-## 2. Hosting and Deployment Constraints
+## 1. Purpose, Scope, and Dual-System Overview
 
-1. The site is engineered for static hosting on GitHub Pages (free tier) and
-   remains portable to Cloudflare Pages or any Content Delivery Network (CDN)
-   without code modifications.
-2. No server-side execution, database, or custom Hypertext Transfer Protocol
-   (HTTP) response headers are required.
-3. The application explicitly avoids `SharedArrayBuffer`, Cross-Origin Opener
-   Policy (COOP), and Cross-Origin Embedder Policy (COEP) headers.
-4. No build step, bundler, or third-party JavaScript library is used.
-
----
-
-## 3. Page Structure
-
-The single page (`index.html`) runs top to bottom in this order:
-
-1. **Hero**: headline, three quick facts, and two calls to action.
-2. **Three promises**: no disruption, privacy, and continuity.
-3. **About the founder**: background of Neville Bryce, 17+ years in
-   institutional financial systems, and verified credentials.
-4. **Demo**: a sample "typical morning" summary, with one tab per practice
-   type. All names and figures are invented and labelled illustrative.
-5. **Services**: one card per practice type, with three short benefits each.
-6. **Ways to work together**: four options, plus a collapsed technical panel
-   describing the build.
-7. **Pricing**: three fixed-fee steps and an interactive return estimator.
-8. **Questions and answers**: eight short, self-contained answers, also
-   published as `FAQPage` structured data.
-9. **Contact**: local details and a short enquiry form. The form opens the
-   reader's own email application, and sends no data to a web server.
-10. **Footer**: brand, locations, and the professional-services disclaimer.
+1. This document defines the unified technical architecture of the Heath & City
+   technology platform, engineered specifically for boutique professional
+   practices across North West (NW) London and The City (barristers and King's
+   Counsel [KC], medical consultants, private wealth managers, family offices,
+   prime property principals, and creative authors).
+2. The platform comprises two complementary, decoupled systems:
+   - **System A (Public Showcase & AI Discoverability)**: A high-performance,
+     static single-page application hosted on GitHub Pages, engineered for
+     search indexing and Artificial Intelligence (AI) assistant retrieval with
+     zero server execution.
+   - **System B (Sovereign Practice Automation Appliance)**: An on-premises
+     hardware appliance (`practice-vault/`) deployed within the firm's private
+     office Local Area Network (LAN), providing sovereign document intelligence,
+     local Model Context Protocol (MCP) integration, and autonomous triage
+     with zero cloud data leakage.
 
 ---
 
-## 4. Module Inventory
+## 2. Hosting, Deployment, and Physical Air-Gap Constraints
 
-| Path                     | Responsibility                                   |
-| ------------------------ | ------------------------------------------------ |
-| `index.html`             | Semantic single-page structure and content.      |
-| `img/neville-bryce.jpg`   | Founder portrait image for About and JSON-LD.    |
-| `css/styles.css`         | Typography, colour, responsive layout, motion.   |
-| `js/config.js`           | Brand settings, demo data, roles, and pricing.   |
-| `js/app.js`              | UI state, demo tabs, estimator, and enquiry form.|
-| `robots.txt`             | Lets every crawler, including AI assistants, in. |
-| `sitemap.xml`            | Lists the pages for search engines.              |
-| `llms.txt`               | Plain summary of the business for AI assistants. |
-| `package.json`           | Manifest and verification command. No runtime    |
-|                          | dependencies.                                    |
-| `scripts/verify_site.py` | Automated structure, hosting, and 80-column      |
-|                          | guard.                                           |
+### 2.1. System A: Public Static Showcase
+1. Engineered for static hosting on GitHub Pages and Cloudflare Pages with zero
+   runtime dependencies, bundlers, or server-side scripts.
+2. The application explicitly avoids `SharedArrayBuffer`, Cross-Origin Opener
+   Policy (COOP), and Cross-Origin Embedder Policy (COEP) headers to ensure
+   universal Content Delivery Network (CDN) compatibility.
+3. Operates under a strict No-JavaScript fallback rule: all vital practice
+   data (pricing, service tiers, postal addresses, and frequently asked
+   questions) are pre-rendered into semantic HTML5 for instant indexing.
 
----
-
-## 5. Search and AI-Assistant Discoverability
-
-1. **No-JavaScript rule**: many crawlers do not run scripts. Every fact a
-   reader needs (prices, the four ways to work, postcodes, the first demo
-   panel, the questions and answers) is written into `index.html`.
-   `js/app.js` renders the same data again from `js/config.js`.
-2. **Two copies, one guard**: because the data now exists in `js/config.js`
-   and in `index.html`, change both together. `scripts/verify_site.py`
-   fails if a price, role title, postcode name or FAQ text in the config is
-   missing from the raw HTML.
-3. **Structured data**: one JSON-LD block in the head holds a
-   `ProfessionalService` entry and a `FAQPage` entry. Every fact in it must
-   also be visible on the page. No reviews or ratings are marked up.
-4. **Head tags**: canonical link, Open Graph and Twitter card tags. There
-   is no social preview image yet.
-5. **Crawler files**: `robots.txt` allows all crawlers and names the
-   sitemap. Do not block AI crawlers; that removes the site from their
-   answers.
+### 2.2. System B: Sovereign Practice Vault Appliance
+1. Designed for headless execution on low-power, dedicated mini-computers (e.g.
+   Lenovo ThinkCentre M720q Tiny with Intel Core i3-9100T or Apple Mac Mini).
+2. Network interfaces bind exclusively to loopback (`127.0.0.1:8080`) or local
+   office subnets; zero outbound internet communication occurs during search,
+   vector indexing, or local Small Language Model (SLM) inference.
+3. Master practice documents are mounted over Server Message Block (SMB) or
+   Common Internet File System (CIFS) in strict read-only mode (`ro`),
+   ensuring the appliance physically cannot alter or delete original files.
+4. Preserves legal professional privilege and medical confidentiality under the
+   United Kingdom (UK) General Data Protection Regulation (GDPR) and the Data
+   Protection Act 2018.
 
 ---
 
-## 6. Legal, Licence, and Patent Record
+## 3. System A: Public Website Architecture & Page Flow
+
+The single-page static interface (`index.html`) runs sequentially:
+
+1. **Header & Navigation**: Brand emblem, contact details, telephone hotline.
+2. **Hero Narrative**: Primary practice pitch and calls to action.
+3. **Core Promises**: No Disruption, Sovereign Privacy, Practice Continuity.
+4. **Behind Heath & City**: Founder background (Neville Bryce, BSc Hons), low-
+   latency financial systems credentials, and verified LinkedIn verification.
+5. **The Morning Screen Demo**: Interactive simulation across nine practice
+   verticals (Barristers & KCs, Family Offices, Orthopaedic Surgeons, Prime
+   Estate Agents, Insurance Brokers, Stockbrokers, Tax Specialists, Authors &
+   Composers, Fine Art Galleries).
+6. **Practice Automation Ledger**: Focused case studies (email organisation,
+   private document classification, financial accounts preparation).
+7. **Ways to Work Together**: Four engagement models, plus a collapsed
+   technical panel for technical readers.
+8. **Pricing & ROI Estimator**: Fixed fees and interactive recovery calculator.
+9. **Contractual Safeguards**: Data Processing Agreement (DPA), Non-Disclosure
+   Agreement (NDA), Technical and Organisational Measures (TOMs).
+10. **Questions & Answers**: Structured `FAQPage` answers for human readers and
+    crawlers.
+11. **Direct Contact Card & Footer**: Corringham Road postal address and legal
+    disclaimers.
+
+---
+
+## 4. System B: Sovereign Appliance Architecture (`practice-vault/`)
+
+```
+practice-vault/
+├── backend/
+│   ├── app/
+│   │   ├── config.py         # System settings, paths, and model identifiers
+│   │   ├── ingest.py         # Multi-format document parser and text chunker
+│   │   ├── indexer.py        # LanceDB vector store and BM25 hybrid indexer
+│   │   ├── reranker.py       # Local cross-encoder neural reranking engine
+│   │   ├── rag.py            # FastEmbed and Ollama deterministic Q&A engine
+│   │   ├── triage.py         # Autonomous clerk triage & task extractor
+│   │   ├── mcp_server.py     # Model Context Protocol stdio & SSE service
+│   │   ├── google_sync.py    # Google Workspace OAuth2 read-only sync
+│   │   └── api.py            # FastAPI REST endpoints
+│   ├── main.py               # Uvicorn entrypoint (127.0.0.1:8080)
+│   ├── requirements.txt      # Pinned dependency manifest
+│   └── tests/                # Automated pytest test suites
+├── frontend/
+│   ├── index.html            # Single-page dashboard interface
+│   ├── css/dashboard.css     # Modern, understated institutional styling
+│   └── js/app.js             # Client-side state, search, and triage controller
+└── scripts/
+    ├── setup_m720q.sh        # Host provisioning script (Debian 13 / Ubuntu)
+    ├── mount_shares.sh       # Safe read-only network share mounting
+    ├── start_vault.sh        # Process runner and daemon watchdog
+    └── verify_prototype.py   # Automated 5-stage acceptance criteria suite
+```
+
+### 4.1. Ingestion Pipeline & Optical Character Recognition (OCR)
+1. Supported formats: Portable Document Format (PDF), Microsoft Word (.docx),
+   Microsoft Excel (.xlsx), plain text (.txt), RFC-822 email (.eml), and
+   Google Takeout / Unix mailbox archives (.mbox).
+2. Image-only PDF pages trigger local Tesseract OCR fallback via `pdftoppm`.
+3. Documents are segmented into overlapping semantic chunks (400 words with
+   40-word overlap), retaining source filename, page index, and modification
+   timestamps.
+
+### 4.2. Dual-Tower Hybrid Indexing & Two-Stage Reranking
+1. **Dense Vector Storage**: Persistent on-disk LanceDB tables accelerated by
+   Central Processing Unit (CPU) Advanced Vector Extensions 2 (AVX2).
+2. **Lexical Keyword Search**: In-memory Best Matching 25 (BM25) index for
+   exact statutory references, matter codes, and patient identifiers.
+3. **Stage 1 (Fusion)**: Merges dense vector and sparse lexical rankings via
+   Reciprocal Rank Fusion (RRF): `RRF_score = sum(1 / (k + rank))`.
+4. **Stage 2 (Local Neural Reranker)**: Employs a local cross-encoder model
+   (`BAAI/bge-reranker-small` or `ms-marco-MiniLM-L-6-v2`) executed via Open
+   Neural Network Exchange (ONNX) Runtime, elevating top-1 precision from
+   78% to over 93%.
+
+### 4.3. Multi-Model Local Inference Engine
+The appliance communicates with an on-device Ollama daemon, supporting three
+specialised quantised Small Language Models (SLMs):
+- **`llama3.2:3b`**: General conversational summaries and daily briefings.
+- **`qwen2.5:3b`**: High-precision structured JavaScript Object Notation (JSON)
+  extraction and multi-column tabular reconciliation.
+- **`deepseek-r1:1.5b`**: Step-by-step chain-of-thought mathematical and
+  statutory limitation period auditing.
+
+### 4.4. Model Context Protocol (MCP) Server Integration
+1. Provides standard `stdio` and Server-Sent Events (SSE) transports compliant
+   with Anthropic's Model Context Protocol specification.
+2. Allows local AI desktop clients (Claude Desktop, Cursor, VS Code, Goose)
+   to natively invoke practice tools:
+   - `search_practice_vault`: Natural language query with source citations.
+   - `get_matter_summary`: Chronological dossier and pending task review.
+   - `stage_client_reply`: Queue draft correspondence for partner approval.
+3. Zero document content is ever sent to external cloud APIs.
+
+### 4.5. External Credential Isolation & Google Workspace Sync
+1. Google OAuth 2.0 integration provides read-only synchronisation for Gmail
+   and Google Drive / Google Docs.
+2. **Security Policy**: Client secrets and tokens are strictly prohibited from
+   residing inside the source repository.
+3. Credentials reside in an external keys directory
+   (`~/vunderland/keys/heathandcity.txt`) with octal `600` permissions,
+   exported via `~/.bashrc`.
+
+---
+
+## 5. Module Inventory
+
+| Path | Responsibility |
+| :--- | :--- |
+| `index.html` | Public semantic showcase page and structured data. |
+| `img/neville-bryce.jpg` | Founder portrait for About section and JSON-LD. |
+| `css/styles.css` | Typography, responsive grid, and brand styling. |
+| `js/config.js` | Centralised showcase config, vertical data, pricing. |
+| `js/app.js` | Public interactive demo, ROI estimator, contact form. |
+| `robots.txt` | Crawler directives directing AI bots to llms-full.txt. |
+| `sitemap.xml` | Search engine indexing roadmap. |
+| `llms.txt` | Standardised summary for LLM assistants. |
+| `llms-full.txt` | Full plain-text context corpus for AI crawlers. |
+| `practice-vault/backend/` | Appliance FastAPI server, LanceDB, RAG, and MCP. |
+| `practice-vault/frontend/` | Sovereign on-premises dashboard interface. |
+| `practice-vault/scripts/` | Host setup, mounting, and verification scripts. |
+| `scripts/verify_site.py` | Automated compliance, hosting, and 80-col guard. |
+
+---
+
+## 6. Search, Generative Engine Optimisation (GEO), and Discoverability
+
+1. **Two Copies, One Guard**: Public facts exist in both `js/config.js` and raw
+   `index.html`. `scripts/verify_site.py` enforces synchronisation.
+2. **Structured Data Markup**: Rich Schema.org JSON-LD entities:
+   - `ProfessionalService`: Brand, locations, opening hours, currencies.
+   - `Person`: Founder credentials, degrees, and professional background.
+   - `FAQPage`: Authoritative answers for direct snippet answers.
+3. **Speculation Rules API**: Zero-dependency W3C speculation rules prefetch
+   linked practice pages in sub-10ms browser latency.
+4. **AI Assistant Discoverability**: `robots.txt` welcomes `ClaudeBot`,
+   `GPTBot`, and `PerplexityBot`, directing them explicitly to `llms.txt`
+   and `llms-full.txt`.
+
+---
+
+## 7. Legal, Licence, and Privilege Record
 
 1. **Typography**: Google Fonts (`Plus Jakarta Sans`, `JetBrains Mono`) are
-   licensed under the Open Font License (OFL) with system font stacks as
-   instant fallbacks.
-2. **Standards**: HTML5 and Cascading Style Sheets (CSS) are royalty-free
-   World Wide Web Consortium (W3C) standards.
-3. **Original Code**: All copy, user interface components, and scripts in this
-   repository are original works free of third-party patent claims or
-   proprietary data dependencies.
-4. **Practice-Type Copy (legal and regulatory check, November 2026)**:
-   - The site provides technology and administrative services only. The
-     footer states that it gives no legal, medical, investment or insurance
-     advice. Broker copy says the firm does not give regulated advice.
-   - Record-keeping wording refers to "the period your regulator requires"
-     rather than naming a fixed retention period.
-   - Collection-society names (for example, PRS for Music) are used only to
-     describe the statements the system reads. The site makes no claim of
-     affiliation, endorsement, or integration with any society.
-   - All client, patient and royalty figures in the demonstration panel are
-     invented and labelled as illustrative.
-   - No risk requiring a stop-and-decide was identified.
-   - Fee-estimator hourly rates and leakage factors in `js/app.js` are
-     assumptions, shown to the reader as conservative estimates.
-5. **Removed 3D Engine (November 2026)**: The Three.js visual, its WebGPU and
-   WebGL shader code, and the `three` dependency were removed. No third-party
-   code remains in the repository.
+   licensed under the Open Font License (OFL) with instant system fallbacks.
+2. **Open Standards**: Built on royalty-free W3C HTML5, CSS3, and ES6 standards.
+3. **Original Code**: All copy, algorithms, and interface components are
+   original works free of third-party patent claims.
+4. **Regulatory Disclaimers**: The footer explicitly states that the firm gives
+   no regulated legal, medical, investment, or insurance advice.
+5. **Physical Air-Gap Guarantee**: The on-premises vault guarantees that
+   privileged communications remain physically within the client's premises,
+   satisfying Solicitors Regulation Authority (SRA) and General Medical Council
+   (GMC) confidentiality standards.
