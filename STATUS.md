@@ -189,6 +189,18 @@
     - Configured production runners, share mounting scripts, and operational
       runbook (practice-vault/README.md).
 
+31. Added Google Workspace OAuth2 login & synchronization (practice-vault/):
+    - Implemented Google Workspace OAuth2 service in backend/app/google_sync.py
+      with read-only access scopes for Gmail and Google Drive / Docs.
+    - Added RESTful endpoints in backend/app/api.py for login authorization,
+      callback token exchange, status inspection, and live synchronization.
+    - Added RFC-822 .eml and Google Takeout .mbox format parsers to
+      backend/app/ingest.py.
+    - Built 'Google Login & Workspace' dashboard tab in frontend/ with live
+      connection status, client credential setup, and sync triggers.
+    - Expanded automated unit test suite (backend/tests/test_google_sync.py),
+      passing all 7 unit checks cleanly.
+
 ---
 
 ## 2. Next

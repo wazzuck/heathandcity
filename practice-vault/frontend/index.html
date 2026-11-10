@@ -29,6 +29,7 @@
     <button class="nav-btn active" data-tab="tab-search">Document Intelligence</button>
     <button class="nav-btn" data-tab="tab-clerk">Practice Clerk &amp; Triage</button>
     <button class="nav-btn" data-tab="tab-archive">Archive Status &amp; Ingestion</button>
+    <button class="nav-btn" data-tab="tab-google" id="nav-btn-google">Google Login &amp; Workspace</button>
   </nav>
 
   <main class="vault-main">
@@ -150,6 +151,99 @@
             <div class="spec-value">BM25 with Reciprocal Rank Fusion</div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Google Login & Workspace Synchronization -->
+    <section id="tab-google" class="tab-pane">
+      <div class="panel-box">
+        <h2 class="panel-title">Google Workspace Connection &amp; Sovereign Intake</h2>
+        <p class="panel-description">
+          Authenticate directly with your Google account using secure OAuth2 to index
+          Gmail correspondence and Google Docs into your sovereign, on-premises vault.
+          Zero cloud data leakage: all retrieved messages and documents are stored
+          locally on this appliance.
+        </p>
+
+        <!-- Dynamic Connection Banner -->
+        <div id="google-status-banner" class="google-status-card not-connected">
+          <div class="google-status-info">
+            <span class="status-dot" id="google-dot" style="background-color: var(--status-amber);"></span>
+            <div>
+              <strong id="google-status-heading">Google Account Not Connected</strong>
+              <div id="google-status-sub" class="text-muted" style="font-size: 0.85rem;">
+                Connect to synchronise Gmail messages and Google Docs.
+              </div>
+            </div>
+          </div>
+          <div class="google-status-actions" id="google-auth-actions">
+            <button type="button" class="btn-primary" id="btn-google-login">
+              Sign in with Google
+            </button>
+          </div>
+        </div>
+
+        <!-- Sync Controls (Visible when connected) -->
+        <div id="google-sync-controls" class="google-sync-grid mt-4" style="display: none;">
+          <div class="panel-box" style="background-color: var(--bg-card);">
+            <h3 class="subheading">Gmail Correspondence Ingestion</h3>
+            <p class="panel-description">
+              Pulls recent email threads from your primary inbox, formats message headers,
+              and indexes bodies into LanceDB and BM25.
+            </p>
+            <button type="button" class="btn-primary" id="btn-sync-gmail">
+              Synchronise Gmail Archive
+            </button>
+          </div>
+
+          <div class="panel-box" style="background-color: var(--bg-card);">
+            <h3 class="subheading">Google Docs Synchronisation</h3>
+            <p class="panel-description">
+              Scans Google Drive for Google Docs, extracts clean formatted plain text,
+              and generates searchable chunks with source file attribution.
+            </p>
+            <button type="button" class="btn-primary" id="btn-sync-docs">
+              Synchronise Google Docs
+            </button>
+          </div>
+        </div>
+
+        <!-- Feedback & Log Box -->
+        <div id="google-sync-feedback" class="mt-4" style="display: none;"></div>
+
+        <!-- Expandable OAuth Client Configuration -->
+        <details class="mt-4" id="google-config-details" style="border: 1px solid var(--border-subtle); padding: 1rem;">
+          <summary style="cursor: pointer; color: var(--gold-accent); font-weight: 500;">
+            Configure Google OAuth2 Client Credentials (Client ID &amp; Secret)
+          </summary>
+          <div class="mt-3">
+            <p class="panel-description">
+              Enter your Google Cloud OAuth 2.0 Client credentials. Authorised redirect URI:
+              <code style="color: var(--gold-accent);">http://127.0.0.1:8080/api/google/callback</code>
+            </p>
+            <form id="google-config-form">
+              <div class="form-row">
+                <input
+                  type="text"
+                  id="google-client-id"
+                  class="input-field"
+                  placeholder="Google Client ID (e.g. 123456789-abc.apps.googleusercontent.com)"
+                  required
+                >
+                <input
+                  type="password"
+                  id="google-client-secret"
+                  class="input-field"
+                  placeholder="Google Client Secret"
+                  required
+                >
+              </div>
+              <button type="submit" class="btn-secondary" id="btn-save-google-config">
+                Save Credentials
+              </button>
+            </form>
+          </div>
+        </details>
       </div>
     </section>
   </main>

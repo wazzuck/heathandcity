@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSearch();
   initTriage();
   initArchive();
+  initGoogleWorkspace();
   pollStatus();
   loadTasks();
 });
@@ -276,6 +277,187 @@ async function pollStatus() {
     statusDot.style.backgroundColor = "var(--status-amber)";
     statusText.textContent = "Connecting...";
   }
+}
+
+/**
+ * Configure Google Workspace OAuth2 login, token state, and synchronization.
+ */
+function initGoogleWorkspace() {
+  const statusHeading = document.getElementById("google-status-heading");
+  const statusSub = document.getElementById("google-status-sub");
+  const statusDot = document.getElementById("google-dot");
+  const authActions = document.getElementById("google-auth-actions");
+  const syncControls = document.getElementById("google-sync-controls");
+  const feedback = document.getElementById("google-sync-feedback");
+  const btnLogin = document.getElementById("btn-google-login");
+  const btnSyncGmail = document.getElementById("btn-sync-gmail");
+  const btnSyncDocs = document.getElementById("btn-sync-docs");
+  const configForm = document.getElementById("google-config-form");
+  const clientIdInput = document.getElementById("google-client-id");
+  const clientSecretInput = document.getElementById("google-client-secret");
+  const configDetails = document.getElementById("google-config-details");
+
+  // Check URL query parameters for return from OAuth callback.
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("google_auth") === "success") {
+    alert("Google Workspace account connected successfully. You can now synchronise Gmail and Google Docs.");
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else if (urlParams.get("google_error")) {
+    alert(`Google Authentication Failed: ${urlParams.get("google_error")}`);
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
+  // Check connection status.
+  async function refreshGoogleStatus() {
+    try {
+      const res = await fetch("/api/google/status");
+      const data = await res.json();
+
+      if (data.is_connected) {
+        statusDot.style.backgroundColor = "var(--status-green)";
+        statusHeading.textContent = `Connected: ${data.connected_email || "Google Account"}`;
+        statusSub.textContent = `Authorised for Gmail and Google Docs (Last sync: ${new Date(data.connected_at).toLocaleTimeString()})`;
+        authActions.innerHTML = `
+          <button type="button" class="btn-secondary" id="btn-google-disconnect">
+            Disconnect Account
+          </button>
+        `;
+        syncControls.style.display = "grid";
+
+        document.getElementById("btn-google-disconnect").addEventListener("click", async () => {
+          if (confirm("Disconnect this Google account? Stored tokens will be removed locally.")) {
+            await fetch("/api/google/disconnect", { method: "POST" });
+            await refreshGoogleStatus();
+          }
+        });
+      } else {
+        statusDot.style.backgroundColor = "var(--status-amber)";
+        statusHeading.textContent = "Google Account Not Connected";
+        statusSub.textContent = data.is_configured
+          ? "Client credentials configured. Ready for partner sign-in."
+          : "Configure OAuth2 Client ID & Secret below, then click Sign in with Google.";
+        authActions.innerHTML = `
+          <button type="button" class="btn-primary" id="btn-google-login">
+            Sign in with Google
+          </button>
+        `;
+        syncControls.style.display = "none";
+        document.getElementById("btn-google-login").addEventListener("click", triggerGoogleLogin);
+      }
+    } catch (err) {
+      statusHeading.textContent = "Unable to inspect Google status";
+    }
+  }
+
+  async function triggerGoogleLogin() {
+    try {
+      const res = await fetch("/api/google/auth-url");
+      const data = await res.json();
+      if (res.ok && data.auth_url) {
+        window.location.href = data.auth_url;
+      } else {
+        configDetails.open = true;
+        alert(data.detail || "Please configure your Google Client ID and Secret first.");
+      }
+    } catch (err) {
+      alert(`Login initiation error: ${err.message}`);
+    }
+  }
+
+  if (btnLogin) {
+    btnLogin.addEventListener("click", triggerGoogleLogin);
+  }
+
+  // Handle saving client credentials.
+  if (configForm) {
+    configForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const clientId = clientIdInput.value.trim();
+      const clientSecret = clientSecretInput.value.trim();
+
+      if (!clientId || !clientSecret) return;
+
+      try {
+        const res = await fetch("/api/google/configure", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ client_id: clientId, client_secret: clientSecret }),
+        });
+        const data = await res.json();
+        alert(data.message || "Credentials saved.");
+        configDetails.open = false;
+        await refreshGoogleStatus();
+      } catch (err) {
+        alert(`Failed to save credentials: ${err.message}`);
+      }
+    });
+  }
+
+  // Sync Gmail.
+  if (btnSyncGmail) {
+    btnSyncGmail.addEventListener("click", async () => {
+      btnSyncGmail.disabled = true;
+      feedback.style.display = "block";
+      feedback.innerHTML = "<p class='stat-badge'>Synchronising Gmail messages via Google API...</p>";
+
+      try {
+        const res = await fetch("/api/google/sync-gmail", { method: "POST" });
+        const data = await res.json();
+
+        if (res.ok) {
+          feedback.innerHTML = `
+            <div class="log-box" style="border-left: 3px solid var(--status-green);">
+              [SUCCESS] Gmail Synchronisation Complete.
+              Messages processed: ${data.messages_fetched}
+              Chunks indexed into LanceDB &amp; BM25: ${data.chunks_indexed}
+              Total vault repository count: ${data.total_vault_volume} chunks.
+            </div>
+          `;
+          await pollStatus();
+        } else {
+          feedback.innerHTML = `<div class="log-box" style="color: var(--status-red);">[ERROR] ${data.detail || "Sync failed"}</div>`;
+        }
+      } catch (err) {
+        feedback.innerHTML = `<div class="log-box" style="color: var(--status-red);">[ERROR] ${err.message}</div>`;
+      } finally {
+        btnSyncGmail.disabled = false;
+      }
+    });
+  }
+
+  // Sync Google Docs.
+  if (btnSyncDocs) {
+    btnSyncDocs.addEventListener("click", async () => {
+      btnSyncDocs.disabled = true;
+      feedback.style.display = "block";
+      feedback.innerHTML = "<p class='stat-badge'>Scanning and synchronising Google Docs...</p>";
+
+      try {
+        const res = await fetch("/api/google/sync-docs", { method: "POST" });
+        const data = await res.json();
+
+        if (res.ok) {
+          feedback.innerHTML = `
+            <div class="log-box" style="border-left: 3px solid var(--status-green);">
+              [SUCCESS] Google Docs Synchronisation Complete.
+              Documents fetched: ${data.docs_fetched}
+              Chunks indexed into LanceDB &amp; BM25: ${data.chunks_indexed}
+              Total vault repository count: ${data.total_vault_volume} chunks.
+            </div>
+          `;
+          await pollStatus();
+        } else {
+          feedback.innerHTML = `<div class="log-box" style="color: var(--status-red);">[ERROR] ${data.detail || "Sync failed"}</div>`;
+        }
+      } catch (err) {
+        feedback.innerHTML = `<div class="log-box" style="color: var(--status-red);">[ERROR] ${err.message}</div>`;
+      } finally {
+        btnSyncDocs.disabled = false;
+      }
+    });
+  }
+
+  refreshGoogleStatus();
 }
 
 /**

@@ -18,6 +18,8 @@ Invariants:
      source path, file modification timestamp, page number, and section.
 """
 
+import email
+import mailbox
 import os
 import subprocess
 from dataclasses import dataclass, field
@@ -135,6 +137,10 @@ class DocumentIngestionPipeline:
             raw_pages = self._extract_xlsx(resolved_path)
         elif suffix in [".txt", ".md"]:
             raw_pages = self._extract_text(resolved_path)
+        elif suffix == ".eml":
+            raw_pages = self._extract_eml(resolved_path)
+        elif suffix == ".mbox":
+            raw_pages = self._extract_mbox(resolved_path)
         else:
             return []
 
@@ -357,6 +363,81 @@ class DocumentIngestionPipeline:
         try:
             text = path.read_text(encoding="utf-8", errors="replace")
             return [{"page_number": 1, "heading": "", "text": text}]
+        except Exception:
+            return []
+
+    def _extract_eml(self, path: Path) -> List[Dict[str, any]]:
+        """
+        Extract subject, sender, date, and body from an RFC-822 .eml file.
+        """
+        try:
+            with open(path, "rb") as f:
+                msg = email.message_from_binary_file(f)
+            subject = msg.get("Subject", "Untitled Email")
+            sender = msg.get("From", "Unknown Sender")
+            date_str = msg.get("Date", "")
+
+            body = ""
+            if msg.is_multipart():
+                for part in msg.walk():
+                    content_type = part.get_content_type()
+                    content_disposition = str(part.get("Content-Disposition"))
+                    if content_type == "text/plain" and "attachment" not in content_disposition:
+                        payload = part.get_payload(decode=True)
+                        if payload:
+                            body += payload.decode("utf-8", errors="replace") + "\n"
+            else:
+                payload = msg.get_payload(decode=True)
+                if payload:
+                    body = payload.decode("utf-8", errors="replace")
+
+            header_summary = (
+                f"Subject: {subject}\nFrom: {sender}\nDate: {date_str}\n\n"
+            )
+            full_text = header_summary + body.strip()
+            return [{"page_number": 1, "heading": f"Email: {subject}", "text": full_text}]
+        except Exception:
+            return []
+
+    def _extract_mbox(self, path: Path) -> List[Dict[str, any]]:
+        """
+        Extract individual email messages from a Google Takeout / Unix .mbox file.
+        """
+        pages = []
+        try:
+            box = mailbox.mbox(str(path))
+            for idx, msg in enumerate(box, start=1):
+                subject = msg.get("Subject", f"Message {idx}")
+                sender = msg.get("From", "Unknown Sender")
+                date_str = msg.get("Date", "")
+
+                body = ""
+                if msg.is_multipart():
+                    for part in msg.walk():
+                        content_type = part.get_content_type()
+                        content_disposition = str(part.get("Content-Disposition"))
+                        if content_type == "text/plain" and "attachment" not in content_disposition:
+                            payload = part.get_payload(decode=True)
+                            if payload:
+                                body += payload.decode("utf-8", errors="replace") + "\n"
+                else:
+                    payload = msg.get_payload(decode=True)
+                    if payload:
+                        body = payload.decode("utf-8", errors="replace")
+
+                header_summary = (
+                    f"Subject: {subject}\nFrom: {sender}\nDate: {date_str}\n\n"
+                )
+                full_text = header_summary + body.strip()
+                if full_text.strip():
+                    pages.append(
+                        {
+                            "page_number": idx,
+                            "heading": f"Email #{idx}: {subject}",
+                            "text": full_text,
+                        }
+                    )
+            return pages
         except Exception:
             return []
 
