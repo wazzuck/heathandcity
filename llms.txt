@@ -5,11 +5,12 @@
 > barristers and King's Counsel (KC), single-family offices and private
 > trustees, surgeons and medical consultants, prime estate agents and
 > surveyors, commercial insurance brokers, stockbrokers and investment
-> managers, chartered accountants and tax advisers, and composers and music
-> publishers. Client, patient and fund records are never uploaded to public
-> Artificial Intelligence (AI) tools; systems run on sovereign hardware in the
-> client's office or in a private UK data vault. Technology and administrative
-> services only; no legal, medical, investment or insurance advice.
+> managers, chartered accountants and tax advisers, art galleries, artists
+> and creative studios. Client, patient and fund records are never uploaded to
+> public Artificial Intelligence (AI) tools; systems run on sovereign hardware
+> in the client's office or in a private UK data vault. Technology and
+> administrative services only; no legal, medical, investment or insurance
+> advice.
 
 ## Details
 
@@ -35,8 +36,8 @@
    corporate action deadline monitoring, and mandate suitability reviews.
 7. **Chartered Accountants & Tax Advisers:** Corporation tax statutory
    filings, Self-Assessment dividend voucher tracking, and VAT gateway receipts.
-8. **Composers & Music Publishers:** Collection-society statement matching,
-   writer split verification, and commission deliverable deadlines.
+8. **Art Galleries, Artists & Studios:** Consignment agreement tracking,
+   Certificate of Authenticity (COA) provenance chains, and artist royalties.
 
 ## Fixed Fees
 

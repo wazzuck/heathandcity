@@ -24,7 +24,7 @@ import {
   SITE_CONFIG,
   VERTICAL_DEMOS,
   PRICING_STEPS
-} from "./config.js";
+} from "./config.js?v=20261110c";
 
 /**
  * Step 1: Define calculator multipliers for the Practice Recovery Estimator.
@@ -88,14 +88,14 @@ const CALCULATOR_PROFILES = Object.freeze({
       "Assumes automated chasing of missing client vouchers, faster " +
       "statutory cross-checks, and fewer deadline scrambles."
   },
-  composers: {
-    label: "Composer / Music Publisher",
-    hourlyRateGbp: 120,
-    leakageFactor: 0.05,
-    efficiencyGain: 0.7,
+  creative: {
+    label: "Art Gallery / Creative Studio",
+    hourlyRateGbp: 180,
+    leakageFactor: 0.045,
+    efficiencyGain: 0.72,
     note:
-      "Assumes royalty statements are matched automatically and missed " +
-      "differences are flagged early, with less time on spreadsheets."
+      "Assumes faster consignment reconciliations, automated tracking of " +
+      "provenance files, and fewer missed artist resale deadlines."
   },
   medical: {
     label: "Surgeon / Consultant",
@@ -211,6 +211,7 @@ function renderPricingSteps() {
 function selectVerticalDemo(verticalId) {
   const demo = VERTICAL_DEMOS[verticalId];
   if (!demo) {
+    console.warn("Unknown vertical demo ID:", verticalId);
     return;
   }
 

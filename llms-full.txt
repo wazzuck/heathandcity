@@ -46,9 +46,9 @@ private UK data vault.
 7. **Chartered Accountants and Tax Advisers:**
    - Statutory corporation tax filing tracking, Self-Assessment dividend voucher
      reconciliation, and HMRC gateway receipt audits.
-8. **Composers, Authors, and Music Publishers:**
-   - Multi-format cataloguing of score manuscripts, copyright contracts,
-     royalty schedules, and mechanical licensing agreements.
+8. **Art Galleries, Artists, and Creative Studios:**
+   - Tracking artist consignment agreements, gallery split accounting (50/50),
+     Certificate of Authenticity (COA) provenance dossiers, and resale rights.
 
 ## 3. Sovereign Architecture and Data Privacy Guarantees
 
