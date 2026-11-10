@@ -141,6 +141,31 @@
     - Direct line button now pulses between white and the section
       background colour (stops for reduced-motion readers).
 
+29. Streamlined page architecture, expanded vertical suite & appliance spec:
+    - Standardised "private UK data vault" across index.html, js/config.js,
+      llms-full.txt, and local strategy documentation.
+    - Refined core promise cards: removed redundant uppercase badges, reworded
+      continuity card to support team without singling out PAs, and bolded
+      "nothing to train anyone on".
+    - Replaced button gradients with solid brand gold and removed header phone
+      button background colour oscillation.
+    - Removed redundant Section 6 (services-by-vertical) and Section 7
+      (specialist-roles) to create a lean 9-section infomercial flow.
+    - Separated Insurance Brokers and Stockbrokers, and expanded The Morning
+      Screen to 9 distinct practices in a balanced 3x3 desktop grid:
+      Barristers & KCs, Family Offices, Surgeons, Estate Agents, Insurance
+      Brokers, Stockbrokers, Accountants & Tax, Authors & Composers & Talent,
+      and Art Galleries & Fine Art.
+    - Updated ROI Practice Recovery Estimator and Contact Form dropdowns to
+      support all 9 practice verticals.
+    - Added module cache-busting query parameters to ensure fresh browser asset
+      hydration.
+    - Codified AI Discoverability & LLM Sync Policy into AGENTS.md rule 4.
+    - Synchronised llms.txt, llms-full.txt, and Schema.org JSON-LD structured
+      data across all 9 target practices.
+    - Authored comprehensive on-premises appliance technical architecture
+      specification in docs/PRODUCT_SPECIFICATION.md.
+
 ---
 
 ## 2. Next
