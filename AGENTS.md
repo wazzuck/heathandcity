@@ -345,3 +345,11 @@ absent. Add project-specific rules only where they apply.
    principals across North West (NW) London and The City.
 3. **Core Tech:** Static HTML5/CSS3/ES6 JavaScript, Three.js, WebGPU with
    WebGL and 2D Canvas fallbacks, zero server or COOP/COEP dependencies.
+4. **AI Discoverability & LLM Policy (`llms.txt`, `llms-full.txt`, JSON-LD):**
+   Whenever services, target verticals, pricing, credentials, or core
+   technical claims are added, modified, or removed from `index.html` or
+   `js/config.js`, the corresponding Artificial Intelligence (AI) crawler
+   files (`llms.txt` and `llms-full.txt`) and the JSON-LD structured data
+   block in `index.html` must be updated in the same change. Search crawlers,
+   AI assistants, and Large Language Models (LLMs) rely on these documents as
+   their canonical ground truth; stale AI documentation is a defect.

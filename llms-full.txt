@@ -16,7 +16,8 @@ professional practices across North West (NW) London and The City of London.
 Client, patient, and financial fund records are strictly protected. Data is
 never transmitted to public multi-tenant AI Application Programming
 Interfaces (APIs). Systems operate entirely on dedicated hardware deployed
-directly within the client's office or inside an encrypted private UK data vault.
+directly within the client's office or inside an encrypted
+private UK data vault.
 
 ## 2. Target Client Practices
 
@@ -25,15 +26,29 @@ directly within the client's office or inside an encrypted private UK data vault
      skeleton arguments, hearing transcripts, and authorities.
    - Complete privilege preservation and General Data Protection Regulation
      (GDPR) / Bar Standards Board compliance.
-2. **Surgeons and Medical Consultants:**
+2. **Single-Family Offices and Private Trustees:**
+   - Multi-custodian bank statement aggregation, capital call tracking,
+     trust distribution resolutions, and supplier disbursement audits.
+   - Dedicated sovereign hardware preserving family privacy.
+3. **Surgeons and Medical Consultants:**
    - Confidential electronic patient records, theatre schedules, and clinical
      notes processed locally with zero third-party data disclosure.
-3. **Composers, Authors, and Music Publishers:**
+   - Rapid chronology generation from 2,000+ page medico-legal bundles.
+4. **Prime Estate Agents and Property Surveyors:**
+   - Sales progression acceleration, Anti-Money Laundering (AML) checks,
+     and statutory tenancy renewals (CP12/EICR).
+5. **Commercial Insurance Brokers:**
+   - 90-day policy renewal pipeline tracking, underwriter warranty alteration
+     checks, and fine-art valuation chasers.
+6. **Stockbrokers and Investment Managers:**
+   - Contract note matching against custodian settlement feeds, corporate action
+     election monitoring, and mandate suitability reviews.
+7. **Chartered Accountants and Tax Advisers:**
+   - Statutory corporation tax filing tracking, Self-Assessment dividend voucher
+     reconciliation, and HMRC gateway receipt audits.
+8. **Composers, Authors, and Music Publishers:**
    - Multi-format cataloguing of score manuscripts, copyright contracts,
      royalty schedules, and mechanical licensing agreements.
-4. **Independent Insurance and Stock Brokers:**
-   - Rapid reconciliation of policy wordings, trading notes, client statements,
-     and Financial Conduct Authority (FCA) record retention schedules.
 
 ## 3. Sovereign Architecture and Data Privacy Guarantees
 
@@ -56,15 +71,8 @@ directly within the client's office or inside an encrypted private UK data vault
 ## 5. Contact & Corporate Identity
 
 - **Platform:** Heath & City Technology Hampstead (https://heathandcity.com)
-- **Principal:** Neville Bryce (Ex-City financial systems software engineer)
+- **Principal:** Neville Bryce (Ex-City financial systems software engineer:
+  Bank of America Merrill Lynch, Nomura, Instinet, Citi Group, Exegy)
 - **Address:** Corringham Court, Corringham Road, London NW11 7BY
-- **Coverage:** NW3, NW6, NW8, NW11, N6, and City of London
-- **Telephone:** 020 4520 9114 (+44 20 4520 9114)
+- **Telephone:** 020 4520 9114
 - **Email:** contactus@heathandcity.com
-
-## 6. Affiliated Practice Ecosystem
-
-- **TillSwift (https://tillswift.com):** Independent UK payment provider
-  comparison platform and 3-year Total Cost of Ownership (TCO) calculator.
-- **IToldYouSo Computing (https://itoldyouso.tech):** Same-day on-site IT
-  support, Wi-Fi engineering, and hardware maintenance in NW London.
