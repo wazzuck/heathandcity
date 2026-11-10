@@ -52,7 +52,7 @@ def trigger_gmail_batch(
     req = urllib.request.Request(url, data=b"", method="POST")
 
     try:
-        with urllib.request.urlopen(req, timeout=120) as response:
+        with urllib.request.urlopen(req, timeout=300) as response:
             if response.status == 200:
                 body = response.read().decode("utf-8")
                 return json.loads(body)
