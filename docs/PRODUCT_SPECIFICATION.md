@@ -102,8 +102,8 @@
      512 GB SSD). Approximate cost: £599 - £799.
 
 ### 3.2. Software Stack
-1. **Operating System:** Linux (Ubuntu 24.04 LTS Server or Debian 12),
-   configured for headless, silent execution.
+1. **Operating System:** Linux (Debian 13 [Trixie], with Ubuntu 24.04 LTS also
+   supported), configured for silent execution with persistent service uptime.
 2. **Document Ingestion & OCR:**
    - Text extractors: `pypdf`, `pdfplumber`, `python-docx`, `openpyxl`.
    - Local OCR: `Tesseract OCR` or `ocrmypdf` for scanned document bundles.
@@ -196,7 +196,7 @@ practice-vault/
 
 ### 5.3. System Prerequisites & Setup Script
 The prototype setup script (`scripts/setup_m720q.sh`) automates host operating
-system configuration on Ubuntu 24.04 LTS:
+system configuration on Debian 13 (Trixie) and Ubuntu 24.04 LTS:
 
 1. **System Packages:**
    Install required system packages, including compiler toolchains, Optical
@@ -312,7 +312,7 @@ ThinkCentre M720q) to build the complete prototype, supply the following prompt:
 ```text
 You are an expert systems engineer tasked with implementing the sovereign
 practice automation prototype described in docs/PRODUCT_SPECIFICATION.md on
-this Lenovo ThinkCentre M720q (Intel i3-9100T, 16GB RAM, Ubuntu 24.04 LTS).
+this Lenovo ThinkCentre M720q (Intel i3-9100T, 16GB RAM, Debian 13 Trixie).
 
 Follow these binding engineering instructions:
 1. Adhere strictly to British Professional English for all code comments,
