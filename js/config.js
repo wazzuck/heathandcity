@@ -266,60 +266,7 @@ export const VERTICAL_DEMOS = Object.freeze({
 });
 
 /**
- * Step 3: Define SPECIALIST_ROLES.
- * Four ways of working together, written as short plain-English summaries.
- * Fields:
- * - number: Two-digit display ordinal.
- * - role: Short title, shown as the card heading.
- * - bestFor: Who the role suits, shown as "Designed for".
- * - summary: One or two sentences explaining what it does.
- * - architectureTag: Two short keywords shown as a badge on the card.
- */
-export const SPECIALIST_ROLES = Object.freeze([
-  {
-    number: "01",
-    role: "Private search for your records",
-    bestFor:
-      "Barristers, King's Counsel, surgeons and anyone with decades of files",
-    summary:
-      "Find any note, opinion or report in seconds. The search runs on a " +
-      "machine in your office, so your files never go to a public AI tool.",
-    architectureTag: "Private search · On-site machine"
-  },
-  {
-    number: "02",
-    role: "Money and paperwork, matched",
-    bestFor:
-      "Brokers, composers, family offices and anyone reconciling statements",
-    summary:
-      "Bank statements, remittances and royalty reports are checked against " +
-      "your own records, and differences are flagged for you to decide.",
-    architectureTag: "Reconciliation · Statement matching"
-  },
-  {
-    number: "03",
-    role: "A practice that runs without one person",
-    bestFor:
-      "Practices where one assistant holds everything in their inbox",
-    summary:
-      "Key tasks, deadlines and contacts are kept in one shared place, so " +
-      "holidays and sick days no longer stall the work.",
-    architectureTag: "Shared memory · No change to Outlook"
-  },
-  {
-    number: "04",
-    role: "Ongoing local support",
-    bestFor:
-      "Principals who want one named person, close by, who knows the practice",
-    summary:
-      "A monthly visit to your office in Hampstead, direct telephone access, " +
-      "and quick changes whenever your banks or insurers change formats.",
-    architectureTag: "Monthly visit · Priority response"
-  }
-]);
-
-/**
- * Step 4: Define PRICING_STEPS.
+ * Step 3: Define PRICING_STEPS.
  * Implements the three-step, fixed-fee engagement structure. Prices are
  * quoted in Pounds Sterling (£). Each entry is rendered as one pricing card.
  */

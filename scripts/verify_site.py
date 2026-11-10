@@ -120,9 +120,6 @@ def check_html_structure() -> List[str]:
     required_ids = {
         "about",
         "daily-screen",
-        "services-by-vertical",
-        "specialist-roles",
-        "architecture",
         "pricing",
         "contact",
         "audit-enquiry-form",

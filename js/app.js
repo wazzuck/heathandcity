@@ -23,7 +23,6 @@
 import {
   SITE_CONFIG,
   VERTICAL_DEMOS,
-  SPECIALIST_ROLES,
   PRICING_STEPS
 } from "./config.js";
 
@@ -135,35 +134,7 @@ function applyBrandConfig() {
 }
 
 /**
- * Step 3: Render the four Specialist Roles cards from SPECIALIST_ROLES.
- */
-function renderSpecialistRoles() {
-  const container = document.getElementById("specialist-roles-grid");
-  if (!container) {
-    return;
-  }
-  container.innerHTML = "";
-
-  SPECIALIST_ROLES.forEach((item) => {
-    const card = document.createElement("article");
-    card.className = "role-card";
-    card.innerHTML = `
-      <div class="role-card__header">
-        <span class="role-card__number">OPTION ${item.number}</span>
-        <span class="role-card__tag">${item.architectureTag}</span>
-      </div>
-      <h3 class="role-card__title">${item.role}</h3>
-      <p class="role-card__best-for">
-        <strong>Best for:</strong> ${item.bestFor}
-      </p>
-      <p class="role-card__summary">${item.summary}</p>
-    `;
-    container.appendChild(card);
-  });
-}
-
-/**
- * Step 4: Render the Three-Step Pricing Architecture cards from PRICING_STEPS.
+ * Step 3: Render the Three-Step Pricing Architecture cards from PRICING_STEPS.
  */
 function renderPricingSteps() {
   const container = document.getElementById("pricing-steps-grid");
@@ -419,8 +390,7 @@ function bootstrapApp() {
   // 1. Inject centralised brand tokens across the page.
   applyBrandConfig();
 
-  // 2. Render dynamic Specialist Roles and Pricing Step cards.
-  renderSpecialistRoles();
+  // 2. Render dynamic Pricing Step cards.
   renderPricingSteps();
 
   // 3. Bind the four-practice "A typical morning" tabs.
