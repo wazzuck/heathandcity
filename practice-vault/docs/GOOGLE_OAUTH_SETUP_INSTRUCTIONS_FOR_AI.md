@@ -79,29 +79,46 @@ on-premises vector storage.
    - If modal closes, click on the client name in the table to view and copy the
      Client secret on the right sidebar.
 
-### Step 4: Inject Credentials into Practice Vault
-Register the acquired credentials using either the REST API or filesystem:
+### Step 4: Save Credentials Outside the Repository & Export via ~/.bashrc
+> [!IMPORTANT]
+> The Client Secret and Client ID MUST BE KEPT OUTSIDE OF THIS REPOSITORY at all
+> times. Under no circumstances should any secret or credentials file be saved
+> or committed inside `/home/neville/heathandcity/`.
 
-#### Method A: Via Local REST Endpoint (Preferred)
-Execute an HTTP POST request to the local vault daemon:
-```bash
-curl -X POST http://127.0.0.1:8080/api/google/configure \
-  -H "Content-Type: application/json" \
-  -d '{
-    "client_id": "PASTE_CLIENT_ID_HERE",
-    "client_secret": "PASTE_CLIENT_SECRET_HERE"
-  }'
-```
+1. Create the external keys directory if it does not already exist:
+   ```bash
+   mkdir -p ~/vunderland/keys
+   ```
 
-#### Method B: Direct Filesystem Injection
-Write the JSON payload directly to:
-`/home/neville/heathandcity/practice-vault/data/google_client_config.json`
-```json
-{
-  "client_id": "PASTE_CLIENT_ID_HERE",
-  "client_secret": "PASTE_CLIENT_SECRET_HERE"
-}
-```
+2. Save the extracted credentials to `~/vunderland/keys/heathandcity.txt`:
+   ```bash
+   cat << 'EOF' > ~/vunderland/keys/heathandcity.txt
+   export GOOGLE_CLIENT_ID="PASTE_CLIENT_ID_HERE"
+   export GOOGLE_CLIENT_SECRET="PASTE_CLIENT_SECRET_HERE"
+   EOF
+   chmod 600 ~/vunderland/keys/heathandcity.txt
+   ```
+
+3. Ensure the keys are exported into the environment via `~/.bashrc`:
+   ```bash
+   grep -q "heathandcity.txt" ~/.bashrc || echo '[ -f "$HOME/vunderland/keys/heathandcity.txt" ] && source "$HOME/vunderland/keys/heathandcity.txt"' >> ~/.bashrc
+   ```
+
+4. Export into the active shell session so the running Practice Vault appliance
+   inherits them:
+   ```bash
+   source ~/.bashrc
+   ```
+
+5. (Optional) Alternatively, register the credentials with the local daemon API:
+   ```bash
+   curl -X POST http://127.0.0.1:8080/api/google/configure \
+     -H "Content-Type: application/json" \
+     -d '{
+       "client_id": "'"$GOOGLE_CLIENT_ID"'",
+       "client_secret": "'"$GOOGLE_CLIENT_SECRET"'"
+     }'
+   ```
 
 ---
 

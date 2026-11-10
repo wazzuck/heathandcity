@@ -59,23 +59,45 @@ class GoogleWorkspaceSyncService:
 
     def get_client_credentials(self) -> Tuple[Optional[str], Optional[str]]:
         """
-        Retrieve Google Client ID and Client Secret from file or settings.
+        Retrieve Google Client ID and Client Secret.
 
         Execution steps:
-          1. Step 1: Check environment or settings defaults.
-          2. Step 2: If absent, read from persistent client_config_file.
+          1. Step 1: Check environment variables (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET).
+          2. Step 2: Check external key file at ~/vunderland/keys/heathandcity.txt.
+          3. Step 3: Check fallback client_config_file if present.
         """
         client_id = settings.google_client_id or os.environ.get("GOOGLE_CLIENT_ID")
         client_secret = settings.google_client_secret or os.environ.get(
             "GOOGLE_CLIENT_SECRET"
         )
 
+        # Step 2: Check external key storage in ~/vunderland/keys/heathandcity.txt
+        if not client_id or not client_secret:
+            ext_key_file = Path.home() / "vunderland" / "keys" / "heathandcity.txt"
+            if ext_key_file.exists():
+                try:
+                    for line in ext_key_file.read_text(encoding="utf-8").splitlines():
+                        clean_line = line.strip()
+                        if clean_line.startswith("export "):
+                            clean_line = clean_line[7:].strip()
+                        if "=" in clean_line:
+                            k, v = clean_line.split("=", 1)
+                            k = k.strip()
+                            v = v.strip().strip("'\"")
+                            if k == "GOOGLE_CLIENT_ID" and not client_id:
+                                client_id = v
+                            elif k == "GOOGLE_CLIENT_SECRET" and not client_secret:
+                                client_secret = v
+                except Exception:
+                    pass
+
+        # Step 3: Check persistent client_config_file.
         if not client_id or not client_secret:
             if self.client_config_file.exists():
                 try:
                     data = json.loads(self.client_config_file.read_text(encoding="utf-8"))
-                    client_id = data.get("client_id")
-                    client_secret = data.get("client_secret")
+                    client_id = client_id or data.get("client_id")
+                    client_secret = client_secret or data.get("client_secret")
                 except Exception:
                     pass
 
