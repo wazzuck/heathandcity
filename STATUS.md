@@ -171,6 +171,24 @@
       criteria, and copy-paste AI master build prompt for the Lenovo
       ThinkCentre M720q Tiny prototype.
 
+30. Implemented sovereign practice automation prototype (practice-vault/):
+    - Provisioned host prerequisites (Tesseract OCR, Poppler, CIFS, Ollama).
+    - Pulled local models (llama3.2:3b and nomic-embed-text) via Ollama.
+    - Built multi-format document parser (backend/app/ingest.py) supporting
+      PDF, DOCX, XLSX, and TXT with local OCR fallback and chunking.
+    - Implemented LanceDB vector indexing with BM25 Reciprocal Rank Fusion
+      (backend/app/indexer.py) and verified CPU AVX2 acceleration.
+    - Built deterministic RAG question answering engine (backend/app/rag.py)
+      enforcing strict source and page citations with refusal guards.
+    - Created autonomous correspondence triage clerk (backend/app/triage.py)
+      staging pre-drafted replies in a mandatory human-approval queue.
+    - Built REST API endpoints and single-page dashboard (frontend/) in pure
+      ES6 JavaScript and CSS with zero external content delivery network calls.
+    - Created test suites (backend/tests/) and acceptance criteria verification
+      script (scripts/verify_prototype.py), passing all 5 acceptance checks.
+    - Configured production runners, share mounting scripts, and operational
+      runbook (practice-vault/README.md).
+
 ---
 
 ## 2. Next
