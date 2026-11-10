@@ -356,50 +356,50 @@ export const VERTICAL_DEMOS = Object.freeze({
       "schedules. We do not provide statutory audit or regulated tax advice; " +
       "the system automates preparation for your sign-off."
   },
-  composers: {
-    id: "composers",
-    tabLabel: "Composers & Music",
-    badge: "COMPOSERS & MUSIC PUBLISHING · NW3 / NW6",
-    headline: "Composers, Songwriters & Music Publishers",
+  creative: {
+    id: "creative",
+    tabLabel: "Art Galleries & Studios",
+    badge: "GALLERIES, ARTISTS & STUDIOS · NW3 / MAYFAIR",
+    headline: "Commercial Art Galleries, Artists & Creative Studios",
     summary:
-      "Royalty statements are checked against your own records, and every " +
-      "commission deadline stays visible.",
+      "Track consignment sales, cross-check provenance certificates, " +
+      "and reconcile artist resale rights and exhibition loan returns.",
     stats: [
-      { label: "Statements Matched", value: "18 Reports", tone: "gold" },
-      { label: "Unmatched Works", value: "2 To Review", tone: "amber" },
-      { label: "Commission Deadlines", value: "On Track", tone: "emerald" }
+      { label: "Consigned Artworks", value: "36 Active", tone: "gold" },
+      { label: "Provenance Discrepancies", value: "1 Missing History", tone: "amber" },
+      { label: "Data Outside Private Studio", value: "Zero", tone: "emerald" }
     ],
-    digestTime: "Monthly royalty review · Weekly deadline list",
+    digestTime: "08:30 gallery briefing · Sovereign hardware",
     queueItems: [
       {
-        priority: "ROYALTY STATEMENT",
-        client: "Collection-society statement (illustrative)",
-        matter: "Matched against your works list and writer splits",
-        status: "Fourteen works matched; two titles need a closer look",
-        timer: "Reviewed this morning",
-        sourceRef: "Statement_Example_Q3.pdf · Page 2"
+        priority: "CONSIGNMENT SALE · 50/50 SPLIT",
+        client: "Contemporary painter solo exhibition (illustrative)",
+        matter: "Exhibition sales log cross-checked against gallery split agreement",
+        status: "Two sales matched; net artist payout and VAT schedule verified",
+        timer: "Exhibition closing in 4 days",
+        sourceRef: "Consignment_Agreement_2025.pdf · Clause 4.2"
       },
       {
-        priority: "COMMISSION DUE · 9 DAYS",
-        client: "Film score commission (illustrative)",
-        matter: "Stems, cue sheet and final invoice",
-        status: "Stems delivered; cue sheet still outstanding",
-        timer: "Due in 9 days",
-        sourceRef: "Commission_Brief_Example.docx"
+        priority: "PROVENANCE & CERTIFICATE CHECK",
+        client: "Secondary market resale, modernist sculpture (illustrative)",
+        matter: "Certificate of Authenticity (COA) and exhibition provenance trail",
+        status: "Provenance gaps resolved; 1982 gallery receipt matched to cast mark",
+        timer: "Sale agreed, awaiting export licence",
+        sourceRef: "Provenance_Dossier_Cast_IV.pdf · Page 2"
       },
       {
-        priority: "SPLIT AGREEMENT",
-        client: "Co-writing agreement (illustrative)",
-        matter: "Writer shares and publishing terms on file",
-        status: "Shares agree with the signed agreement",
-        timer: "Filed and verified",
-        sourceRef: "Co_Write_Agreement_Example.pdf · Schedule 1"
+        priority: "ARTIST'S RESALE RIGHT (ARR)",
+        client: "DACS collection society remittance (illustrative)",
+        matter: "Secondary auction sales report checked against royalty threshold",
+        status: "Three UK auction sales verified; statutory royalty calculated",
+        timer: "Remittance statement reviewed today",
+        sourceRef: "DACS_Royalty_Statement_Q3.pdf"
       }
     ],
     guarantee:
-      "Your catalogue, splits and contracts stay on your own private " +
-      "system. We flag differences for you to check; we never change a " +
-      "royalty figure on your behalf."
+      "Your collectors list, consignment terms, provenance archives, and " +
+      "artist splits stay on your private local hardware. We do not value " +
+      "art or negotiate sales; the system automates records and agreements."
   },
 
   medical: {
