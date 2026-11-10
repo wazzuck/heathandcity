@@ -48,3 +48,27 @@ def test_google_disconnect(tmp_path: Path):
     assert service.get_token() is not None
     assert service.disconnect() is True
     assert service.get_token() is None
+
+
+def test_external_key_file_reading(tmp_path: Path, monkeypatch):
+    """Verify that credentials are read from ~/vunderland/keys/heathandcity.txt."""
+    service = GoogleWorkspaceSyncService()
+    # Ensure no environment variables or local json interfere.
+    monkeypatch.delenv("GOOGLE_CLIENT_ID", raising=False)
+    monkeypatch.delenv("GOOGLE_CLIENT_SECRET", raising=False)
+    service.client_config_file = tmp_path / "nonexistent.json"
+
+    # Mock Path.home() to return tmp_path
+    monkeypatch.setattr(Path, "home", lambda: tmp_path)
+    keys_dir = tmp_path / "vunderland" / "keys"
+    keys_dir.mkdir(parents=True)
+    key_file = keys_dir / "heathandcity.txt"
+    key_file.write_text(
+        'export GOOGLE_CLIENT_ID="ext-id.apps.googleusercontent.com"\n'
+        'export GOOGLE_CLIENT_SECRET="ext-secret-12345"\n',
+        encoding="utf-8",
+    )
+
+    cid, csecret = service.get_client_credentials()
+    assert cid == "ext-id.apps.googleusercontent.com"
+    assert csecret == "ext-secret-12345"
