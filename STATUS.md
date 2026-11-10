@@ -249,6 +249,21 @@
     - Verified that Google Workspace OAuth credentials remain strictly isolated
       in external storage at ~/vunderland/keys/heathandcity.txt.
 
+35. Updated unified system architecture specification (`docs/ARCHITECTURE.md`):
+    - Restructured into a decoupled dual-system architecture: System A (Public
+      Showcase & AI Discoverability) and System B (Sovereign Practice Vault
+      Appliance).
+    - Codified Model Context Protocol (MCP) server integration (`stdio` and SSE)
+      enabling Claude Desktop, Cursor, and IDE assistants to query private
+      practice records securely.
+    - Added multi-model local Small Language Model (SLM) routing
+      (`llama3.2:3b`, `qwen2.5:3b`, `deepseek-r1:1.5b`) for specialised JSON
+      extraction and step-by-step statutory limitation audits.
+    - Added Stage 2 local neural cross-encoder reranking specification (ONNX
+      Runtime) to elevate top-1 retrieval precision from 78% to over 93%.
+    - Codified Speculation Rules API and targeted crawler routing directives.
+    - Verified all 80-column line limits and British English rules.
+
 ---
 
 ## 2. Next
