@@ -320,6 +320,85 @@ class VaultStatisticsService:
         self._save_stats(stats)
         return stats
 
+    def update_incremental(
+        self, new_chunks: List[Any], total_index_count: int
+    ) -> Dict[str, Any]:
+        """
+        Incrementally update corpus statistics without loading full database.
+
+        Execution steps:
+          1. Step 1: Load current persisted statistics as baseline.
+          2. Step 2: Sum bytes, words, and category counts for new chunks.
+          3. Step 3: Add deltas to baseline totals.
+          4. Step 4: Persist updated metrics and return structured dictionary.
+        """
+        stats = self.get_latest_statistics()
+        added_words = 0
+        added_bytes = 0
+        breakdown = stats.get("source_breakdown", {
+            "local_documents": 0,
+            "gmail_messages": 0,
+            "google_docs": 0,
+            "other": 0,
+        })
+
+        for chunk in new_chunks:
+            text = (
+                chunk.text
+                if hasattr(chunk, "text")
+                else chunk.get("text", "")
+            )
+            source_path = (
+                chunk.source_path
+                if hasattr(chunk, "source_path")
+                else chunk.get("source_path", "")
+            )
+            added_bytes += len(text.encode("utf-8"))
+            added_words += len(text.split())
+
+            if source_path.startswith("gmail://"):
+                breakdown["gmail_messages"] = (
+                    breakdown.get("gmail_messages", 0) + 1
+                )
+            elif source_path.startswith("gdrive://"):
+                breakdown["google_docs"] = (
+                    breakdown.get("google_docs", 0) + 1
+                )
+            elif source_path:
+                breakdown["local_documents"] = (
+                    breakdown.get("local_documents", 0) + 1
+                )
+            else:
+                breakdown["other"] = breakdown.get("other", 0) + 1
+
+        total_words = stats.get("total_words_indexed", 0) + added_words
+        total_bytes = stats.get("total_bytes_indexed", 0) + added_bytes
+        total_chunks = max(
+            total_index_count,
+            stats.get("total_chunks_indexed", 0) + len(new_chunks),
+        )
+        total_docs = stats.get("total_documents_tracked", 0) + len(new_chunks)
+
+        updated_stats = {
+            "total_documents_tracked": total_docs,
+            "total_chunks_indexed": total_chunks,
+            "total_words_indexed": total_words,
+            "total_bytes_indexed": total_bytes,
+            "total_megabytes_indexed": round(
+                total_bytes / (1024.0 * 1024.0), 3
+            ),
+            "average_chunk_words": (
+                round(total_words / total_chunks, 1)
+                if total_chunks > 0
+                else 0
+            ),
+            "source_breakdown": breakdown,
+            "calculated_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+        self._save_stats(updated_stats)
+        return updated_stats
+
     def get_latest_statistics(self) -> Dict[str, Any]:
         """Load cached statistics or return baseline metrics."""
         if self.stats_file.exists():

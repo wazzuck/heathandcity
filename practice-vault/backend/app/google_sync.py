@@ -20,11 +20,14 @@ Invariants:
 import base64
 import json
 import os
+import re
+import time
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import httpx
+import lxml.html
 
 from .config import settings
 from .ingest import DocumentChunk
@@ -209,9 +212,87 @@ class GoogleWorkspaceSyncService:
             tokens["connected_at"] = datetime.now(timezone.utc).isoformat()
 
             # Step 3: Persist tokens locally.
-            self.credentials_file.parent.mkdir(parents=True, exist_ok=True)
-            self.credentials_file.write_text(json.dumps(tokens), encoding="utf-8")
+            self._save_tokens_to_disk(tokens)
             return tokens
+
+    def _save_tokens_to_disk(self, tokens: Dict[str, Any]) -> None:
+        """
+        Persist OAuth2 tokens to disk, preserving external symlinks.
+
+        Args:
+          tokens: Token payload dictionary.
+        """
+        target_path = self.credentials_file.resolve()
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        target_path.write_text(json.dumps(tokens, indent=2), encoding="utf-8")
+
+    def refresh_access_token(self) -> str:
+        """
+        Refresh Google OAuth2 access token using stored refresh_token.
+
+        Execution steps:
+          1. Step 1: Retrieve stored tokens from disk.
+          2. Step 2: Validate presence of refresh_token.
+          3. Step 3: Fetch client ID and client secret.
+          4. Step 4: POST grant_type=refresh_token to GOOGLE_TOKEN_URL.
+          5. Step 5: Merge and save updated tokens to disk.
+          6. Step 6: Return refreshed access token.
+
+        Returns:
+          Fresh access token string.
+
+        Raises:
+          RuntimeError: If refresh token is missing or Google returns an error.
+        """
+        tokens = self.get_token()
+        if not tokens or "refresh_token" not in tokens:
+            raise RuntimeError(
+                "Cannot refresh token: No refresh_token found in credentials."
+            )
+
+        client_id, client_secret = self.get_client_credentials()
+        if not client_id or not client_secret:
+            raise RuntimeError(
+                "Cannot refresh token: Client ID or Secret is not configured."
+            )
+
+        payload = {
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "refresh_token": tokens["refresh_token"],
+            "grant_type": "refresh_token",
+        }
+
+        with httpx.Client(timeout=30.0) as client:
+            res = client.post(self.GOOGLE_TOKEN_URL, data=payload)
+            if res.status_code != 200:
+                raise RuntimeError(
+                    f"Google token refresh failed ({res.status_code}): {res.text}"
+                )
+            new_data = res.json()
+            tokens.update(new_data)
+            tokens["refreshed_at"] = datetime.now(timezone.utc).isoformat()
+            self._save_tokens_to_disk(tokens)
+            return str(tokens["access_token"])
+
+    def get_valid_access_token(self, force_refresh: bool = False) -> str:
+        """
+        Return an active access token, refreshing if requested or missing.
+
+        Args:
+          force_refresh: Whether to proactively refresh via OAuth endpoint.
+
+        Returns:
+          Valid access token string.
+        """
+        if force_refresh:
+            return self.refresh_access_token()
+
+        token = self.get_token()
+        if not token or "access_token" not in token:
+            raise RuntimeError("Google account is not authenticated.")
+
+        return str(token["access_token"])
 
     def get_token(self) -> Optional[Dict[str, Any]]:
         """Load stored OAuth2 token credentials if available."""
@@ -224,8 +305,11 @@ class GoogleWorkspaceSyncService:
 
     def disconnect(self) -> bool:
         """Remove stored OAuth2 tokens to disconnect Google account."""
-        if self.credentials_file.exists():
-            self.credentials_file.unlink()
+        target = self.credentials_file.resolve()
+        if target.exists():
+            target.unlink()
+            if self.credentials_file.is_symlink():
+                self.credentials_file.unlink()
             return True
         return False
 
@@ -241,39 +325,95 @@ class GoogleWorkspaceSyncService:
             "connected_at": token.get("connected_at") if token else None,
         }
 
-    def fetch_and_parse_gmails(self, max_messages: int = 50) -> List[DocumentChunk]:
+    def fetch_and_parse_gmails(
+        self,
+        max_messages: int = 50,
+        page_token: Optional[str] = None,
+        use_checkpoint: bool = False,
+        existing_chunk_ids: Optional[Any] = None,
+        progress_callback: Optional[Any] = None,
+    ) -> List[DocumentChunk]:
         """
         Synchronise messages from Gmail and convert to DocumentChunks.
 
         Execution steps:
-          1. Step 1: Verify valid access token.
-          2. Step 2: List recent messages via Gmail REST API.
-          3. Step 3: For each message ID, fetch detailed body and headers.
-          4. Step 4: Construct DocumentChunk instance for each email.
+          1. Step 1: Verify valid access token (auto-refreshing if expired).
+          2. Step 2: Retrieve message IDs using pagination tokens.
+          3. Step 3: Filter out message IDs already indexed.
+          4. Step 4: Fetch detailed headers and body for unindexed messages.
+          5. Step 5: Checkpoint next_page_token and update sync state.
         """
-        token = self.get_token()
-        if not token or "access_token" not in token:
-            raise RuntimeError("Google account is not authenticated.")
-
-        headers = {"Authorization": f"Bearer {token['access_token']}"}
+        access_token = self.get_valid_access_token()
+        headers = {"Authorization": f"Bearer {access_token}"}
         chunks: List[DocumentChunk] = []
 
+        curr_token = page_token
+        if use_checkpoint and curr_token is None:
+            state = self.get_sync_state()
+            curr_token = state.get("gmail_next_page_token")
+
+        messages: List[Dict[str, Any]] = []
+        next_token: Optional[str] = None
+
         with httpx.Client(timeout=40.0) as client:
-            list_res = client.get(
-                f"{self.GMAIL_API_BASE}/messages?maxResults={max_messages}",
-                headers=headers,
-            )
-            if list_res.status_code != 200:
-                raise RuntimeError(f"Gmail list query failed: {list_res.text}")
+            while len(messages) < max_messages:
+                batch_limit = min(max_messages - len(messages), 100)
+                url = f"{self.GMAIL_API_BASE}/messages?maxResults={batch_limit}"
+                if curr_token:
+                    url += f"&pageToken={curr_token}"
 
-            messages = list_res.json().get("messages", [])
+                list_res = client.get(url, headers=headers)
+                if list_res.status_code == 401:
+                    access_token = self.refresh_access_token()
+                    headers = {"Authorization": f"Bearer {access_token}"}
+                    list_res = client.get(url, headers=headers)
+                elif list_res.status_code in (403, 429):
+                    # Google API per-minute quota exceeded; back off 35 seconds.
+                    time.sleep(35.0)
+                    list_res = client.get(url, headers=headers)
 
-            for msg_meta in messages:
+                if list_res.status_code != 200:
+                    raise RuntimeError(
+                        f"Gmail list query failed: {list_res.text}"
+                    )
+
+                data = list_res.json()
+                batch_msgs = data.get("messages", [])
+                messages.extend(batch_msgs)
+                next_token = data.get("nextPageToken")
+                curr_token = next_token
+                if not curr_token or not batch_msgs:
+                    break
+
+            # Filter out messages already indexed.
+            messages_to_fetch = [
+                m for m in messages
+                if not existing_chunk_ids
+                or f"gmail#{m.get('id')}#p1#c0" not in existing_chunk_ids
+            ]
+
+            total_to_process = len(messages_to_fetch)
+            for idx, msg_meta in enumerate(messages_to_fetch, start=1):
                 msg_id = msg_meta.get("id")
                 msg_res = client.get(
                     f"{self.GMAIL_API_BASE}/messages/{msg_id}?format=full",
                     headers=headers,
                 )
+                if msg_res.status_code == 401:
+                    access_token = self.refresh_access_token()
+                    headers = {"Authorization": f"Bearer {access_token}"}
+                    msg_res = client.get(
+                        f"{self.GMAIL_API_BASE}/messages/{msg_id}?format=full",
+                        headers=headers,
+                    )
+                elif msg_res.status_code in (403, 429):
+                    # Google API per-minute quota exceeded; back off 35 seconds.
+                    time.sleep(35.0)
+                    msg_res = client.get(
+                        f"{self.GMAIL_API_BASE}/messages/{msg_id}?format=full",
+                        headers=headers,
+                    )
+
                 if msg_res.status_code != 200:
                     continue
 
@@ -292,64 +432,170 @@ class GoogleWorkspaceSyncService:
                     elif name == "date":
                         date_str = h.get("value", "")
 
-                body_text = self._extract_gmail_body(msg_data.get("payload", {}))
+                body_text = self._extract_gmail_body(
+                    msg_data.get("payload", {})
+                )
                 if not body_text:
                     body_text = msg_data.get("snippet", "")
 
-                full_content = (
+                # Parse internalDate (epoch milliseconds) into ISO UTC string.
+                internal_date_ms = msg_data.get("internalDate")
+                source_iso = None
+                if internal_date_ms:
+                    try:
+                        source_iso = datetime.fromtimestamp(
+                            int(internal_date_ms) / 1000.0, tz=timezone.utc
+                        ).isoformat()
+                    except Exception:
+                        pass
+                if not source_iso:
+                    source_iso = datetime.now(timezone.utc).isoformat()
+
+                header_prefix = (
                     f"Subject: {subject}\nFrom: {sender}\nDate: {date_str}\n\n"
-                    f"{body_text}"
                 )
 
-                chunk = DocumentChunk(
-                    chunk_id=f"gmail#{msg_id}#p1#c0",
-                    source_path=f"gmail://{msg_id}",
-                    file_name=f"Gmail: {subject[:40]}",
-                    page_number=1,
-                    section_heading=f"Email from {sender}",
-                    text=full_content,
-                    modified_at=datetime.now(timezone.utc).isoformat(),
-                )
-                chunks.append(chunk)
+                words = body_text.split()
+                if len(words) <= 400:
+                    chunk = DocumentChunk(
+                        chunk_id=f"gmail#{msg_id}#p1#c0",
+                        source_path=f"gmail://{msg_id}",
+                        file_name=f"Gmail: {subject[:40]}",
+                        page_number=1,
+                        section_heading=f"Email from {sender}",
+                        text=header_prefix + body_text,
+                        modified_at=source_iso,
+                    )
+                    chunks.append(chunk)
+                else:
+                    # Segment multi-page or lengthy correspondence (400 words).
+                    step_size = 350
+                    c_idx = 0
+                    for w_start in range(0, len(words), step_size):
+                        window = words[w_start : w_start + 400]
+                        segment_text = " ".join(window)
+                        chunk = DocumentChunk(
+                            chunk_id=f"gmail#{msg_id}#p1#c{c_idx}",
+                            source_path=f"gmail://{msg_id}",
+                            file_name=f"Gmail: {subject[:40]}",
+                            page_number=1,
+                            section_heading=(
+                                f"Email from {sender} (Part {c_idx + 1})"
+                            ),
+                            text=header_prefix + segment_text,
+                            modified_at=source_iso,
+                        )
+                        chunks.append(chunk)
+                        c_idx += 1
+                        if w_start + 400 >= len(words):
+                            break
+
+                if progress_callback:
+                    try:
+                        progress_callback(idx, total_to_process, len(chunks))
+                    except Exception:
+                        pass
+
+        # Update persistent sync timestamp.
+        state = self.get_sync_state()
+        state["last_gmail_sync"] = datetime.now(timezone.utc).isoformat()
+        state["total_synced_gmails"] = (
+            state.get("total_synced_gmails", 0) + len(chunks)
+        )
+        state["gmail_next_page_token"] = next_token
+        self.save_sync_state(state)
 
         return chunks
 
-    def fetch_and_parse_google_docs(self, max_files: int = 30) -> List[DocumentChunk]:
+    def fetch_and_parse_google_docs(
+        self,
+        max_files: Optional[int] = None,
+        existing_chunk_ids: Optional[Any] = None,
+        progress_callback: Optional[Any] = None,
+    ) -> List[DocumentChunk]:
         """
         Synchronise Google Docs from Google Drive and convert to DocumentChunks.
 
         Execution steps:
-          1. Step 1: Query Google Drive API for Google Docs documents.
-          2. Step 2: Export each document as plain text.
-          3. Step 3: Segment text into DocumentChunks preserving file metadata.
+          1. Step 1: Query Google Drive API using pagination tokens to collect
+             matching Google Docs metadata across entire corpus.
+          2. Step 2: Filter out documents whose chunk_ids already reside in
+             the vault index to minimise redundant export latency.
+          3. Step 3: Export each unindexed document as plain text.
+          4. Step 4: Segment text into DocumentChunks preserving file metadata.
+          5. Step 5: Update persistent sync timestamps and totals.
         """
-        token = self.get_token()
-        if not token or "access_token" not in token:
-            raise RuntimeError("Google account is not authenticated.")
-
-        headers = {"Authorization": f"Bearer {token['access_token']}"}
+        access_token = self.get_valid_access_token()
+        headers = {"Authorization": f"Bearer {access_token}"}
         chunks: List[DocumentChunk] = []
 
-        query = "mimeType='application/vnd.google-apps.document' and trashed=false"
+        query = (
+            "mimeType='application/vnd.google-apps.document' and trashed=false"
+        )
+        files: List[Dict[str, Any]] = []
+        page_token: Optional[str] = None
+
         with httpx.Client(timeout=40.0) as client:
-            list_res = client.get(
-                f"{self.DRIVE_API_BASE}/files?q={urllib.parse.quote(query)}&pageSize={max_files}&fields=files(id,name,modifiedTime)",
-                headers=headers,
-            )
-            if list_res.status_code != 200:
-                raise RuntimeError(f"Google Drive query failed: {list_res.text}")
+            # Step 1: Collect document records across pages.
+            while True:
+                page_size = (
+                    min(max_files - len(files), 100) if max_files else 100
+                )
+                if page_size <= 0:
+                    break
+                url = (
+                    f"{self.DRIVE_API_BASE}/files?q={urllib.parse.quote(query)}"
+                    f"&pageSize={page_size}"
+                    f"&fields=nextPageToken,files(id,name,modifiedTime)"
+                )
+                if page_token:
+                    url += f"&pageToken={page_token}"
 
-            files = list_res.json().get("files", [])
+                list_res = client.get(url, headers=headers)
+                if list_res.status_code == 401:
+                    access_token = self.refresh_access_token()
+                    headers = {"Authorization": f"Bearer {access_token}"}
+                    list_res = client.get(url, headers=headers)
 
-            for f in files:
+                if list_res.status_code != 200:
+                    raise RuntimeError(
+                        f"Google Drive query failed: {list_res.text}"
+                    )
+
+                data = list_res.json()
+                batch_files = data.get("files", [])
+                files.extend(batch_files)
+                page_token = data.get("nextPageToken")
+                if not page_token or (max_files and len(files) >= max_files):
+                    break
+
+            # Step 2: Filter out documents already indexed.
+            files_to_export = [
+                f for f in files
+                if not existing_chunk_ids
+                or f"gdoc#{f.get('id')}#p1#c0" not in existing_chunk_ids
+            ]
+
+            total_to_process = len(files_to_export)
+            for idx, f in enumerate(files_to_export, start=1):
                 file_id = f.get("id")
                 file_name = f.get("name", "Untitled Doc")
-                modified_time = f.get("modifiedTime", datetime.now(timezone.utc).isoformat())
+                modified_time = f.get(
+                    "modifiedTime", datetime.now(timezone.utc).isoformat()
+                )
 
                 export_res = client.get(
                     f"{self.DRIVE_API_BASE}/files/{file_id}/export?mimeType=text/plain",
                     headers=headers,
                 )
+                if export_res.status_code == 401:
+                    access_token = self.refresh_access_token()
+                    headers = {"Authorization": f"Bearer {access_token}"}
+                    export_res = client.get(
+                        f"{self.DRIVE_API_BASE}/files/{file_id}/export?mimeType=text/plain",
+                        headers=headers,
+                    )
+
                 if export_res.status_code != 200:
                     continue
 
@@ -368,10 +614,18 @@ class GoogleWorkspaceSyncService:
                 )
                 chunks.append(chunk)
 
+                if progress_callback:
+                    try:
+                        progress_callback(idx, total_to_process, len(chunks))
+                    except Exception:
+                        pass
+
         # Update persistent sync timestamp.
         state = self.get_sync_state()
         state["last_doc_sync"] = datetime.now(timezone.utc).isoformat()
-        state["total_synced_docs"] = state.get("total_synced_docs", 0) + len(chunks)
+        state["total_synced_docs"] = (
+            state.get("total_synced_docs", 0) + len(chunks)
+        )
         self.save_sync_state(state)
 
         return chunks
@@ -403,7 +657,8 @@ class GoogleWorkspaceSyncService:
         if not last_sync:
             return self.fetch_and_parse_google_docs(max_files=max_files)
 
-        headers = {"Authorization": f"Bearer {token['access_token']}"}
+        access_token = self.get_valid_access_token()
+        headers = {"Authorization": f"Bearer {access_token}"}
         chunks: List[DocumentChunk] = []
 
         query = (
@@ -417,6 +672,15 @@ class GoogleWorkspaceSyncService:
                 f"&pageSize={max_files}&fields=files(id,name,modifiedTime)",
                 headers=headers,
             )
+            if list_res.status_code == 401:
+                access_token = self.refresh_access_token()
+                headers = {"Authorization": f"Bearer {access_token}"}
+                list_res = client.get(
+                    f"{self.DRIVE_API_BASE}/files?q={urllib.parse.quote(query)}"
+                    f"&pageSize={max_files}&fields=files(id,name,modifiedTime)",
+                    headers=headers,
+                )
+
             if list_res.status_code != 200:
                 return []
 
@@ -430,6 +694,14 @@ class GoogleWorkspaceSyncService:
                     f"{self.DRIVE_API_BASE}/files/{file_id}/export?mimeType=text/plain",
                     headers=headers,
                 )
+                if export_res.status_code == 401:
+                    access_token = self.refresh_access_token()
+                    headers = {"Authorization": f"Bearer {access_token}"}
+                    export_res = client.get(
+                        f"{self.DRIVE_API_BASE}/files/{file_id}/export?mimeType=text/plain",
+                        headers=headers,
+                    )
+
                 if export_res.status_code != 200:
                     continue
 
@@ -456,22 +728,67 @@ class GoogleWorkspaceSyncService:
         return chunks
 
     def _extract_gmail_body(self, payload: Dict[str, Any]) -> str:
-        """Recursively extract plain text body parts from Gmail MIME payload."""
-        mime_type = payload.get("mimeType", "")
-        body_data = payload.get("body", {}).get("data", "")
+        """
+        Recursively extract message text from a Gmail MIME payload.
 
-        if mime_type == "text/plain" and body_data:
+        Prefers plain text parts; falls back to Hypertext Markup Language (HTML)
+        sanitisation via lxml when plain text is absent or empty.
+
+        Execution steps:
+          1. Step 1: Traverse MIME tree and collect text/plain and text/html
+             encoded segments.
+          2. Step 2: Return concatenated plain text if available.
+          3. Step 3: Parse and strip HTML trees if only markup was provided.
+        """
+        text_plain_parts: List[str] = []
+        text_html_parts: List[str] = []
+
+        def _traverse(part: Dict[str, Any]) -> None:
+            mime = part.get("mimeType", "")
+            raw_data = part.get("body", {}).get("data", "")
+            if raw_data:
+                try:
+                    decoded = base64.urlsafe_b64decode(
+                        raw_data.encode("ASCII")
+                    ).decode("utf-8", errors="replace")
+                    if mime == "text/plain":
+                        text_plain_parts.append(decoded)
+                    elif mime == "text/html":
+                        text_html_parts.append(decoded)
+                except Exception:
+                    pass
+            for subpart in part.get("parts", []):
+                _traverse(subpart)
+
+        _traverse(payload)
+
+        # Step 2: Prefer text/plain if non-empty.
+        plain_combined = "\n".join(text_plain_parts).strip()
+        if plain_combined:
+            return plain_combined
+
+        # Step 3: Parse HTML if text/plain was absent.
+        if text_html_parts:
+            html_raw = "\n".join(text_html_parts)
             try:
-                decoded = base64.urlsafe_b64decode(body_data.encode("ASCII"))
-                return decoded.decode("utf-8", errors="replace")
+                doc = lxml.html.fromstring(html_raw)
+                for elem in doc.xpath(
+                    "//script | //style | //head | //meta"
+                ):
+                    elem.drop_tree()
+                for elem in doc.xpath(
+                    "//p | //div | //tr | //h1 | //h2 | //h3 | //h4 | //br | //li"
+                ):
+                    elem.tail = (elem.tail or "") + "\n"
+                extracted = doc.text_content()
+                lines = [
+                    line.strip()
+                    for line in extracted.splitlines()
+                    if line.strip()
+                ]
+                return "\n".join(lines)
             except Exception:
-                return ""
+                cleaned = re.sub(r"<[^>]+>", " ", html_raw)
+                return " ".join(cleaned.split())
 
-        parts = payload.get("parts", [])
-        extracted = []
-        for p in parts:
-            text = self._extract_gmail_body(p)
-            if text:
-                extracted.append(text)
-
-        return "\n".join(extracted)
+        return ""

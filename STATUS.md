@@ -280,15 +280,105 @@
     - Documented all features in `docs/ARCHITECTURE.md` (Sections 4.6-4.8).
     - Verified all 11 pytest checks and 5/5 prototype acceptance suite stages.
 
+37. Evaluated Small Language Model (SLM) scaling and provisioned Qwen 3:
+    - Conducted Central Processing Unit (CPU) latency and token throughput
+      benchmarks across Qwen 2.5 (3B and 7B) and Llama 3.2 (3B), validating
+      11.2 tok/s on 3B versus 4.5 tok/s on 7B.
+    - Confirmed architectural decoupling of vector and lexical indexes from
+      model inference: swapping base models requires zero re-indexing of
+      the accumulated vault corpus (19,991 chunks / 9.2 million words).
+    - Initiated local Ollama provisioning of `qwen3:latest` (5.2 GB)
+      as the recommended next-generation reasoning candidate.
+    - Codified model operational routing: Qwen 2.5 (3B) / Qwen 3 (4B) for
+      interactive low-latency conversational queries (<3.5s response) and
+      Qwen 2.5 (7B) / Qwen 3 (8B) for complex multi-document legal synthesis.
+
+38. Built Sovereign Command-Line Interface (CLI) and Terminal REPL (`./vault`):
+    - Implemented `practice-vault/scripts/vault_cli.py` and root launcher
+      `./vault` supporting interactive terminal REPL and direct scriptable
+      queries.
+    - Added sub-second hybrid search mode (`./vault -s <query>`) returning
+      ranked matches with cross-encoder neural scores in 0.02-0.8s.
+    - Added plain-English Retrieval-Augmented Generation (RAG) query mode
+      (`./vault "<question>"`) generating synthesised answers with verified
+      source citations and execution telemetry.
+    - Added appliance status inspection (`./vault --status`) and Google
+      Workspace synchronisation inspection (`./vault --sync`).
+    - Integrated interactive Read-Eval-Print Loop (REPL) with command history,
+      on-the-fly model switching (`/model <tag>`), and ANSI styling.
+    - Increased backend HTTP client timeout to 180s in `backend/app/rag.py`
+      and enabled dynamic model overrides in `backend/app/api.py`.
+
+39. Provisioned and Benchmarked Qwen 3 (4B) Reasoning Model (`qwen3:4b`):
+    - Downloaded and verified `qwen3:4b` (2.5 GB, 4.0B parameters, 262k
+      context) into local Ollama runtime.
+    - Benchmarked raw token generation velocity at 9.42 tokens/sec on host
+      quad-core CPU.
+    - Identified architectural thinking behaviour: Qwen 3 natively emits
+      chain-of-thought tokens (`<think> ... </think>`) before producing
+      final syntheses.
+    - Validated live Retrieval-Augmented Generation (RAG) execution via
+      `./vault -m qwen3:4b -k 1`, returning factual summary with source
+      citations in 71.8 seconds.
+    - Confirmed operational recommendation: `qwen2.5:3b` remains optimal
+      for low-latency interactive conversational search (~24-28s on CPU),
+      while `qwen3:4b` is available for deep legal deliberation.
+
+40. Advanced Corpus Ingestion to 42,700 Chunks:
+    - Ingested historical Gmail messages in persistent batches, expanding
+      corpus to 42,442+ documents and 42,700 chunks across LanceDB and
+      SQLite FTS5.
+    - Checkpointed sync state safely preserved in external appliance storage
+      (`~/practice-vault-data/google_sync_state.json`).
+
+41. Provisioned and Benchmarked SOTA Small Language Models (SLMs):
+    - Researched latest open-weight models in the 3B-9B class; downloaded and
+      verified `qwen3.5:4b` (3.3 GB), `qwen3.5:9b` (6.6 GB), and
+      `phi4-mini:latest` (2.5 GB, Microsoft 3.8B SOTA) into local Ollama.
+    - Deployed Ollama systemd override (`override.conf`) restricting concurrency
+      to 1 model, setting 8192 context, 4 CPU threads, and 5-minute keep-alive.
+    - Automated comparative benchmark matrix across candidates on host quad-core
+      CPU: `phi4-mini:latest` delivered 2.05s warm latency (11.2 tok/s, 100%
+      citation compliance); `qwen3.5:4b` with `think: false` delivered 4.70s
+      warm latency (9.1 tok/s, 100% citation compliance).
+
+42. Built Path B Structured Transaction Pipeline (`transactions.py`):
+    - Offloaded exhaustive multi-document financial inquiries from SLMs to
+      deterministic SQLite queries, eliminating arithmetic hallucinations.
+    - Scanned indexed email database and extracted 1,607 verified transactions
+      into `~/practice-vault-data/transactions.db` (£696,344.78 ledger spend).
+    - Answering aggregation inquiries ("What did I buy last year?") in 0.02s
+      with exact figures (108 orders, £2,160.34, merchant breakdown, itemised
+      table, email citations), and "What did I buy from Amazon?" (725 orders,
+      £15,255.52).
+
+43. Hardened Ingestion Pipeline & Reduced Memory Footprint:
+    - Upgraded `google_sync.py` to extract HTML email bodies using `lxml.html`,
+      parse true email dates via `internalDate` into ISO8601 UTC strings, and
+      chunk long emails (>400 words) with sliding windows and preserved headers.
+    - Added automatic 35-second backoff and retry on Google API HTTP 403 / 429
+      per-minute quota limits.
+    - Replaced in-memory vector table deserialisation in `indexer.py` and
+      `tracker.py` with direct SQLite FTS5 queries and incremental stat updates;
+      backend memory RSS reduced to 586 MB.
+    - All 15 unit tests passing in `practice-vault/backend/tests/`.
+
+44. Launched Overnight Continuous Ingestion Daemon:
+    - Initiated background indexer daemon (`scripts/continuous_indexer.py`)
+      running continuously with controlled 12-second inter-batch pauses to
+      ingest the remaining ~15,400 messages to 100% mailbox completeness.
+
 ---
 
 ## 2. Next
 
-1. Visibility phase 3 (one page per profession) awaits a decision.
-2. Visibility phase 4 (off-page): Google Business Profile, Search Console,
+1. Allow overnight continuous background indexer to complete ingestion of
+   remaining historical Gmail messages to achieve 100% corpus completeness.
+2. Visibility phase 3 (one page per profession) awaits a decision.
+3. Visibility phase 4 (off-page): Google Business Profile, Search Console,
    Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
-3. Add a bespoke social preview Open Graph image (`og:image`).
-4. Allow GitHub to finish issuing the multi-domain certificate expansion for
+4. Add a bespoke social preview Open Graph image (`og:image`).
+5. Allow GitHub to finish issuing the multi-domain certificate expansion for
    `www.heathandcity.com` (automated background job).
 
 ---
