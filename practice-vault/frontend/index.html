@@ -131,6 +131,109 @@
         <div id="ingest-feedback" class="mt-3"></div>
       </div>
 
+      <!-- Active Indexing Jobs & Progress Tracking -->
+      <div class="panel-box mt-4">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <h3 class="subheading" style="margin-bottom: 0;">Indexing Jobs &amp; Progress Tracking</h3>
+          <span class="stat-badge" id="job-status-badge">Status: Idle</span>
+        </div>
+        <p class="panel-description mt-2">
+          Real-time tracking of long-running ingestion runs, item throughput velocity,
+          and dynamic run-time estimation.
+        </p>
+
+        <div id="active-job-container" style="display: none; background-color: var(--bg-card); padding: 1.25rem; border: 1px solid var(--border-subtle); border-radius: 4px; margin-top: 1rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600;">
+            <span id="active-job-desc">Ingesting practice files...</span>
+            <span id="active-job-percent" style="color: var(--gold-accent);">0%</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-fill" id="active-job-progress-fill"></div>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);" id="active-job-current-label">
+            Current: --
+          </div>
+          <div class="job-metrics-grid">
+            <div class="job-metric-item">
+              <div class="job-metric-label">Processed Items</div>
+              <div class="job-metric-value" id="job-processed-metric">0 / 0</div>
+            </div>
+            <div class="job-metric-item">
+              <div class="job-metric-label">Elapsed Time</div>
+              <div class="job-metric-value" id="job-elapsed-metric">0s</div>
+            </div>
+            <div class="job-metric-item">
+              <div class="job-metric-label">Estimated Time Remaining</div>
+              <div class="job-metric-value" id="job-remaining-metric">Calculating...</div>
+            </div>
+            <div class="job-metric-item">
+              <div class="job-metric-label">Throughput Velocity</div>
+              <div class="job-metric-value" id="job-throughput-metric">0.0 items/s</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
+            Recent Job History
+          </div>
+          <div id="recent-jobs-container" class="log-box" style="max-height: 140px;">
+            No recent indexing jobs recorded.
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Repository Volume & Data Statistics -->
+      <div class="panel-box mt-4">
+        <h3 class="subheading">Repository Volume &amp; Data Statistics</h3>
+        <p class="panel-description">
+          Audited metrics on total indexed documents, chunk segmentation, and lexical volume.
+        </p>
+
+        <div class="stats-summary-grid mt-3">
+          <div class="summary-card">
+            <div class="stat-number" id="stats-total-docs">--</div>
+            <div class="stat-label">Documents Tracked</div>
+          </div>
+          <div class="summary-card">
+            <div class="stat-number" id="stats-total-chunks">--</div>
+            <div class="stat-label">Chunks Indexed</div>
+          </div>
+          <div class="summary-card">
+            <div class="stat-number" id="stats-total-volume">-- MB</div>
+            <div class="stat-label">Tracked Data Volume</div>
+          </div>
+          <div class="summary-card">
+            <div class="stat-number" id="stats-total-words">--</div>
+            <div class="stat-label">Total Words Parsed</div>
+          </div>
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
+          Source Breakdown
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Source Repository</th>
+                <th>Documents</th>
+                <th>Chunks</th>
+                <th>Volume (MB)</th>
+                <th>Total Words</th>
+              </tr>
+            </thead>
+            <tbody id="stats-sources-body">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-muted); font-family: var(--font-serif);">
+                  Loading repository statistics...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="panel-box mt-4">
         <h3 class="subheading">Appliance Technical Parameters</h3>
         <div class="specs-grid">
@@ -204,6 +307,25 @@
             </p>
             <button type="button" class="btn-primary" id="btn-sync-docs">
               Synchronise Google Docs
+            </button>
+          </div>
+
+          <div class="panel-box" style="background-color: var(--bg-card);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h3 class="subheading" style="margin-bottom: 0;">Incremental Auto-Sync</h3>
+              <span class="auto-sync-badge" id="google-auto-sync-badge">
+                <span class="status-dot healthy"></span> Active (60s poll)
+              </span>
+            </div>
+            <p class="panel-description">
+              Background daemon continuously queries Google Drive for newly added or modified
+              documents and triggers automated incremental indexing.
+            </p>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 1rem;" id="auto-sync-status-details">
+              Last check: Awaiting sync...
+            </div>
+            <button type="button" class="btn-secondary" id="btn-auto-sync-now">
+              Check for New Docs Now
             </button>
           </div>
         </div>

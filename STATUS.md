@@ -264,6 +264,22 @@
     - Codified Speculation Rules API and targeted crawler routing directives.
     - Verified all 80-column line limits and British English rules.
 
+36. Implemented Indexing Job Tracker, Volume Auditing & Google Docs Auto-Sync:
+    - Built `IndexingJobTracker` (`backend/app/tracker.py`) tracking elapsed
+      run-times, processing velocity (items/sec), and dynamic Estimated Time
+      of Arrival (ETA) projections with persistent job history.
+    - Built `VaultStatisticsService` (`backend/app/tracker.py`) calculating
+      total tracked documents, indexed chunks, byte and megabyte volumes,
+      word counts, and source breakdown.
+    - Implemented background asynchronous watcher
+      (`background_google_docs_watcher` in `backend/main.py`) polling Google
+      Drive every 60 seconds with incremental ingestion of new/modified docs.
+    - Updated dashboard User Interface (UI) (`frontend/index.html`,
+      `css/dashboard.css`, `js/app.js`) with live statistics cards, active job
+      progress bar, ETA timer, and manual auto-sync trigger.
+    - Documented all features in `docs/ARCHITECTURE.md` (Sections 4.6-4.8).
+    - Verified all 11 pytest checks and 5/5 prototype acceptance suite stages.
+
 ---
 
 ## 2. Next

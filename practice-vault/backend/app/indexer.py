@@ -327,3 +327,14 @@ class HybridIndexEngine:
             except Exception:
                 pass
         return len(self._bm25_chunks)
+
+    def get_all_chunks(self) -> List[Any]:
+        """Return all indexed document chunks in memory or database."""
+        if self._bm25_chunks:
+            return list(self._bm25_chunks)
+        if self._table is not None:
+            try:
+                return self._table.to_pandas().to_dict(orient="records")
+            except Exception:
+                pass
+        return []
