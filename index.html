@@ -32,7 +32,7 @@ INVARIANTS:
   </title>
   <meta
     name="description"
-    content="Private IT and document systems for Hampstead barristers, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, art galleries and creative studios. Fixed fees. Your data stays in your own office."
+    content="Private IT and document systems for Hampstead barristers, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, authors, composers, actors, art galleries and creative estates. Fixed fees. Your data stays in your own office."
   />
   <link rel="canonical" href="https://heathandcity.com/" />
   <link
@@ -63,7 +63,7 @@ INVARIANTS:
     property="og:title"
     content="Heath &amp; City Technology Hampstead | Private IT and Document Systems"
   />
-  <meta property="og:description" content="Private IT and document systems for Hampstead barristers, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, art galleries and creative studios. Fixed fees. Your data stays in your own office." />
+  <meta property="og:description" content="Private IT and document systems for Hampstead barristers, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, authors, composers, actors, art galleries and creative estates. Fixed fees. Your data stays in your own office." />
   <meta property="og:url" content="https://heathandcity.com/" />
   <meta property="og:locale" content="en_GB" />
   <meta name="twitter:card" content="summary" />
@@ -71,7 +71,7 @@ INVARIANTS:
     name="twitter:title"
     content="Heath &amp; City Technology Hampstead | Private IT and Document Systems"
   />
-  <meta property="twitter:description" content="Private IT and document systems for Hampstead barristers, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, art galleries and creative studios. Fixed fees. Your data stays in your own office." />
+  <meta property="twitter:description" content="Private IT and document systems for Hampstead barristers, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, authors, composers, actors, art galleries and creative estates. Fixed fees. Your data stays in your own office." />
 
   <!-- Step 1b: Structured data (Schema.org JSON-LD) for search engines and
        AI assistants. Every fact here is also visible on the page. -->
@@ -84,7 +84,7 @@ INVARIANTS:
         "@id": "https://heathandcity.com/#business",
         "name": "Heath & City Technology Hampstead",
         "url": "https://heathandcity.com/",
-        "description": "Private IT and document systems for Hampstead barristers, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, art galleries and creative studios. Fixed fees. Your data stays in your own office.",
+        "description": "Private IT and document systems for Hampstead barristers, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, authors, composers, actors, art galleries and creative estates. Fixed fees. Your data stays in your own office.",
         "telephone": "+44 20 4520 9114",
         "email": "contactus@heathandcity.com",
         "address": {
@@ -144,7 +144,7 @@ INVARIANTS:
             "name": "Who do you work with?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Small private practices in Hampstead, North West London and the City: barristers and King's Counsel, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, art galleries and creative studios."
+              "text": "Small private practices in Hampstead, North West London and the City: barristers and King's Counsel, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, authors, composers, actors, art galleries and creative estates."
             }
           },
           {
@@ -238,7 +238,7 @@ INVARIANTS:
   />
 
   <!-- Step 2: Load the bespoke stylesheet. -->
-  <link rel="stylesheet" href="css/styles.css?v=3" />
+  <link rel="stylesheet" href="css/styles.css?v=4" />
 </head>
 <body>
   <!-- =======================================================================
@@ -597,10 +597,19 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn"
-            data-vertical-tab="creative"
+            data-vertical-tab="talent"
             aria-selected="false"
           >
-            Art Galleries &amp; Studios
+            Authors, Composers &amp; Talent
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn"
+            data-vertical-tab="galleries"
+            aria-selected="false"
+          >
+            Art Galleries &amp; Fine Art
           </button>
         </div>
 
@@ -778,7 +787,8 @@ INVARIANTS:
                 <option value="insurance">Commercial Insurance Broker</option>
                 <option value="stockbrokers">Stockbroker / Wealth Manager</option>
                 <option value="accountants">Chartered Accountant / Tax Adviser</option>
-                <option value="creative">Art Gallery / Creative Studio</option>
+                <option value="talent">Author, Composer or Creative Talent</option>
+                <option value="galleries">Commercial Art Gallery or Dealer</option>
               </select>
             </div>
 
@@ -855,7 +865,7 @@ INVARIANTS:
           </div>
           <div class="faq-item">
             <h3>Who do you work with?</h3>
-            <p>Small private practices in Hampstead, North West London and the City: barristers and King's Counsel, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, art galleries and creative studios.</p>
+            <p>Small private practices in Hampstead, North West London and the City: barristers and King's Counsel, family offices, surgeons, estate agents, insurance brokers, stockbrokers, accountants, authors, composers, actors, art galleries and creative estates.</p>
           </div>
           <div class="faq-item">
             <h3>Where are you based?</h3>
@@ -1107,8 +1117,11 @@ INVARIANTS:
               <option value="Stockbrokers: contract notes, corporate actions and cash">
                 Contract notes, corporate actions and cash
               </option>
-              <option value="Art galleries & studios: consignments, provenance and artist royalties">
-                Art galleries and studios: consignments, provenance and artist royalties
+              <option value="Authors, composers & talent: royalties, residuals and publisher accounting">
+                Authors, composers & talent: royalties, residuals and publisher accounting
+              </option>
+              <option value="Art galleries & fine art: consignments, provenance and artist splits">
+                Art galleries & fine art: consignments, provenance and artist splits
               </option>
               <option value="Surgeons: medico-legal bundles and insurer recovery">
                 Medico-legal bundles and insurer recovery
@@ -1174,6 +1187,6 @@ INVARIANTS:
   </footer>
 
   <!-- Step 12: Boot the ES Module application controller. -->
-  <script type="module" src="js/app.js?v=20261110c"></script>
+  <script type="module" src="js/app.js?v=20261110d"></script>
 </body>
 </html>

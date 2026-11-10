@@ -46,7 +46,10 @@ private UK data vault.
 7. **Chartered Accountants and Tax Advisers:**
    - Statutory corporation tax filing tracking, Self-Assessment dividend voucher
      reconciliation, and HMRC gateway receipt audits.
-8. **Art Galleries, Artists, and Creative Studios:**
+8. **Authors, Composers, and Creative Talent:**
+   - Automated PRS/MCPS royalty reconciliation, SAG-AFTRA/Equity repeat fee
+     audits, publisher foreign rights tracking, and manuscript cue sheet alerts.
+9. **Commercial Art Galleries, Dealers, and Fine Art Estates:**
    - Tracking artist consignment agreements, gallery split accounting (50/50),
      Certificate of Authenticity (COA) provenance dossiers, and resale rights.
 

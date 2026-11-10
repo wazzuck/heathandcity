@@ -356,18 +356,64 @@ export const VERTICAL_DEMOS = Object.freeze({
       "schedules. We do not provide statutory audit or regulated tax advice; " +
       "the system automates preparation for your sign-off."
   },
-  creative: {
-    id: "creative",
-    tabLabel: "Art Galleries & Studios",
-    badge: "GALLERIES, ARTISTS & STUDIOS · NW3 / MAYFAIR",
-    headline: "Commercial Art Galleries, Artists & Creative Studios",
+talent: {
+    id: "talent",
+    tabLabel: "Authors, Composers & Talent",
+    badge: "MEDIA, PUBLISHING & TALENT · NW3 / SOHO",
+    headline: "Composers, Authors, Actors & Creative Talent",
+    summary:
+      "Reconcile complex royalty statements, verify broadcast residuals, " +
+      "and track publishing and commission deliverable deadlines.",
+    stats: [
+      { label: "Royalty Statements Matched", value: "22 Reports", tone: "gold" },
+      { label: "Unmatched Residual Items", value: "2 To Review", tone: "amber" },
+      { label: "Data Outside Private Study", value: "Zero", tone: "emerald" }
+    ],
+    digestTime: "08:15 talent digest · On-premises hardware",
+    queueItems: [
+      {
+        priority: "ROYALTY STATEMENT MATCH",
+        client: "PRS & streaming collection statements (illustrative)",
+        matter: "Reconciled against catalogue writer shares and publisher splits",
+        status: "Twenty works matched; two foreign streaming statements flagged",
+        timer: "Reviewed 08:10 today",
+        sourceRef: "PRS_Distribution_Statement_Q3.pdf · Page 4"
+      },
+      {
+        priority: "EQUITY RESIDUAL AUDIT",
+        client: "Television drama broadcast repeat fees (illustrative)",
+        matter: "Residual remittance matched against contract agreement and commission",
+        status: "UK terrestrial repeat verified; foreign syndication fee pending",
+        timer: "Residual check complete",
+        sourceRef: "Talent_Agency_Remittance.pdf · Section B"
+      },
+      {
+        priority: "PUBLISHER ROYALTY & DEADLINE",
+        client: "Literary estate & manuscript delivery (illustrative)",
+        matter: "Publisher semi-annual statement and translation rights schedule",
+        status: "Domestic sales matched; manuscript delivery window flagged",
+        timer: "Delivery due in 14 days",
+        sourceRef: "Publishing_Contract_Schedule.docx"
+      }
+    ],
+    guarantee:
+      "Your catalogues, writer splits, agency contracts, and private banking " +
+      "affairs remain entirely on your own local hardware. We do not negotiate " +
+      "contracts or collect fees; the system automates documentation."
+  },
+
+  galleries: {
+    id: "galleries",
+    tabLabel: "Art Galleries & Fine Art",
+    badge: "GALLERIES, DEALERS & ESTATES · NW3 / MAYFAIR",
+    headline: "Commercial Art Galleries, Dealers & Artist Estates",
     summary:
       "Track consignment sales, cross-check provenance certificates, " +
       "and reconcile artist resale rights and exhibition loan returns.",
     stats: [
       { label: "Consigned Artworks", value: "36 Active", tone: "gold" },
       { label: "Provenance Discrepancies", value: "1 Missing History", tone: "amber" },
-      { label: "Data Outside Private Studio", value: "Zero", tone: "emerald" }
+      { label: "Data Outside Private Gallery", value: "Zero", tone: "emerald" }
     ],
     digestTime: "08:30 gallery briefing · Sovereign hardware",
     queueItems: [
