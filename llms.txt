@@ -1,13 +1,15 @@
 # Heath & City Technology Hampstead
 
 > Private Information Technology (IT) and document systems for boutique
-> professional practices in Hampstead and North West (NW) London: barristers
-> and King's Counsel (KC), insurance and stock brokers, composers and music
-> publishers, and surgeons and medical consultants. Client, patient and fund
-> records are never uploaded to public Artificial Intelligence (AI) tools;
-> systems run on sovereign hardware in the client's office or in a private UK
-> vault. Technology and administrative services only; no legal, medical,
-> investment or insurance advice.
+> professional practices in Hampstead, North West (NW) London and The City:
+> barristers and King's Counsel (KC), single-family offices and private
+> trustees, surgeons and medical consultants, prime estate agents and
+> surveyors, commercial insurance brokers, stockbrokers and investment
+> managers, chartered accountants and tax advisers, and composers and music
+> publishers. Client, patient and fund records are never uploaded to public
+> Artificial Intelligence (AI) tools; systems run on sovereign hardware in the
+> client's office or in a private UK data vault. Technology and administrative
+> services only; no legal, medical, investment or insurance advice.
 
 ## Details
 
@@ -16,6 +18,25 @@
 - Areas served: NW3, NW6, NW8, NW11, N6 and the City of London
 - Telephone: 020 4520 9114
 - Email: contactus@heathandcity.com
+
+## Target Client Practices
+
+1. **Barristers & King's Counsel (KC):** Precedent and brief discovery across
+   decades of files; court disclosure bundle cross-referencing.
+2. **Single-Family Offices & Private Trustees:** Multi-custodian statement
+   consolidation, capital call tracking, and estate disbursement auditing.
+3. **Surgeons & Medical Consultants:** Chronology generation from 2,000+ page
+   medico-legal bundles; insurer underpayment recovery checks.
+4. **Prime Estate Agents & Surveyors:** Sales progression tracking,
+   Anti-Money Laundering (AML) source-of-funds checks, and tenancy compliance.
+5. **Commercial Insurance Brokers:** 90-day policy renewal tracking,
+   underwriter warranty alterations, and client valuation chasers.
+6. **Stockbrokers & Wealth Managers:** Contract note settlement matching,
+   corporate action deadline monitoring, and mandate suitability reviews.
+7. **Chartered Accountants & Tax Advisers:** Corporation tax statutory
+   filings, Self-Assessment dividend voucher tracking, and VAT gateway receipts.
+8. **Composers & Music Publishers:** Collection-society statement matching,
+   writer split verification, and commission deliverable deadlines.
 
 ## Fixed Fees
 
@@ -28,7 +49,7 @@
 - Neville Bryce: Founder and Principal Systems Technologist
 - Experience: Over 17 years engineering mission-critical financial
   market infrastructure for institutions including Bank of America
-  Merrill Lynch, Nomura, and Exegy.
+  Merrill Lynch, Nomura, Instinet, Citi Group, and Exegy.
 - Education: Bachelor's in Software Engineering (University of Ulster).
 - Training: Advanced AI and deep learning at The Machine Learning Institute.
 - LinkedIn: https://www.linkedin.com/in/nevillebryce/
