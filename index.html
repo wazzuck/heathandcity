@@ -234,7 +234,7 @@ INVARIANTS:
   />
 
   <!-- Step 2: Load the bespoke stylesheet. -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
 </head>
 <body>
   <!-- =======================================================================
@@ -539,6 +539,24 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn"
+            data-vertical-tab="family-office"
+            aria-selected="false"
+          >
+            Family Offices
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn"
+            data-vertical-tab="medical"
+            aria-selected="false"
+          >
+            Surgeons &amp; Consultants
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn"
             data-vertical-tab="estate"
             aria-selected="false"
           >
@@ -566,10 +584,10 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn"
-            data-vertical-tab="medical"
+            data-vertical-tab="accountants"
             aria-selected="false"
           >
-            Surgeons &amp; Consultants
+            Accountants &amp; Tax
           </button>
           <button
             type="button"
@@ -750,10 +768,12 @@ INVARIANTS:
               <label for="calc-vertical">Your practice:</label>
               <select id="calc-vertical">
                 <option value="legal">Barrister / King's Counsel</option>
+                <option value="family-office">Family Office / Private Trustee</option>
+                <option value="medical">Surgeon / Consultant</option>
                 <option value="estate">Prime Estate Agent / Surveyor</option>
                 <option value="insurance">Commercial Insurance Broker</option>
                 <option value="stockbrokers">Stockbroker / Wealth Manager</option>
-                <option value="medical">Surgeon / Consultant</option>
+                <option value="accountants">Chartered Accountant / Tax Adviser</option>
                 <option value="composers">Composer / Music Publisher</option>
               </select>
             </div>
@@ -1067,6 +1087,12 @@ INVARIANTS:
               </option>
               <option value="Barristers: find old opinions and check disclosure">
                 Finding old opinions and checking disclosure
+              </option>
+              <option value="Family offices: trust accounting, capital calls and disbursements">
+                Family offices: trust accounting, capital calls and disbursements
+              </option>
+              <option value="Accountants: tax returns, statutory filings and voucher chasing">
+                Accountants: tax returns, statutory filings and voucher chasing
               </option>
               <option value="Estate agents: sales progression, AML and compliance">
                 Sales progression, AML and compliance
