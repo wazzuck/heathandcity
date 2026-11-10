@@ -201,6 +201,25 @@
     - Expanded automated unit test suite (backend/tests/test_google_sync.py),
       passing all 7 unit checks cleanly.
 
+32. Provisioned Google Cloud OAuth 2.0 credentials for the Practice Vault
+    appliance (operational task, no repository changes):
+    - Enabled the Gmail API and the Google Drive API in Cloud project
+      `marketcalc`.
+    - Created the Google Auth Platform configuration (app name "Heath & City
+      Practice Vault", External user type, testing mode) with the
+      `gmail.readonly` and `drive.readonly` scopes and the operator account
+      registered as a test user.
+    - Created the Web application OAuth client "Practice Vault Local Web
+      Client" with authorised redirect URI
+      `http://127.0.0.1:8080/api/google/callback`.
+    - Stored the Client ID and Client Secret outside the repository at
+      `~/vunderland/keys/heathandcity.txt` (mode 600), sourced from `~/.bashrc`.
+    - Redirected the appliance token store outside the repository by symlink,
+      so no key material exists in any tracked or untracked repository file.
+    - Verified `GET /api/google/status` returns `is_configured: true` and
+      `is_connected: true`, and `GET /api/google/auth-url` returns a valid
+      Google authorisation URL.
+
 ---
 
 ## 2. Next
