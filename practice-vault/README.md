@@ -14,7 +14,7 @@ operational disruption:
 
 1. **Zero Cloud Leakage**: All vector embeddings, document parsing, and Large
    Language Model (LLM) reasoning execute strictly on local hardware (Lenovo
-   ThinkCentre M720q Tiny or equivalent Linux mini-PC).
+   ThinkCentre M720q Tiny running Debian 13 or equivalent Linux mini-PC).
 2. **Read-Only Data Access**: Network shares are mounted in strict read-only
    mode (`ro`), preventing accidental document modification or data loss.
 3. **Deterministic Citations**: Answers are grounded directly in practice

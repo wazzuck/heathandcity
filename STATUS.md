@@ -220,6 +220,35 @@
       `is_connected: true`, and `GET /api/google/auth-url` returns a valid
       Google authorisation URL.
 
+33. Configured host Debian 13 (Trixie) environment for Practice Vault:
+    - Updated documentation (`docs/PRODUCT_SPECIFICATION.md`,
+      `practice-vault/README.md`, `practice-vault/scripts/setup_m720q.sh`) to
+      designate Debian 13 (Trixie) as the tested host Operating System (OS).
+    - Configured systemd logind and sleep drop-ins
+      (`/etc/systemd/logind.conf.d/zz-always-on.conf` and
+      `/etc/systemd/sleep.conf.d/zz-always-on.conf`) and masked sleep/suspend
+      targets to enforce always-on continuous operation without sleep or
+      hibernation.
+    - Preserved graphical login session (`graphical.target` via LightDM).
+    - Verified dynamic Central Processing Unit (CPU) scaling under Intel
+      Hardware P-States (HWP) and enabled dynamic boost: turbo boost
+      activates up to 3.4-3.7 GHz across all cores during vector embedding
+      and Artificial Intelligence (AI) inference, returning immediately to
+      sub-1.6 GHz power-efficient idle when waiting for requests.
+    - Fixed test isolation in `practice-vault/backend/app/google_sync.py` and
+      verified full unit test and acceptance criteria suites.
+
+34. Conducted full-repository API key and secret security audit:
+    - Scanned working tree, untracked files, and Git commit history across 13
+      secret regex classes (Google API keys, OAuth secrets, OpenAI, Anthropic,
+      AWS, GitHub tokens, Slack tokens, Stripe keys, and private key blocks).
+    - Neutralised legacy third-party Google Maps browser key embedded in the
+      Southgate Surgery offline restoration mock-up.
+    - Verified zero active API keys or credentials exist within the working
+      tree or repository.
+    - Verified that Google Workspace OAuth credentials remain strictly isolated
+      in external storage at ~/vunderland/keys/heathandcity.txt.
+
 ---
 
 ## 2. Next

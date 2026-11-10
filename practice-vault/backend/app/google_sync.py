@@ -71,7 +71,17 @@ class GoogleWorkspaceSyncService:
             "GOOGLE_CLIENT_SECRET"
         )
 
-        # Step 2: Check external key storage in ~/vunderland/keys/heathandcity.txt
+        # Step 2: Check persistent client_config_file.
+        if not client_id or not client_secret:
+            if self.client_config_file.exists():
+                try:
+                    data = json.loads(self.client_config_file.read_text(encoding="utf-8"))
+                    client_id = client_id or data.get("client_id")
+                    client_secret = client_secret or data.get("client_secret")
+                except Exception:
+                    pass
+
+        # Step 3: Check external key storage in ~/vunderland/keys/heathandcity.txt
         if not client_id or not client_secret:
             ext_key_file = Path.home() / "vunderland" / "keys" / "heathandcity.txt"
             if ext_key_file.exists():
@@ -88,16 +98,6 @@ class GoogleWorkspaceSyncService:
                                 client_id = v
                             elif k == "GOOGLE_CLIENT_SECRET" and not client_secret:
                                 client_secret = v
-                except Exception:
-                    pass
-
-        # Step 3: Check persistent client_config_file.
-        if not client_id or not client_secret:
-            if self.client_config_file.exists():
-                try:
-                    data = json.loads(self.client_config_file.read_text(encoding="utf-8"))
-                    client_id = client_id or data.get("client_id")
-                    client_secret = client_secret or data.get("client_secret")
                 except Exception:
                     pass
 

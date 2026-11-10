@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # Sovereign Practice Vault - Host Machine Setup Script for Lenovo ThinkCentre
-# Target OS: Ubuntu 24.04 LTS / Debian 12 (Headless)
+# Target OS: Debian 13 (Trixie) / Ubuntu 24.04 LTS (Headless or Desktop)
 # Language: British Professional English
 # ==============================================================================
 
@@ -11,7 +11,8 @@ echo ">>> [1/5] Verifying CPU AVX2 instruction support..."
 if grep -q "avx2" /proc/cpuinfo; then
   echo "    CPU AVX2 vector instructions verified."
 else
-  echo "    WARNING: AVX2 instructions not detected; model inference may degrade."
+  echo "    WARNING: AVX2 instructions not detected;"
+  echo "    model inference performance may degrade."
 fi
 
 echo ">>> [2/5] Installing core host packages and OCR utilities..."
