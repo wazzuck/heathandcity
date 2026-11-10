@@ -24,7 +24,7 @@ import {
   SITE_CONFIG,
   VERTICAL_DEMOS,
   PRICING_STEPS
-} from "./config.js?v=20261110c";
+} from "./config.js?v=20261110d";
 
 /**
  * Step 1: Define calculator multipliers for the Practice Recovery Estimator.
@@ -88,11 +88,20 @@ const CALCULATOR_PROFILES = Object.freeze({
       "Assumes automated chasing of missing client vouchers, faster " +
       "statutory cross-checks, and fewer deadline scrambles."
   },
-  creative: {
-    label: "Art Gallery / Creative Studio",
-    hourlyRateGbp: 180,
+  talent: {
+    label: "Author, Composer or Creative Talent",
+    hourlyRateGbp: 200,
     leakageFactor: 0.045,
     efficiencyGain: 0.72,
+    note:
+      "Assumes faster royalty statement reconciliations, automated tracking " +
+      "of residuals, and fewer missed delivery deadlines."
+  },
+  galleries: {
+    label: "Commercial Art Gallery or Dealer",
+    hourlyRateGbp: 240,
+    leakageFactor: 0.045,
+    efficiencyGain: 0.7,
     note:
       "Assumes faster consignment reconciliations, automated tracking of " +
       "provenance files, and fewer missed artist resale deadlines."
