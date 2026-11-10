@@ -1,0 +1,18 @@
+HEATH & CITY ACCOUNTANCY AND TAX PARTNERSHIP
+Corringham Road, Hampstead, London NW11
+Financial Audit Reference: FIN-2024-Q3
+Date: 30 September 2024
+
+PRACTICE FINANCIAL RECONCILIATION & UNDERWRITER LEAKAGE AUDIT
+
+1. Audit Objectives
+Independent reconciliation of gross billed fee notes against incoming underwriter remittances and commercial insurance broker commissions for the preceding two quarters.
+
+2. Identified Discrepancies and Fee Leakage
+During the Q2-Q3 audit period, gross invoiced disbursements totalled £84,250.00. However, banking remittances received through the BACS clearing system amounted to £78,400.00, revealing an unrecovered variance of £5,850.00.
+Specifically:
+- Policy Brokerage Ref BRK-9912: Commission underpayment of £2,100.00 due to misapplied tier deduction.
+- Medico-Legal Invoice #4401: Unsettled expert witness attendance fee of £3,750.00 overdue by 68 days.
+
+3. Corrective Recovery Action
+Formal recovery letters have been issued to the respective insurers. Practice clerks are instructed to withhold further statement clearance pending full settlement.
