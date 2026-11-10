@@ -43,14 +43,32 @@ const CALCULATOR_PROFILES = Object.freeze({
       "Assumes faster precedent searches and fewer disclosure checks done by " +
       "hand. Use your own hourly rate to refine the estimate."
   },
-  brokers: {
-    label: "Insurance / Stock Broker",
+  estate: {
+    label: "Prime Estate Agent / Surveyor",
+    hourlyRateGbp: 220,
+    leakageFactor: 0.045,
+    efficiencyGain: 0.7,
+    note:
+      "Assumes faster sales progression, fewer stalled solicitor replies, " +
+      "and automated tracking of anti-money laundering paperwork."
+  },
+  insurance: {
+    label: "Commercial Insurance Broker",
     hourlyRateGbp: 250,
     leakageFactor: 0.035,
     efficiencyGain: 0.72,
     note:
       "Assumes fewer missed renewals, fewer manual chasers, and less time " +
-      "spent forwarding Outlook threads and filing trade records."
+      "spent cross-checking underwriter policy wordings."
+  },
+  stockbrokers: {
+    label: "Stockbroker / Wealth Manager",
+    hourlyRateGbp: 350,
+    leakageFactor: 0.04,
+    efficiencyGain: 0.75,
+    note:
+      "Assumes instant contract note matching, zero custodian breaks, " +
+      "and early notification of corporate actions."
   },
   composers: {
     label: "Composer / Music Publisher",
@@ -262,7 +280,7 @@ function initRecoveryCalculator() {
   function updateCalculator() {
     const profile =
       CALCULATOR_PROFILES[verticalSelect.value] ||
-      CALCULATOR_PROFILES.brokers;
+      CALCULATOR_PROFILES.legal;
     const weeklyHours = Number(hoursInput.value) || 10;
     const annualRevenueMillions = Number(revenueInput.value) || 1.2;
 

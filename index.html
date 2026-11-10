@@ -539,19 +539,28 @@ INVARIANTS:
             type="button"
             role="tab"
             class="vertical-tab-btn"
-            data-vertical-tab="brokers"
+            data-vertical-tab="estate"
             aria-selected="false"
           >
-            Insurance &amp; Stock Brokers
+            Estate Agents
           </button>
           <button
             type="button"
             role="tab"
             class="vertical-tab-btn"
-            data-vertical-tab="composers"
+            data-vertical-tab="insurance"
             aria-selected="false"
           >
-            Composers &amp; Music
+            Insurance Brokers
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn"
+            data-vertical-tab="stockbrokers"
+            aria-selected="false"
+          >
+            Stockbrokers &amp; Wealth
           </button>
           <button
             type="button"
@@ -561,6 +570,15 @@ INVARIANTS:
             aria-selected="false"
           >
             Surgeons &amp; Consultants
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="vertical-tab-btn"
+            data-vertical-tab="composers"
+            aria-selected="false"
+          >
+            Composers &amp; Music
           </button>
         </div>
 
@@ -732,9 +750,11 @@ INVARIANTS:
               <label for="calc-vertical">Your practice:</label>
               <select id="calc-vertical">
                 <option value="legal">Barrister / King's Counsel</option>
-                <option value="brokers">Insurance / Stock Broker</option>
-                <option value="composers">Composer / Music Publisher</option>
+                <option value="estate">Prime Estate Agent / Surveyor</option>
+                <option value="insurance">Commercial Insurance Broker</option>
+                <option value="stockbrokers">Stockbroker / Wealth Manager</option>
                 <option value="medical">Surgeon / Consultant</option>
+                <option value="composers">Composer / Music Publisher</option>
               </select>
             </div>
 
@@ -1048,8 +1068,14 @@ INVARIANTS:
               <option value="Barristers: find old opinions and check disclosure">
                 Finding old opinions and checking disclosure
               </option>
-              <option value="Brokers: renewals, claims and trade records">
-                Renewals, claims and trade records
+              <option value="Estate agents: sales progression, AML and compliance">
+                Sales progression, AML and compliance
+              </option>
+              <option value="Insurance brokers: renewals, claims and endorsements">
+                Renewals, claims and endorsements
+              </option>
+              <option value="Stockbrokers: contract notes, corporate actions and cash">
+                Contract notes, corporate actions and cash
               </option>
               <option value="Composers: royalty statements and commission deadlines">
                 Royalty statements and commission deadlines

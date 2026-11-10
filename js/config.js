@@ -128,49 +128,142 @@ export const VERTICAL_DEMOS = Object.freeze({
       "The system finds and prepares; you decide."
   },
 
-  brokers: {
-    id: "brokers",
-    tabLabel: "Insurance & Stock Brokers",
-    badge: "BROKERAGE & TRADING PRACTICE · NW3 / NW8",
-    headline: "Insurance Brokers & Stock Brokers",
+  estate: {
+    id: "estate",
+    tabLabel: "Estate Agents",
+    badge: "PRIME RESIDENTIAL & COMMERCIAL · NW3 / NW8 / W1",
+    headline: "Prime Estate Agents & Property Advisors",
     summary:
-      "Renewals and trade records stay on schedule, and your team keeps " +
-      "working in Outlook as usual.",
+      "Accelerate sales progression, cross-check anti-money laundering " +
+      "paperwork, and keep tenancy compliance audits in order.",
     stats: [
-      { label: "Needs Reply Today", value: "4 Items", tone: "amber" },
-      { label: "Waiting on Underwriter", value: "7 Chasers", tone: "gold" },
-      { label: "Renewals in 30 Days", value: "Covered", tone: "emerald" }
+      { label: "Sales Progression Files", value: "24 Matters", tone: "gold" },
+      { label: "AML & Source of Funds Gaps", value: "3 Incomplete", tone: "amber" },
+      { label: "Tenancy Safety Certificates", value: "100% In Order", tone: "emerald" }
     ],
-    digestTime: "08:00 daily summary to you",
+    digestTime: "08:15 daily pipeline update · On-premises vault",
     queueItems: [
       {
-        priority: "RENEWAL · 6 DAYS",
-        client: "Commercial property client (illustrative)",
-        matter: "Policy renewal with the underwriter's amended wording",
-        status: "Wording received; two changed clauses flagged for you",
-        timer: "Renewal in 6 days",
-        sourceRef: "Outlook thread · Endorsement PDF, Clause 11.2"
+        priority: "SALES PROGRESSION CHASER",
+        client: "Hampstead Village detached residence (£4.2m, illustrative)",
+        matter: "Draft contract pack and management replies stalled with seller's solicitor",
+        status: "Enquiries unanswered for 11 days; polite escalation drafted for approval",
+        timer: "Stalled 11 days",
+        sourceRef: "Solicitor_Thread · Enquiries_List.pdf"
       },
       {
-        priority: "WAITING ON REPLY · 72 HOURS",
-        client: "Private client, fine art schedule (illustrative)",
-        matter: "Valuation needed before the policy can be bound",
-        status: "Polite chaser drafted for your approval",
-        timer: "Waiting 3 days",
-        sourceRef: "Attachment: Valuation_Schedule.pdf"
+        priority: "AML & SOURCE OF FUNDS",
+        client: "Purchaser, St John's Wood penthouse (illustrative)",
+        matter: "Anti-Money Laundering (AML) and source of wealth verification",
+        status: "Bank statement received; overseas trust deed still outstanding",
+        timer: "Deposit ready, awaiting deed",
+        sourceRef: "Client_AML_Checklist.xlsx"
       },
       {
-        priority: "RECORDS · COMPLETE",
-        client: "Trade confirmations for last week (illustrative)",
-        matter: "Contract notes matched and filed for retention",
-        status: "All trades matched; nothing missing",
-        timer: "Completed 08:14",
-        sourceRef: "Contract_Notes_Week_Example.csv"
+        priority: "TENANCY STATUTORY COMPLIANCE",
+        client: "Belsize Park portfolio (18 managed units, illustrative)",
+        matter: "Annual Gas Safety (CP12) and Electrical Installation (EICR) renewals",
+        status: "Two certificates expiring in 30 days; contractor booking emails drafted",
+        timer: "Expiring in 28 days",
+        sourceRef: "Tenancy_Compliance_Register.xlsx"
       }
     ],
     guarantee:
-      "We organise paperwork and prepare drafts. We do not give regulated " +
-      "advice, and no message leaves your office without your approval."
+      "We track compliance dates, summarise conveyancing correspondence, " +
+      "and draft chasers. We never communicate with buyers, vendors, or " +
+      "solicitors without your explicit instruction."
+  },
+
+  insurance: {
+    id: "insurance",
+    tabLabel: "Insurance Brokers",
+    badge: "COMMERCIAL & PRIVATE BROKERAGE · NW3 / EC3",
+    headline: "Commercial & Private Client Insurance Brokers",
+    summary:
+      "Track renewal dates 90 days out, catch changes in underwriter " +
+      "policy wording, and chase missing client schedules automatically.",
+    stats: [
+      { label: "Renewals Under Review", value: "12 Policies", tone: "gold" },
+      { label: "Wording Alterations Flagged", value: "2 Clauses", tone: "amber" },
+      { label: "Data Sent to Public Cloud", value: "None", tone: "emerald" }
+    ],
+    digestTime: "08:00 daily summary · Stays on your machine",
+    queueItems: [
+      {
+        priority: "RENEWAL · 6 DAYS",
+        client: "Commercial property portfolio (illustrative)",
+        matter: "Annual policy renewal with underwriter's amended wording",
+        status: "Wording received; two changed warranty clauses flagged for review",
+        timer: "Renewal in 6 days",
+        sourceRef: "Outlook thread · Endorsement PDF, Clause 14.2"
+      },
+      {
+        priority: "VALUATION CHASER",
+        client: "Private client, fine art schedule (illustrative)",
+        matter: "Independent valuation needed before Lloyd's syndicate binds risk",
+        status: "Polite chaser drafted for your approval to send to client PA",
+        timer: "Waiting 4 days",
+        sourceRef: "Attachment: Valuation_Schedule.pdf"
+      },
+      {
+        priority: "CLAIMS CORRESPONDENCE",
+        client: "Water ingress claim, Hampstead residential block (illustrative)",
+        matter: "Loss adjuster report cross-checked against original policy excess",
+        status: "Coverage confirmed; £250 excess verified against policy terms",
+        timer: "Reviewed 08:14 today",
+        sourceRef: "Loss_Adjuster_Report_Final.pdf · Page 4"
+      }
+    ],
+    guarantee:
+      "We organise paperwork, track renewal dates, and prepare draft " +
+      "chasers. We do not provide regulated insurance advice, and no " +
+      "message leaves your office without your approval."
+  },
+
+  stockbrokers: {
+    id: "stockbrokers",
+    tabLabel: "Stockbrokers & Wealth",
+    badge: "WEALTH MANAGEMENT & BROKING · THE CITY / MAYFAIR",
+    headline: "Stockbrokers, Investment Managers & Family Wealth",
+    summary:
+      "Contract notes matched against custodian feeds, corporate actions " +
+      "tracked, and cash reconciliations verified quietly on-site.",
+    stats: [
+      { label: "Contract Notes Matched", value: "142 Notes", tone: "gold" },
+      { label: "Custodian Breaks", value: "0 Breaks", tone: "emerald" },
+      { label: "Corporate Actions Approaching", value: "1 Action", tone: "amber" }
+    ],
+    digestTime: "07:45 morning reconciliation · Local installation",
+    queueItems: [
+      {
+        priority: "CONTRACT NOTE MATCHING",
+        client: "Institutional execution and custody feeds (illustrative)",
+        matter: "Previous business day equity and fixed-income settlement match",
+        status: "All 142 contract notes verified against custodian broker logs",
+        timer: "Completed 07:45 today",
+        sourceRef: "Custodian_Feed_Matched.csv"
+      },
+      {
+        priority: "CORPORATE ACTION · 48 HOURS",
+        client: "Discretionary portfolio holdings (illustrative)",
+        matter: "Rights issue election notification across 28 client sub-accounts",
+        status: "Summary memo prepared showing election options and client cash balances",
+        timer: "Election deadline in 2 days",
+        sourceRef: "Corporate_Action_Circular.pdf · Page 2"
+      },
+      {
+        priority: "SUITABILITY FILE CHECK",
+        client: "Mandate renewal: offshore trust account (illustrative)",
+        matter: "Annual risk profile and wealth verification review",
+        status: "All documentation complete; compliance sign-off pack drafted",
+        timer: "Waiting for partner review",
+        sourceRef: "Mandate_Annual_Review.docx"
+      }
+    ],
+    guarantee:
+      "Our software operates entirely within your walls on dedicated local " +
+      "hardware. We do not handle funds or give investment advice; the " +
+      "system automates documentation and reconciliation."
   },
 
   composers: {
