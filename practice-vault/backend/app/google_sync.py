@@ -88,24 +88,31 @@ class GoogleWorkspaceSyncService:
         Retrieve Google Client ID and Client Secret.
 
         Execution steps:
-          1. Step 1: Check environment variables (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET).
-          2. Step 2: Check external key file at ~/vunderland/keys/heathandcity.txt.
-          3. Step 3: Check fallback client_config_file if present.
+          1. Step 1: Check persistent client_config_file if present.
+          2. Step 2: Check environment variables or application settings.
+          3. Step 3: Check external key file at ~/vunderland/keys/heathandcity.txt.
         """
-        client_id = settings.google_client_id or os.environ.get("GOOGLE_CLIENT_ID")
-        client_secret = settings.google_client_secret or os.environ.get(
-            "GOOGLE_CLIENT_SECRET"
-        )
+        client_id = None
+        client_secret = None
 
-        # Step 2: Check persistent client_config_file.
+        # Step 1: Check persistent client_config_file.
+        if self.client_config_file.exists():
+            try:
+                data = json.loads(self.client_config_file.read_text(encoding="utf-8"))
+                client_id = data.get("client_id")
+                client_secret = data.get("client_secret")
+            except Exception:
+                pass
+
+        # Step 2: Check environment variables (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET).
         if not client_id or not client_secret:
-            if self.client_config_file.exists():
-                try:
-                    data = json.loads(self.client_config_file.read_text(encoding="utf-8"))
-                    client_id = client_id or data.get("client_id")
-                    client_secret = client_secret or data.get("client_secret")
-                except Exception:
-                    pass
+            client_id = client_id or (
+                settings.google_client_id or os.environ.get("GOOGLE_CLIENT_ID")
+            )
+            client_secret = client_secret or (
+                settings.google_client_secret
+                or os.environ.get("GOOGLE_CLIENT_SECRET")
+            )
 
         # Step 3: Check external key storage in ~/vunderland/keys/heathandcity.txt
         if not client_id or not client_secret:
