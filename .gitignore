@@ -160,6 +160,7 @@ env.bak/
 venv.bak/
 practice-vault/venv/
 practice-vault/data/lancedb/
+practice-vault/data/*.json
 
 # Spyder project settings
 .spyderproject

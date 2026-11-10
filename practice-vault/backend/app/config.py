@@ -17,6 +17,7 @@ Invariants:
 """
 
 from pathlib import Path
+from typing import Optional
 from pydantic import BaseModel, Field
 
 
@@ -89,6 +90,30 @@ class SystemSettings(BaseModel):
         default_factory=lambda: Path(__file__).resolve().parent.parent.parent
         / "frontend",
         description="Directory serving static frontend files.",
+    )
+    google_client_id: Optional[str] = Field(
+        default=None,
+        description="Google OAuth2 Client ID.",
+    )
+    google_client_secret: Optional[str] = Field(
+        default=None,
+        description="Google OAuth2 Client Secret.",
+    )
+    google_redirect_uri: str = Field(
+        default="http://127.0.0.1:8080/api/google/callback",
+        description="Authorised Google OAuth2 redirect URI.",
+    )
+    google_credentials_file: Path = Field(
+        default_factory=lambda: Path(__file__).resolve().parent.parent.parent
+        / "data"
+        / "google_credentials.json",
+        description="Local on-disk Google OAuth2 token storage.",
+    )
+    google_client_config_file: Path = Field(
+        default_factory=lambda: Path(__file__).resolve().parent.parent.parent
+        / "data"
+        / "google_client_config.json",
+        description="Local on-disk Google OAuth2 client secrets storage.",
     )
 
     def ensure_directories(self) -> None:
