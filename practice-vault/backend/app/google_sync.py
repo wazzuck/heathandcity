@@ -56,6 +56,32 @@ class GoogleWorkspaceSyncService:
         """Initialise configuration paths."""
         self.credentials_file = settings.google_credentials_file
         self.client_config_file = settings.google_client_config_file
+        self.sync_state_file = settings.data_dir / "google_sync_state.json"
+
+    def get_sync_state(self) -> Dict[str, Any]:
+        """Load persistent Google synchronization timestamps and statistics."""
+        if self.sync_state_file.exists():
+            try:
+                return json.loads(self.sync_state_file.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        return {
+            "last_doc_sync": None,
+            "last_gmail_sync": None,
+            "total_synced_docs": 0,
+            "auto_sync_enabled": True,
+            "poll_interval_seconds": 60,
+        }
+
+    def save_sync_state(self, state: Dict[str, Any]) -> None:
+        """Persist synchronization timestamps to disk."""
+        try:
+            self.sync_state_file.parent.mkdir(parents=True, exist_ok=True)
+            self.sync_state_file.write_text(
+                json.dumps(state, indent=2), encoding="utf-8"
+            )
+        except Exception:
+            pass
 
     def get_client_credentials(self) -> Tuple[Optional[str], Optional[str]]:
         """
@@ -334,6 +360,91 @@ class GoogleWorkspaceSyncService:
                     modified_at=modified_time,
                 )
                 chunks.append(chunk)
+
+        # Update persistent sync timestamp.
+        state = self.get_sync_state()
+        state["last_doc_sync"] = datetime.now(timezone.utc).isoformat()
+        state["total_synced_docs"] = state.get("total_synced_docs", 0) + len(chunks)
+        self.save_sync_state(state)
+
+        return chunks
+
+    def detect_and_sync_new_docs(self, max_files: int = 50) -> List[DocumentChunk]:
+        """
+        Detect and ingest newly added or modified Google Docs since last sync.
+
+        Execution steps:
+          1. Step 1: Read last_doc_sync timestamp from state.
+          2. Step 2: Build Drive query filtering by modifiedTime > last_sync.
+          3. Step 3: Fetch, export, and segment newly detected documents.
+          4. Step 4: Advance last_doc_sync timestamp to current UTC time.
+
+        Args:
+          max_files: Maximum new documents processed per cycle.
+
+        Returns:
+          List of DocumentChunk instances for newly added or modified docs.
+        """
+        token = self.get_token()
+        if not token or "access_token" not in token:
+            return []
+
+        state = self.get_sync_state()
+        last_sync = state.get("last_doc_sync")
+
+        # If no previous sync timestamp exists, fall back to initial sync.
+        if not last_sync:
+            return self.fetch_and_parse_google_docs(max_files=max_files)
+
+        headers = {"Authorization": f"Bearer {token['access_token']}"}
+        chunks: List[DocumentChunk] = []
+
+        query = (
+            f"mimeType='application/vnd.google-apps.document' and "
+            f"trashed=false and modifiedTime > '{last_sync}'"
+        )
+
+        with httpx.Client(timeout=40.0) as client:
+            list_res = client.get(
+                f"{self.DRIVE_API_BASE}/files?q={urllib.parse.quote(query)}"
+                f"&pageSize={max_files}&fields=files(id,name,modifiedTime)",
+                headers=headers,
+            )
+            if list_res.status_code != 200:
+                return []
+
+            files = list_res.json().get("files", [])
+            for f in files:
+                file_id = f.get("id")
+                file_name = f.get("name", "Untitled Doc")
+                modified_time = f.get("modifiedTime", datetime.now(timezone.utc).isoformat())
+
+                export_res = client.get(
+                    f"{self.DRIVE_API_BASE}/files/{file_id}/export?mimeType=text/plain",
+                    headers=headers,
+                )
+                if export_res.status_code != 200:
+                    continue
+
+                doc_text = export_res.text.strip()
+                if not doc_text:
+                    continue
+
+                chunk = DocumentChunk(
+                    chunk_id=f"gdoc#{file_id}#p1#c0",
+                    source_path=f"gdrive://{file_id}",
+                    file_name=f"Google Doc: {file_name}",
+                    page_number=1,
+                    section_heading=file_name,
+                    text=doc_text,
+                    modified_at=modified_time,
+                )
+                chunks.append(chunk)
+
+        # Advance state timestamp.
+        state["last_doc_sync"] = datetime.now(timezone.utc).isoformat()
+        state["total_synced_docs"] = state.get("total_synced_docs", 0) + len(chunks)
+        self.save_sync_state(state)
 
         return chunks
 

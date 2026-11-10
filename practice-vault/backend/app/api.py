@@ -27,6 +27,7 @@ from .google_sync import GoogleWorkspaceSyncService
 from .indexer import HybridIndexEngine
 from .ingest import DocumentIngestionPipeline
 from .rag import RAGEngine
+from .tracker import job_tracker, stats_service
 from .triage import InboxTriageEngine, TriageResult
 
 router = APIRouter(prefix="/api")
@@ -193,20 +194,58 @@ def triage_correspondence(payload: TriageRequest) -> Dict[str, Any]:
 @router.post("/ingest")
 def trigger_ingest(payload: IngestRequest) -> Dict[str, Any]:
     """
-    Ingest files from disk into vector and lexical indexes.
+    Ingest files from disk into vector and lexical indexes with job logging.
     """
     scan_dir = (
         settings.sample_docs_dir
         if payload.folder_path is None
         else settings.data_dir / payload.folder_path
     )
-    chunks = ingest_pipeline.scan_directory(scan_dir)
-    indexed_count = index_engine.index_chunks(chunks)
+    job = job_tracker.create_job(source_type="local_files", total_items=1)
+    try:
+        chunks = ingest_pipeline.scan_directory(scan_dir)
+        job.update_progress(
+            processed_items=len(chunks),
+            chunks_generated=len(chunks),
+            total_items=len(chunks) or 1,
+        )
+        indexed_count = index_engine.index_chunks(chunks)
+        job_tracker.finish_job(job.job_id, chunks_indexed=indexed_count)
+
+        # Recalculate repository statistics.
+        all_chunks = index_engine.get_all_chunks()
+        stats_service.calculate_statistics(all_chunks, index_engine.count())
+
+        return {
+            "status": "success",
+            "job_id": job.job_id,
+            "scan_directory": str(scan_dir),
+            "chunks_extracted": len(chunks),
+            "chunks_indexed": indexed_count,
+            "total_index_count": index_engine.count(),
+        }
+    except Exception as err:
+        job_tracker.fail_job(job.job_id, str(err))
+        raise HTTPException(status_code=500, detail=str(err))
+
+
+@router.get("/stats")
+def get_vault_statistics() -> Dict[str, Any]:
+    """
+    Return comprehensive metrics of all data volume tracked across the vault.
+    """
+    all_chunks = index_engine.get_all_chunks()
+    return stats_service.calculate_statistics(all_chunks, index_engine.count())
+
+
+@router.get("/jobs")
+def get_indexing_jobs() -> Dict[str, Any]:
+    """
+    Return active indexing jobs with ETA calculations and historical runs.
+    """
     return {
-        "scan_directory": str(scan_dir),
-        "chunks_extracted": len(chunks),
-        "chunks_indexed": indexed_count,
-        "total_index_count": index_engine.count(),
+        "active_jobs": job_tracker.get_active_jobs(),
+        "history": job_tracker.get_history(limit=15),
     }
 
 
@@ -270,16 +309,29 @@ def sync_gmail() -> Dict[str, Any]:
     """
     Synchronise recent emails from Gmail and index into practice vault.
     """
+    job = job_tracker.create_job(source_type="gmail", total_items=50)
     try:
         chunks = google_service.fetch_and_parse_gmails(max_messages=50)
+        job.update_progress(
+            processed_items=len(chunks),
+            chunks_generated=len(chunks),
+            total_items=len(chunks) or 1,
+        )
         indexed = index_engine.index_chunks(chunks)
+        job_tracker.finish_job(job.job_id, chunks_indexed=indexed)
+
+        all_chunks = index_engine.get_all_chunks()
+        stats_service.calculate_statistics(all_chunks, index_engine.count())
+
         return {
             "status": "success",
+            "job_id": job.job_id,
             "messages_fetched": len(chunks),
             "chunks_indexed": indexed,
             "total_vault_volume": index_engine.count(),
         }
     except Exception as err:
+        job_tracker.fail_job(job.job_id, str(err))
         raise HTTPException(status_code=500, detail=str(err))
 
 
@@ -288,14 +340,71 @@ def sync_google_docs() -> Dict[str, Any]:
     """
     Synchronise Google Docs from Google Drive and index into practice vault.
     """
+    job = job_tracker.create_job(source_type="google_docs", total_items=30)
     try:
         chunks = google_service.fetch_and_parse_google_docs(max_files=30)
+        job.update_progress(
+            processed_items=len(chunks),
+            chunks_generated=len(chunks),
+            total_items=len(chunks) or 1,
+        )
         indexed = index_engine.index_chunks(chunks)
+        job_tracker.finish_job(job.job_id, chunks_indexed=indexed)
+
+        all_chunks = index_engine.get_all_chunks()
+        stats_service.calculate_statistics(all_chunks, index_engine.count())
+
         return {
             "status": "success",
+            "job_id": job.job_id,
             "docs_fetched": len(chunks),
             "chunks_indexed": indexed,
             "total_vault_volume": index_engine.count(),
         }
     except Exception as err:
+        job_tracker.fail_job(job.job_id, str(err))
+        raise HTTPException(status_code=500, detail=str(err))
+
+
+@router.get("/google/sync-state")
+def get_google_sync_state() -> Dict[str, Any]:
+    """
+    Return incremental Google Docs synchronisation state and timestamps.
+    """
+    return google_service.get_sync_state()
+
+
+@router.post("/google/auto-sync")
+def trigger_google_auto_sync() -> Dict[str, Any]:
+    """
+    Detect newly added or modified Google Docs and automatically index them.
+    """
+    job = job_tracker.create_job(source_type="google_docs_incremental", total_items=10)
+    try:
+        new_chunks = google_service.detect_and_sync_new_docs(max_files=50)
+        indexed = 0
+        if new_chunks:
+            indexed = index_engine.index_chunks(new_chunks)
+            job.update_progress(
+                processed_items=len(new_chunks),
+                chunks_generated=len(new_chunks),
+                total_items=len(new_chunks),
+            )
+            job_tracker.finish_job(job.job_id, chunks_indexed=indexed)
+            all_chunks = index_engine.get_all_chunks()
+            stats_service.calculate_statistics(all_chunks, index_engine.count())
+        else:
+            job_tracker.finish_job(job.job_id, chunks_indexed=0)
+
+        state = google_service.get_sync_state()
+        return {
+            "status": "success",
+            "job_id": job.job_id,
+            "new_docs_detected": len(new_chunks),
+            "chunks_indexed": indexed,
+            "last_doc_sync": state.get("last_doc_sync"),
+            "total_vault_volume": index_engine.count(),
+        }
+    except Exception as err:
+        job_tracker.fail_job(job.job_id, str(err))
         raise HTTPException(status_code=500, detail=str(err))

@@ -94,10 +94,11 @@ practice-vault/
 │   │   ├── reranker.py       # Local cross-encoder neural reranking engine
 │   │   ├── rag.py            # FastEmbed and Ollama deterministic Q&A engine
 │   │   ├── triage.py         # Autonomous clerk triage & task extractor
+│   │   ├── tracker.py        # Run-time job tracking and volume statistics
 │   │   ├── mcp_server.py     # Model Context Protocol stdio & SSE service
-│   │   ├── google_sync.py    # Google Workspace OAuth2 read-only sync
+│   │   ├── google_sync.py    # Google Workspace OAuth2 and auto-sync watcher
 │   │   └── api.py            # FastAPI REST endpoints
-│   ├── main.py               # Uvicorn entrypoint (127.0.0.1:8080)
+│   ├── main.py               # Uvicorn entrypoint & background sync loop
 │   ├── requirements.txt      # Pinned dependency manifest
 │   └── tests/                # Automated pytest test suites
 ├── frontend/
@@ -159,6 +160,37 @@ specialised quantised Small Language Models (SLMs):
 3. Credentials reside in an external keys directory
    (`~/vunderland/keys/heathandcity.txt`) with octal `600` permissions,
    exported via `~/.bashrc`.
+
+### 4.6. Long-Run Indexing Job Tracking & Run-Time Estimation
+1. Large document corpus ingestions (thousands of briefs, discovery bundles,
+   or medical records) can span significant durations. The
+   `IndexingJobTracker` monitors real-time execution telemetry.
+2. Computes instantaneous and moving-average processing throughput
+   (`items_per_second`), total elapsed seconds, and dynamic Estimated
+   Time of Arrival (ETA) projections (`estimated_remaining_seconds`).
+3. Exposes live status updates and recent job history via Representational
+   State Transfer (REST) Application Programming Interface (API) endpoints
+   (`GET /api/jobs`) and visual dashboard progress components.
+
+### 4.7. Repository Volume Auditing & Data Statistics
+1. The `VaultStatisticsService` provides continuous auditing across the
+   hybrid LanceDB vector store and BM25 lexical index.
+2. Aggregates granular metrics: total unique source documents, chunk
+   counts, raw payload byte volume (and Megabytes [MB]), total parsed
+   words, and average word densities per chunk.
+3. Delivers hierarchical source-level breakdowns distinguishing local
+   network share archives, incoming client correspondence, Gmail messages,
+   and Google Docs.
+
+### 4.8. Continuous Google Docs Incremental Auto-Sync
+1. In addition to manual on-demand synchronisation, the appliance runs a
+   background asynchronous worker (`background_google_docs_watcher`)
+   polling Google Drive every 60 seconds.
+2. Queries the Google Drive API filtered by `modifiedTime > last_sync_time`
+   to detect newly added or edited Google Docs.
+3. Automatically extracts clean plain text, parses semantic chunks, and
+   indexes new content into LanceDB and BM25 without requiring partner
+   manual intervention or disruptive bulk re-indexing.
 
 ---
 

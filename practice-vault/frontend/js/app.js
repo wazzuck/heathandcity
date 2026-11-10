@@ -13,6 +13,15 @@ document.addEventListener("DOMContentLoaded", () => {
   initGoogleWorkspace();
   pollStatus();
   loadTasks();
+  pollStatistics();
+  pollJobs();
+  pollGoogleSyncState();
+
+  // Polling intervals for real-time status and telemetry.
+  setInterval(pollStatus, 5000);
+  setInterval(pollJobs, 2000);
+  setInterval(pollStatistics, 5000);
+  setInterval(pollGoogleSyncState, 5000);
 });
 
 /**
@@ -280,6 +289,150 @@ async function pollStatus() {
 }
 
 /**
+ * Format duration in seconds into human-readable British English string.
+ */
+function formatSeconds(sec) {
+  if (sec === null || sec === undefined || isNaN(sec)) return "Calculating...";
+  const s = Math.round(sec);
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  return `${m}m ${rem}s`;
+}
+
+/**
+ * Poll indexing jobs and update runtime progress and ETA metrics.
+ */
+async function pollJobs() {
+  const badge = document.getElementById("job-status-badge");
+  const container = document.getElementById("active-job-container");
+  const descEl = document.getElementById("active-job-desc");
+  const percentEl = document.getElementById("active-job-percent");
+  const fillEl = document.getElementById("active-job-progress-fill");
+  const currentLabelEl = document.getElementById("active-job-current-label");
+  const processedEl = document.getElementById("job-processed-metric");
+  const elapsedEl = document.getElementById("job-elapsed-metric");
+  const remainingEl = document.getElementById("job-remaining-metric");
+  const throughputEl = document.getElementById("job-throughput-metric");
+  const recentContainer = document.getElementById("recent-jobs-container");
+
+  try {
+    const res = await fetch("/api/jobs");
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const job = data.active_job;
+    if (job) {
+      if (badge) {
+        badge.textContent = `Status: In Progress (${job.status})`;
+        badge.style.color = "var(--gold-accent)";
+      }
+      if (container) container.style.display = "block";
+      if (descEl) descEl.textContent = job.description || "Indexing practice records...";
+      if (percentEl) percentEl.textContent = `${job.percent_complete}%`;
+      if (fillEl) fillEl.style.width = `${job.percent_complete}%`;
+      if (currentLabelEl) {
+        currentLabelEl.textContent = job.current_item_label
+          ? `Current: ${job.current_item_label}`
+          : "Processing records...";
+      }
+      if (processedEl) processedEl.textContent = `${job.processed_items} / ${job.total_items}`;
+      if (elapsedEl) elapsedEl.textContent = formatSeconds(job.elapsed_seconds);
+      if (remainingEl) remainingEl.textContent = formatSeconds(job.estimated_remaining_seconds);
+      if (throughputEl) throughputEl.textContent = `${job.items_per_second.toFixed(2)} items/s`;
+    } else {
+      if (badge) {
+        badge.textContent = "Status: Idle";
+        badge.style.color = "var(--text-muted)";
+      }
+      if (container) container.style.display = "none";
+    }
+
+    if (recentContainer && Array.isArray(data.recent_jobs)) {
+      if (data.recent_jobs.length === 0) {
+        recentContainer.innerHTML = "<p class='empty-state' style='padding: 0.5rem;'>No recent indexing jobs recorded.</p>";
+      } else {
+        recentContainer.innerHTML = data.recent_jobs.map((rj) => {
+          const finishedAt = rj.finished_at ? new Date(rj.finished_at * 1000).toLocaleTimeString() : "--";
+          const dur = rj.elapsed_seconds ? `${rj.elapsed_seconds.toFixed(1)}s` : "--";
+          const statusCol = rj.status === "completed" ? "var(--status-green)" : "var(--status-red)";
+          return `<div style="padding: 0.25rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between;">
+            <span>[${escapeHtml(rj.job_type)}] ${escapeHtml(rj.description)} &mdash; ${rj.processed_items} items (${dur})</span>
+            <span style="color: ${statusCol}; font-weight: 600;">${rj.status} at ${finishedAt}</span>
+          </div>`;
+        }).join("");
+      }
+    }
+  } catch (err) {
+    // Graceful error silence for background polling.
+  }
+}
+
+/**
+ * Poll practice repository volume and data statistics.
+ */
+async function pollStatistics() {
+  const totalDocsEl = document.getElementById("stats-total-docs");
+  const totalChunksEl = document.getElementById("stats-total-chunks");
+  const totalVolEl = document.getElementById("stats-total-volume");
+  const totalWordsEl = document.getElementById("stats-total-words");
+  const tableBody = document.getElementById("stats-sources-body");
+
+  try {
+    const res = await fetch("/api/stats");
+    if (!res.ok) return;
+    const stats = await res.json();
+
+    if (totalDocsEl) totalDocsEl.textContent = stats.total_documents.toLocaleString();
+    if (totalChunksEl) totalChunksEl.textContent = stats.total_chunks.toLocaleString();
+    if (totalVolEl) totalVolEl.textContent = `${stats.total_megabytes.toFixed(2)} MB`;
+    if (totalWordsEl) totalWordsEl.textContent = stats.total_words.toLocaleString();
+
+    if (tableBody) {
+      const sources = Object.entries(stats.sources_breakdown || {});
+      if (sources.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No documents indexed yet.</td></tr>`;
+      } else {
+        tableBody.innerHTML = sources.map(([sourceName, s]) => {
+          return `<tr>
+            <td style="color: var(--text-main); font-weight: 500;">${escapeHtml(sourceName)}</td>
+            <td>${s.documents.toLocaleString()}</td>
+            <td>${s.chunks.toLocaleString()}</td>
+            <td>${s.megabytes.toFixed(3)} MB</td>
+            <td>${s.words.toLocaleString()}</td>
+          </tr>`;
+        }).join("");
+      }
+    }
+  } catch (err) {
+    // Graceful error silence for background polling.
+  }
+}
+
+/**
+ * Poll Google Workspace auto-sync status state.
+ */
+async function pollGoogleSyncState() {
+  const statusEl = document.getElementById("auto-sync-status-details");
+  if (!statusEl) return;
+
+  try {
+    const res = await fetch("/api/google/sync-state");
+    if (!res.ok) return;
+    const state = await res.json();
+
+    if (state.last_synced_iso) {
+      const dt = new Date(state.last_synced_iso);
+      statusEl.textContent = `Last check: ${dt.toLocaleTimeString()} (${state.tracked_google_docs_count} docs registered, poll interval: ${state.poll_interval_seconds}s)`;
+    } else {
+      statusEl.textContent = `Auto-sync active (${state.poll_interval_seconds}s interval). Awaiting initial sync run.`;
+    }
+  } catch (err) {
+    // Graceful error silence for background polling.
+  }
+}
+
+/**
  * Configure Google Workspace OAuth2 login, token state, and synchronization.
  */
 function initGoogleWorkspace() {
@@ -453,6 +606,41 @@ function initGoogleWorkspace() {
         feedback.innerHTML = `<div class="log-box" style="color: var(--status-red);">[ERROR] ${err.message}</div>`;
       } finally {
         btnSyncDocs.disabled = false;
+      }
+    });
+  }
+
+  // Incremental Auto-Sync Trigger Now.
+  const btnAutoSyncNow = document.getElementById("btn-auto-sync-now");
+  if (btnAutoSyncNow) {
+    btnAutoSyncNow.addEventListener("click", async () => {
+      btnAutoSyncNow.disabled = true;
+      feedback.style.display = "block";
+      feedback.innerHTML = "<p class='stat-badge'>Checking Google Drive for newly added or modified documents...</p>";
+
+      try {
+        const res = await fetch("/api/google/auto-sync", { method: "POST" });
+        const data = await res.json();
+
+        if (res.ok) {
+          feedback.innerHTML = `
+            <div class="log-box" style="border-left: 3px solid var(--status-green);">
+              [SUCCESS] Incremental Check Complete.
+              ${data.message}
+              Newly indexed chunks: ${data.new_chunks_indexed}
+              Total vault volume: ${data.total_vault_volume} chunks.
+            </div>
+          `;
+          await pollGoogleSyncState();
+          await pollStatistics();
+          await pollStatus();
+        } else {
+          feedback.innerHTML = `<div class="log-box" style="color: var(--status-red);">[ERROR] ${data.detail || "Auto-sync check failed"}</div>`;
+        }
+      } catch (err) {
+        feedback.innerHTML = `<div class="log-box" style="color: var(--status-red);">[ERROR] ${err.message}</div>`;
+      } finally {
+        btnAutoSyncNow.disabled = false;
       }
     });
   }
