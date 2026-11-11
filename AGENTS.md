@@ -265,6 +265,22 @@ only; two uncommitted edits to one file can still lose one of them.
       British Professional English spelling, grammar, and idioms at all
       times without exception.
 
+16. **Mandatory offline counterpart for all system improvements.**
+    - Whenever an enhancement, capability, intelligence builder or feature
+      is found (including capabilities that leverage online tools, web
+      research or external APIs), an offline implementation must also be
+      found, architected, implemented, and rigorously tested.
+    - The appliance must remain 100% operational, self-contained, and
+      capable of fulfilling its intelligence functions in a completely
+      air-gapped, offline environment.
+    - Any external web intelligence gathered during research or enrichment
+      must be crystallised and persisted into local offline storage (e.g.
+      SQLite fact stores, episodic databases or vector indices) so
+      subsequent operations execute deterministically without live internet
+      connectivity.
+    - Verify that both the online enrichment pipeline and the sovereign
+      offline counterpart pass all regression tests and verification gates.
+
 ---
 
 ## 5. Definition of done
