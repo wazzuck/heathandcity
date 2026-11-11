@@ -44,6 +44,22 @@ from .config import settings
 from .ingest import DocumentChunk
 from .reranker import NeuralReranker
 
+# Curated practice vocabulary synonyms for lexical query expansion.
+PRACTICE_SYNONYMS: Dict[str, List[str]] = {
+    "fee": ["fee", "rate", "tariff", "retainer", "remuneration", "charge"],
+    "rate": ["rate", "fee", "tariff", "hourly"],
+    "agreement": ["agreement", "contract", "retainer", "terms", "settlement"],
+    "contract": ["contract", "agreement", "retainer", "terms"],
+    "settlement": ["settlement", "compromise", "consent order", "resolution"],
+    "invoice": ["invoice", "bill", "fee note", "receipt", "payment"],
+    "lawyer": ["counsel", "barrister", "solicitor", "advocate"],
+    "counsel": ["counsel", "barrister", "advocate", "silk"],
+    "purchase": ["purchase", "order", "receipt", "invoice", "payment", "buy"],
+    "bought": ["bought", "purchase", "purchased", "order", "receipt"],
+    "spend": ["spend", "spent", "expenditure", "cost", "total"],
+    "spent": ["spent", "spend", "expenditure", "cost", "total"],
+}
+
 
 class HybridIndexEngine:
     """
@@ -361,7 +377,16 @@ class HybridIndexEngine:
                     w for w in re.findall(r"\w+", query) if len(w) > 1
                 ]
                 if clean_words:
-                    match_expr = " OR ".join(f'"{w}"*' for w in clean_words)
+                    expanded_clauses = []
+                    for w in clean_words:
+                        w_lower = w.lower()
+                        if w_lower in PRACTICE_SYNONYMS:
+                            syns = PRACTICE_SYNONYMS[w_lower]
+                            sub = " OR ".join(f'"{s}"*' for s in syns[:4])
+                            expanded_clauses.append(f"({sub})")
+                        else:
+                            expanded_clauses.append(f'"{w}"*')
+                    match_expr = " OR ".join(expanded_clauses)
                     cur = self._fts_conn.execute(
                         "SELECT chunk_id, source_path, file_name, "
                         "page_number, section_heading, text, modified_at, "

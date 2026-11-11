@@ -27,7 +27,9 @@
 
   <nav class="vault-nav">
     <button class="nav-btn active" data-tab="tab-search">Document Intelligence</button>
-    <button class="nav-btn" data-tab="tab-clerk">Practice Clerk &amp; Triage</button>
+    <button class="nav-btn" data-tab="tab-audio">Audio Dictation &amp; Diarisation</button>
+    <button class="nav-btn" data-tab="tab-ledger">Expenditure &amp; Ledger Audit</button>
+    <button class="nav-btn" data-tab="tab-clerk">Correspondence Triage</button>
     <button class="nav-btn" data-tab="tab-archive">Archive Status &amp; Ingestion</button>
     <button class="nav-btn" data-tab="tab-google" id="nav-btn-google">Google Login &amp; Workspace</button>
   </nav>
@@ -55,7 +57,12 @@
       </div>
 
       <div id="answer-container" class="answer-container" style="display: none;">
-        <h3 class="subheading">Deterministic Finding</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 class="subheading" style="margin-bottom: 0;">Deterministic Finding</h3>
+          <button type="button" class="btn-secondary" id="btn-copy-answer" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
+            Copy Finding &amp; Citations
+          </button>
+        </div>
         <div id="answer-text" class="answer-box"></div>
         <h4 class="citations-title">Verified Source Citations</h4>
         <div id="citations-list" class="citations-list"></div>
@@ -64,6 +71,191 @@
       <div id="search-results-container" class="search-results-container" style="display: none;">
         <h3 class="subheading">Hybrid Retrieval Results</h3>
         <div id="results-list" class="results-list"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Audio Dictation & Speaker Diarisation -->
+    <section id="tab-audio" class="tab-pane">
+      <div class="panel-box">
+        <h2 class="panel-title">Audio Dictation, Speaker Diarisation &amp; Conference Intake</h2>
+        <p class="panel-description">
+          On-premises voice transcription and multi-party speaker turn detection for client conferences,
+          medical consultations, and partner telephone dictations. Runs 100% on local CPU.
+        </p>
+
+        <!-- Statutory Legal Advisory Notice -->
+        <div style="background-color: rgba(197, 160, 89, 0.08); border-left: 3px solid var(--gold-accent); padding: 0.85rem 1rem; border-radius: 4px; margin-bottom: 1.25rem;">
+          <strong style="color: var(--gold-accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">
+            Investigatory Powers Act 2016 &amp; UK GDPR Advisory Notice
+          </strong>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem;">
+            Ensure all participants have consented to recording prior to capturing multi-party calls.
+            Transcripts are held strictly in on-premises external storage under Legal Professional Privilege
+            and Caldicott Principles. Zero cloud audio egress.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+          <!-- Live Microphone Recording Card -->
+          <div style="background-color: var(--bg-card); padding: 1.25rem; border: 1px solid var(--border-subtle); border-radius: 4px;">
+            <h3 class="subheading" style="font-size: 1rem;">Live Microphone Dictation</h3>
+            <p class="panel-description" style="font-size: 0.82rem;">
+              Capture counsel consultations or clinic notes directly from your browser microphone.
+            </p>
+            <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 1rem;">
+              <button type="button" class="btn-primary" id="btn-record-mic">
+                Start Dictation
+              </button>
+              <button type="button" class="btn-secondary" id="btn-stop-mic" style="display: none; background-color: var(--status-red); border-color: var(--status-red); color: white;">
+                Stop Recording
+              </button>
+              <span id="recording-indicator" style="display: none; color: var(--status-red); font-size: 0.85rem; font-weight: 600;">
+                &bull; Recording Live... (<span id="record-timer">00:00</span>)
+              </span>
+            </div>
+          </div>
+
+          <!-- Audio File Upload Card -->
+          <div style="background-color: var(--bg-card); padding: 1.25rem; border: 1px solid var(--border-subtle); border-radius: 4px;">
+            <h3 class="subheading" style="font-size: 1rem;">Upload Audio Recording</h3>
+            <p class="panel-description" style="font-size: 0.82rem;">
+              Upload recorded client calls, court hearings, or dictations (WAV, MP3, M4A, WEBM, OGG).
+            </p>
+            <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+              <input type="file" id="audio-file-input" accept="audio/*" class="input-field" style="padding: 0.4rem;">
+              <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <label for="audio-speakers-select" style="font-size: 0.82rem; color: var(--text-muted);">Max Participants:</label>
+                <select id="audio-speakers-select" class="input-field" style="width: auto; padding: 0.35rem 0.5rem;">
+                  <option value="2">2 Participants</option>
+                  <option value="3">3 Participants</option>
+                  <option value="4" selected>4 Participants</option>
+                  <option value="6">6 Participants</option>
+                </select>
+                <button type="button" class="btn-primary" id="btn-transcribe-file">
+                  Transcribe &amp; Diarise
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="audio-progress-banner" style="display: none; margin-top: 1rem; background-color: var(--bg-card); padding: 1rem; border: 1px solid var(--border-subtle); border-radius: 4px;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="status-dot healthy" style="background-color: var(--gold-accent);"></span>
+            <span id="audio-progress-text" style="font-size: 0.9rem; font-weight: 600;">Processing speech on local CPU...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diarised Transcript & Person Tagging Container -->
+      <div id="transcript-container" class="panel-box mt-4" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <h3 class="subheading" style="margin-bottom: 0;">Attributed Speech Turns &amp; Person Tagging</h3>
+          <div style="display: flex; gap: 0.5rem;">
+            <button type="button" class="btn-secondary" id="btn-copy-transcript">Copy Transcript</button>
+            <button type="button" class="btn-primary" id="btn-generate-note">Generate Chambers Note</button>
+          </div>
+        </div>
+
+        <!-- Person Tagging Configuration -->
+        <div style="background-color: var(--bg-primary); padding: 1rem; border: 1px solid var(--border-subtle); border-radius: 4px; margin-top: 1rem;">
+          <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--gold-accent); margin-bottom: 0.5rem;">
+            Assign Participant Names &amp; Roles
+          </h4>
+          <div id="speaker-tag-fields" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem;">
+            <!-- Populated dynamically with inputs for Speaker 1, Speaker 2... -->
+          </div>
+          <button type="button" class="btn-secondary mt-3" id="btn-apply-tags" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+            Apply Person Tags
+          </button>
+        </div>
+
+        <!-- Speech Turns Feed -->
+        <div id="speech-turns-feed" class="mt-3" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; padding-right: 0.5rem;">
+          <!-- Turns populated dynamically -->
+        </div>
+
+        <!-- Attendance Note Synthesis Preview -->
+        <div id="attendance-note-box" style="display: none; margin-top: 1.5rem; background-color: var(--bg-primary); border: 1px solid var(--gold-accent); border-radius: 4px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <h4 style="color: var(--gold-accent); margin-bottom: 0;">Formal Chambers Attendance Note</h4>
+            <div style="display: flex; gap: 0.5rem;">
+              <button type="button" class="btn-secondary" id="btn-copy-note" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">Copy Note</button>
+              <button type="button" class="btn-primary" id="btn-index-note" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">Index into Practice Vault</button>
+            </div>
+          </div>
+          <pre id="attendance-note-text" style="white-space: pre-wrap; font-family: var(--font-serif); font-size: 0.9rem; line-height: 1.6; color: var(--text-main);"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Expenditure & Ledger Audit (Path B Deterministic Engine) -->
+    <section id="tab-ledger" class="tab-pane">
+      <div class="panel-box">
+        <h2 class="panel-title">Expenditure &amp; Transaction Ledger Audit</h2>
+        <p class="panel-description">
+          Deterministic financial ledger extracted from practice emails and invoices.
+          Zero arithmetic hallucination. Instant SQL-verified accounting audit trails.
+        </p>
+
+        <!-- KPI Metrics Grid -->
+        <div class="stats-summary-grid mt-3">
+          <div class="summary-card">
+            <div class="stat-number" id="ledger-total-spend">£--</div>
+            <div class="stat-label">Cumulative Expenditure</div>
+          </div>
+          <div class="summary-card">
+            <div class="stat-number" id="ledger-total-orders">--</div>
+            <div class="stat-label">Identified Purchases</div>
+          </div>
+          <div class="summary-card">
+            <div class="stat-number" id="ledger-year-spend" style="font-size: 1.5rem;">£--</div>
+            <div class="stat-label" id="ledger-year-label">Current Year Spend</div>
+          </div>
+          <div class="summary-card">
+            <div class="stat-number" id="ledger-top-merchant" style="font-size: 1.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">--</div>
+            <div class="stat-label">Top Counterparty</div>
+          </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem;">
+          <div id="ledger-year-pills" style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+            <button type="button" class="btn-secondary active-pill" data-year="">All Years</button>
+            <button type="button" class="btn-secondary" data-year="2026">2026</button>
+            <button type="button" class="btn-secondary" data-year="2025">2025</button>
+            <button type="button" class="btn-secondary" data-year="2024">2024</button>
+            <button type="button" class="btn-secondary" data-year="2023">2023</button>
+            <button type="button" class="btn-secondary" data-year="2022">2022</button>
+            <button type="button" class="btn-secondary" data-year="2021">2021</button>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input type="text" id="ledger-search-input" class="input-field" placeholder="Search merchant / item..." style="width: 220px; padding: 0.4rem 0.6rem;">
+            <button type="button" class="btn-secondary" id="btn-export-csv">Export Audit (CSV)</button>
+          </div>
+        </div>
+
+        <!-- Ledger Table -->
+        <div style="overflow-x: auto; margin-top: 1rem;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Counterparty / Vendor</th>
+                <th>Item / Description</th>
+                <th style="text-align: right;">Amount</th>
+                <th>Citation Reference</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-table-body">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-muted); font-family: var(--font-serif);">
+                  Loading deterministic transaction records...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 

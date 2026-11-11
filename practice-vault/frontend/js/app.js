@@ -8,6 +8,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
   initSearch();
+  initAudioDictation();
+  initTransactionLedger();
   initTriage();
   initArchive();
   initGoogleWorkspace();
@@ -100,6 +102,24 @@ function initSearch() {
       answerText.textContent = `Error querying practice vault: ${err.message}`;
     }
   });
+
+  const btnCopyAnswer = document.getElementById("btn-copy-answer");
+  if (btnCopyAnswer) {
+    btnCopyAnswer.addEventListener("click", () => {
+      let copyText = answerText.textContent + "\n\n---\nVerified Citations:\n";
+      const cards = citationsList.querySelectorAll(".citation-card");
+      cards.forEach((c) => {
+        copyText += c.textContent.trim() + "\n";
+      });
+      navigator.clipboard.writeText(copyText).then(() => {
+        const orig = btnCopyAnswer.textContent;
+        btnCopyAnswer.textContent = "Copied to Clipboard!";
+        setTimeout(() => {
+          btnCopyAnswer.textContent = orig;
+        }, 2000);
+      });
+    });
+  }
 
   btnSearchOnly.addEventListener("click", async () => {
     const query = queryInput.value.trim();
@@ -646,6 +666,425 @@ function initGoogleWorkspace() {
   }
 
   refreshGoogleStatus();
+}
+
+/**
+ * Configure Sovereign Audio Dictation, Speaker Diarisation, and Tagging.
+ */
+function initAudioDictation() {
+  const btnRecordMic = document.getElementById("btn-record-mic");
+  const btnStopMic = document.getElementById("btn-stop-mic");
+  const recordingIndicator = document.getElementById("recording-indicator");
+  const recordTimer = document.getElementById("record-timer");
+  const audioFileInput = document.getElementById("audio-file-input");
+  const btnTranscribeFile = document.getElementById("btn-transcribe-file");
+  const audioSpeakersSelect = document.getElementById("audio-speakers-select");
+  const audioProgress = document.getElementById("audio-progress-banner");
+  const transcriptContainer = document.getElementById("transcript-container");
+  const speakerTagFields = document.getElementById("speaker-tag-fields");
+  const speechTurnsFeed = document.getElementById("speech-turns-feed");
+  const btnApplyTags = document.getElementById("btn-apply-tags");
+  const btnGenerateNote = document.getElementById("btn-generate-note");
+  const attendanceNoteBox = document.getElementById("attendance-note-box");
+  const attendanceNoteText = document.getElementById("attendance-note-text");
+  const btnCopyTranscript = document.getElementById("btn-copy-transcript");
+  const btnCopyNote = document.getElementById("btn-copy-note");
+  const btnIndexNote = document.getElementById("btn-index-note");
+
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let timerInterval = null;
+  let timerSeconds = 0;
+  let currentDictation = null;
+
+  // Live Microphone Dictation.
+  if (btnRecordMic && btnStopMic) {
+    btnRecordMic.addEventListener("click", async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) audioChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+          stream.getTracks().forEach((track) => track.stop());
+          const blob = new Blob(audioChunks, { type: "audio/webm" });
+          const file = new File([blob], "mic_dictation.webm", { type: "audio/webm" });
+          await uploadAndTranscribe(file, parseInt(audioSpeakersSelect.value || "2", 10));
+        };
+
+        mediaRecorder.start();
+        btnRecordMic.style.display = "none";
+        btnStopMic.style.display = "inline-block";
+        recordingIndicator.style.display = "inline-block";
+
+        timerSeconds = 0;
+        recordTimer.textContent = "00:00";
+        timerInterval = setInterval(() => {
+          timerSeconds += 1;
+          const m = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
+          const s = String(timerSeconds % 60).padStart(2, "0");
+          recordTimer.textContent = `${m}:${s}`;
+        }, 1000);
+      } catch (err) {
+        alert("Microphone access failed: " + err.message);
+      }
+    });
+
+    btnStopMic.addEventListener("click", () => {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+      }
+      clearInterval(timerInterval);
+      btnRecordMic.style.display = "inline-block";
+      btnStopMic.style.display = "none";
+      recordingIndicator.style.display = "none";
+    });
+  }
+
+  // Audio File Upload Transcription.
+  if (btnTranscribeFile && audioFileInput) {
+    btnTranscribeFile.addEventListener("click", async () => {
+      const file = audioFileInput.files[0];
+      if (!file) {
+        alert("Please select an audio file (WAV, MP3, M4A, WEBM) first.");
+        return;
+      }
+      const maxSpeakers = parseInt(audioSpeakersSelect.value || "4", 10);
+      await uploadAndTranscribe(file, maxSpeakers);
+    });
+  }
+
+  async function uploadAndTranscribe(file, maxSpeakers) {
+    audioProgress.style.display = "block";
+    transcriptContainer.style.display = "none";
+    attendanceNoteBox.style.display = "none";
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("max_speakers", maxSpeakers);
+
+    try {
+      const res = await fetch("/api/audio/transcribe", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Transcription failed");
+
+      currentDictation = data;
+      renderTranscriptData(data);
+    } catch (err) {
+      alert("Transcription error: " + err.message);
+    } finally {
+      audioProgress.style.display = "none";
+    }
+  }
+
+  function renderTranscriptData(data) {
+    transcriptContainer.style.display = "block";
+    speakerTagFields.innerHTML = "";
+    speechTurnsFeed.innerHTML = "";
+
+    // Render Speaker Tagging Fields.
+    const speakers = data.speakers_detected || ["Speaker 1"];
+    speakers.forEach((spk) => {
+      const fieldCard = document.createElement("div");
+      fieldCard.style.cssText = "background: var(--bg-card); padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);";
+      fieldCard.innerHTML = `
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--gold-accent); margin-bottom: 0.35rem;">${escapeHtml(spk)}</div>
+        <input type="text" class="input-field tag-name-input" data-speaker="${escapeHtml(spk)}" placeholder="Full Name (e.g. William McAdam)" style="padding: 0.35rem 0.5rem; font-size: 0.8rem; margin-bottom: 0.3rem;">
+        <input type="text" class="input-field tag-role-input" data-speaker="${escapeHtml(spk)}" placeholder="Role (e.g. Counsel / Solicitor)" style="padding: 0.35rem 0.5rem; font-size: 0.8rem;">
+      `;
+      speakerTagFields.appendChild(fieldCard);
+    });
+
+    // Render Speech Turns Feed.
+    renderSpeechTurns(data.speech_turns || []);
+  }
+
+  function renderSpeechTurns(turns) {
+    speechTurnsFeed.innerHTML = "";
+    if (turns.length === 0) {
+      speechTurnsFeed.innerHTML = "<p class='empty-state'>No speech segments detected in this recording.</p>";
+      return;
+    }
+
+    turns.forEach((t) => {
+      const card = document.createElement("div");
+      card.style.cssText = "background: var(--bg-card); padding: 0.75rem 1rem; border-radius: 4px; border-left: 3px solid var(--gold-accent);";
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.35rem;">
+          <strong style="color: var(--gold-hover);">${escapeHtml(t.speaker_name || t.speaker_id)} <span style="color: var(--text-muted); font-weight: normal;">(${escapeHtml(t.speaker_role || 'Participant')})</span></strong>
+          <span class="stat-badge" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;">${escapeHtml(t.timestamp_display)}</span>
+        </div>
+        <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-main); margin-bottom: 0;">${escapeHtml(t.text)}</p>
+      `;
+      speechTurnsFeed.appendChild(card);
+    });
+  }
+
+  // Apply Person Tags Handler.
+  if (btnApplyTags) {
+    btnApplyTags.addEventListener("click", async () => {
+      if (!currentDictation) return;
+
+      const mapping = {};
+      const nameInputs = speakerTagFields.querySelectorAll(".tag-name-input");
+      nameInputs.forEach((input) => {
+        const spk = input.getAttribute("data-speaker");
+        const nameVal = input.value.trim();
+        const roleInput = speakerTagFields.querySelector(`.tag-role-input[data-speaker="${spk}"]`);
+        const roleVal = roleInput ? roleInput.value.trim() : "Participant";
+        if (nameVal) {
+          mapping[spk] = { name: nameVal, role: roleVal || "Participant" };
+        }
+      });
+
+      if (Object.keys(mapping).length === 0) {
+        alert("Please enter at least one participant name.");
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/audio/tag", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dictation_id: currentDictation.dictation_id,
+            tags: mapping,
+          }),
+        });
+        const updated = await res.json();
+        if (!res.ok) throw new Error(updated.detail || "Tagging failed");
+
+        currentDictation = updated;
+        renderSpeechTurns(updated.speech_turns || []);
+        alert("Person tags successfully applied!");
+      } catch (err) {
+        alert("Error applying tags: " + err.message);
+      }
+    });
+  }
+
+  // Generate Chambers Note Handler.
+  if (btnGenerateNote) {
+    btnGenerateNote.addEventListener("click", async () => {
+      if (!currentDictation) return;
+      const title = prompt("Enter Matter or Conference Title:", "Client Conference") || "Client Conference";
+
+      try {
+        const res = await fetch("/api/audio/attendance-note", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dictation_id: currentDictation.dictation_id,
+            matter_title: title,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Note generation failed");
+
+        attendanceNoteBox.style.display = "block";
+        attendanceNoteText.textContent = data.attendance_note;
+        attendanceNoteBox.scrollIntoView({ behavior: "smooth" });
+      } catch (err) {
+        alert("Error generating note: " + err.message);
+      }
+    });
+  }
+
+  // Index Note into Vault Handler.
+  if (btnIndexNote) {
+    btnIndexNote.addEventListener("click", async () => {
+      if (!currentDictation) return;
+      btnIndexNote.disabled = true;
+
+      try {
+        const res = await fetch("/api/audio/index-to-vault", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dictation_id: currentDictation.dictation_id,
+            matter_title: "Conference Attendance Note",
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Indexing failed");
+
+        alert("Attendance note successfully indexed into Practice Vault!");
+        await pollStatistics();
+        await pollStatus();
+      } catch (err) {
+        alert("Error indexing note: " + err.message);
+      } finally {
+        btnIndexNote.disabled = false;
+      }
+    });
+  }
+
+  // Copy Handlers.
+  if (btnCopyTranscript) {
+    btnCopyTranscript.addEventListener("click", () => {
+      if (!currentDictation) return;
+      let fullText = `Attributed Conference Transcript - ${currentDictation.file_name}\n\n`;
+      (currentDictation.speech_turns || []).forEach((t) => {
+        fullText += `[${t.timestamp_display}] ${t.speaker_name || t.speaker_id} (${t.speaker_role || 'Participant'}):\n${t.text}\n\n`;
+      });
+      navigator.clipboard.writeText(fullText).then(() => {
+        const orig = btnCopyTranscript.textContent;
+        btnCopyTranscript.textContent = "Transcript Copied!";
+        setTimeout(() => { btnCopyTranscript.textContent = orig; }, 2000);
+      });
+    });
+  }
+
+  if (btnCopyNote) {
+    btnCopyNote.addEventListener("click", () => {
+      if (!attendanceNoteText.textContent) return;
+      navigator.clipboard.writeText(attendanceNoteText.textContent).then(() => {
+        const orig = btnCopyNote.textContent;
+        btnCopyNote.textContent = "Note Copied!";
+        setTimeout(() => { btnCopyNote.textContent = orig; }, 2000);
+      });
+    });
+  }
+}
+
+/**
+ * Configure Deterministic Transaction Ledger & Expenditure Audit.
+ */
+function initTransactionLedger() {
+  const ledgerTotalSpend = document.getElementById("ledger-total-spend");
+  const ledgerTotalOrders = document.getElementById("ledger-total-orders");
+  const ledgerYearSpend = document.getElementById("ledger-year-spend");
+  const ledgerYearLabel = document.getElementById("ledger-year-label");
+  const ledgerTopMerchant = document.getElementById("ledger-top-merchant");
+  const ledgerTableBody = document.getElementById("ledger-table-body");
+  const ledgerSearchInput = document.getElementById("ledger-search-input");
+  const btnExportCsv = document.getElementById("btn-export-csv");
+  const yearPillButtons = document.querySelectorAll("#ledger-year-pills button");
+
+  let activeYear = "";
+  let currentSearch = "";
+
+  async function loadLedgerSummary() {
+    try {
+      const res = await fetch("/api/transactions/summary");
+      if (!res.ok) return;
+      const data = await res.json();
+
+      if (ledgerTotalSpend) ledgerTotalSpend.textContent = data.total_display || "£0.00";
+      if (ledgerTotalOrders) ledgerTotalOrders.textContent = (data.count || 0).toLocaleString();
+
+      if (data.top_merchants && data.top_merchants.length > 0 && ledgerTopMerchant) {
+        const top = data.top_merchants[0];
+        ledgerTopMerchant.textContent = `${top.merchant} (${top.total_display})`;
+      }
+
+      if (data.year_summary && data.year_summary.length > 0 && ledgerYearSpend) {
+        const latest = data.year_summary[0];
+        ledgerYearSpend.textContent = latest.total_display;
+        if (ledgerYearLabel) ledgerYearLabel.textContent = `${latest.year} Spend (${latest.count} purchases)`;
+      }
+    } catch (err) {
+      console.error("Failed to load ledger summary:", err);
+    }
+  }
+
+  async function loadLedgerRows() {
+    if (!ledgerTableBody) return;
+    ledgerTableBody.innerHTML = `
+      <tr><td colspan="5" style="text-align: center; color: var(--text-muted); font-family: var(--font-serif);">
+        Loading deterministic records...
+      </td></tr>
+    `;
+
+    try {
+      let url = `/api/transactions/ledger?limit=60`;
+      if (activeYear) url += `&year=${encodeURIComponent(activeYear)}`;
+      if (currentSearch) url += `&merchant=${encodeURIComponent(currentSearch)}`;
+
+      const res = await fetch(url);
+      if (!res.ok) return;
+      const data = await res.json();
+
+      const txs = data.transactions || [];
+      ledgerTableBody.innerHTML = "";
+
+      if (txs.length === 0) {
+        ledgerTableBody.innerHTML = `
+          <tr><td colspan="5" style="text-align: center; color: var(--text-muted); font-family: var(--font-serif); padding: 1.5rem;">
+            No transaction records match the specified filters.
+          </td></tr>
+        `;
+        return;
+      }
+
+      txs.forEach((t) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="font-family: var(--font-mono); font-size: 0.85rem; white-space: nowrap;">${escapeHtml(t.transaction_date)}</td>
+          <td><strong style="color: var(--gold-accent);">${escapeHtml(t.merchant)}</strong></td>
+          <td style="font-size: 0.88rem; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(t.item_description)}">${escapeHtml(t.item_description)}</td>
+          <td style="text-align: right; font-family: var(--font-mono); font-weight: 600; color: var(--text-main); white-space: nowrap;">${escapeHtml(t.amount_display)}</td>
+          <td style="font-size: 0.8rem; color: var(--text-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(t.subject)}">${escapeHtml(t.subject)}</td>
+        `;
+        ledgerTableBody.appendChild(tr);
+      });
+    } catch (err) {
+      ledgerTableBody.innerHTML = `
+        <tr><td colspan="5" style="text-align: center; color: var(--status-red); padding: 1rem;">
+          Error loading ledger rows: ${escapeHtml(err.message)}
+        </td></tr>
+      `;
+    }
+  }
+
+  // Year Pill Toggles.
+  yearPillButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      yearPillButtons.forEach((b) => {
+        b.style.backgroundColor = "";
+        b.style.borderColor = "";
+        b.style.color = "";
+      });
+      btn.style.backgroundColor = "var(--gold-accent)";
+      btn.style.borderColor = "var(--gold-accent)";
+      btn.style.color = "#000";
+
+      activeYear = btn.getAttribute("data-year") || "";
+      loadLedgerRows();
+    });
+  });
+
+  // Search Filter Handler.
+  if (ledgerSearchInput) {
+    let debounce = null;
+    ledgerSearchInput.addEventListener("input", () => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => {
+        currentSearch = ledgerSearchInput.value.trim();
+        loadLedgerRows();
+      }, 350);
+    });
+  }
+
+  // Export CSV Handler.
+  if (btnExportCsv) {
+    btnExportCsv.addEventListener("click", () => {
+      let exportUrl = `/api/transactions/ledger?format=csv&limit=5000`;
+      if (activeYear) exportUrl += `&year=${encodeURIComponent(activeYear)}`;
+      if (currentSearch) exportUrl += `&merchant=${encodeURIComponent(currentSearch)}`;
+      window.location.href = exportUrl;
+    });
+  }
+
+  loadLedgerSummary();
+  loadLedgerRows();
 }
 
 /**

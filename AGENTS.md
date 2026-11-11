@@ -119,8 +119,14 @@ only; two uncommitted edits to one file can still lose one of them.
    - Never leave a commit unpushed at the end of a task.
 
 4. **Run a legal and patent check on every new feature.**
-   - Check that the feature does not break the law or infringe another
-     party's patent or licence.
+   - Execute `scripts/verify_legal_compliance.py` on every feature or
+     dependency change.
+   - Check that the feature does not break United Kingdom (UK) General Data
+     Protection Regulation (UK GDPR), the Investigatory Powers Act 2016,
+     Solicitors Regulation Authority (SRA) or Bar Standards Board (BSB)
+     rules, or National Health Service (NHS) Caldicott Principles.
+   - Confirm all libraries use permissive commercial licences (MIT, Apache-2.0,
+     BSD) with zero copyleft (GPL/AGPL) contamination.
    - If a risk exists, state it in bold red text, stop making changes,
      and wait for the operator to decide.
    - Record the decision in the repository, not only in chat.
@@ -353,3 +359,12 @@ absent. Add project-specific rules only where they apply.
    block in `index.html` must be updated in the same change. Search crawlers,
    AI assistants, and Large Language Models (LLMs) rely on these documents as
    their canonical ground truth; stale AI documentation is a defect.
+5. **Commercial Sale & Legal Verification**
+   (`scripts/verify_legal_compliance.py`):
+   This software is engineered for commercial sale and deployment to regulated
+   solicitors, King's Counsel (KC), and medical consultants. Every session
+   adding features, APIs, or dependencies must run
+   `scripts/verify_legal_compliance.py` to confirm zero copyleft licensing
+   contamination (GPL/AGPL), strict 100% on-premises UK GDPR sovereignty,
+   preservation of Legal Professional Privilege, and NHS Caldicott information
+   governance compliance.
