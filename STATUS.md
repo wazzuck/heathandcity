@@ -453,18 +453,24 @@
     - Expanded test suite to 22 unit tests across
       `practice-vault/backend/tests/` (all 22 passing).
 
+52. Configured Social Preview Metadata & Confirmed Multi-Domain SSL:
+    - Added `og:image` and `twitter:image` tags in `index.html` referencing
+      the brand emblem (`https://heathandcity.com/img/logo-square.png`).
+    - Confirmed automated GitHub Pages multi-domain Transport Layer Security
+      (TLS) certificate active across both `heathandcity.com` (HTTP/2 200) and
+      `www.heathandcity.com` (HTTP/2 301 canonical redirect).
+
 ---
 
 ## 2. Next
 
 1. Allow overnight continuous background indexer to complete ingestion of
    remaining historical Gmail messages to achieve 100% corpus completeness.
-2. Visibility phase 3 (one page per profession) awaits a decision.
-3. Visibility phase 4 (off-page): Google Business Profile, Search Console,
+2. Allow automated post-indexing evaluation orchestrator (`task-2017`) to
+   compile `docs/POST_INDEXING_BENCHMARK_REPORT.md` upon archive completion.
+3. Visibility phase 3 (one page per profession) awaits a decision.
+4. Visibility phase 4 (off-page): Google Business Profile, Search Console,
    Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
-4. Add a bespoke social preview Open Graph image (`og:image`).
-5. Allow GitHub to finish issuing the multi-domain certificate expansion for
-   `www.heathandcity.com` (automated background job).
 
 ---
 
