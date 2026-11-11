@@ -157,6 +157,15 @@ class DocumentIngestionPipeline:
             segmented_texts = self._chunk_text(page_text)
             for idx, text_block in enumerate(segmented_texts):
                 chunk_id = f"{resolved_path.name}#p{page_num}#c{idx}"
+                # Prepend contextual document header (Contextual Retrieval).
+                ctx_header = (
+                    f"[Document: {resolved_path.name} | Page: {page_num}"
+                )
+                if heading:
+                    ctx_header += f" | Section: {heading}"
+                ctx_header += "]\n\n"
+                enriched_text = ctx_header + text_block
+
                 chunks.append(
                     DocumentChunk(
                         chunk_id=chunk_id,
@@ -164,7 +173,7 @@ class DocumentIngestionPipeline:
                         file_name=resolved_path.name,
                         page_number=page_num,
                         section_heading=heading,
-                        text=text_block,
+                        text=enriched_text,
                         modified_at=modified_at,
                     )
                 )

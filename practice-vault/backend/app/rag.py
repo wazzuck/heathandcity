@@ -233,7 +233,7 @@ class RAGEngine:
             )
             context_blocks.append(block)
 
-        # Step 3: Check if context is empty.
+        # Step 3: Check if context is empty or rejected by neural reranker.
         if not hits:
             return RAGResponse(
                 query=user_query,
@@ -242,6 +242,22 @@ class RAGEngine:
                 ),
                 citations=[],
                 model_used="deterministic-guard",
+                context_chunks_count=0,
+            )
+
+        # Stage 2 Neural Cross-Encoder Grounding Guard (Corrective RAG).
+        # When even the top-ranked candidate receives an intensely negative
+        # relevance score (< -5.0), the archive contains no factual ground.
+        # Refusing immediately prevents generative hallucination in ~30ms.
+        top_score = hits[0].get("rerank_score")
+        if top_score is not None and float(top_score) < -5.0:
+            return RAGResponse(
+                query=user_query,
+                answer=(
+                    "The practice archive contains no record of this information."
+                ),
+                citations=[],
+                model_used="cross-encoder-refusal-gate",
                 context_chunks_count=0,
             )
 

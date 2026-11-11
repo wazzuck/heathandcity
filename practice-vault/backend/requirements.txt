@@ -1,14 +1,17 @@
 annotated-doc==0.0.5
 annotated-types==0.8.0
 anyio==4.16.0
+av==13.1.0
 certifi==2026.10.23
 cffi==2.1.1
 charset-normalizer==3.5.2
 click==8.5.1
 cryptography==50.0.2
+ctranslate2==4.9.0
 deprecation==2.1.0
 et_xmlfile==2.0.0
 fastapi==0.162.2
+faster-whisper==1.2.1
 fastembed==0.9.1
 filelock==4.2.10
 flatbuffers==25.12.19
@@ -47,6 +50,7 @@ pypdfium2==5.15.2
 pytest==9.2.0
 python-dateutil==4.0.0
 python-docx==1.2.0
+python-multipart==0.0.33
 PyYAML==6.0.3
 rank-bm25==0.2.2
 requests==2.34.2

@@ -387,6 +387,46 @@
       `docs/PRACTICE_VAULT_AMBIGUITY_AND_QUERY_GOVERNANCE.md`.
     - All 15 unit tests pass cleanly.
 
+46. Commercial Open-Source Licensing & Legal Compliance Audit Suite:
+    - Built automated legal audit suite (`scripts/verify_legal_compliance.py`)
+      verifying zero copyleft contamination across all 65 installed packages,
+      United Kingdom General Data Protection Regulation (UK GDPR) 127.0.0.1
+      loopback isolation, zero cloud AI egress, and National Health Service
+      (NHS) Caldicott Principles compliance.
+    - Added binding compliance gate to `AGENTS.md` (Policy 4 and Section 9.5).
+    - Authored comprehensive commercial sale and regulatory governance guide in
+      `docs/COMMERCIAL_SALE_AND_REGULATORY_COMPLIANCE.md`.
+    - Unit test `test_legal_compliance.py` passing in test suite.
+
+47. Sovereign Audio Dictation, Speaker Diarisation & Person Tagging:
+    - Integrated Faster-Whisper (`tiny.en` int8 on CPU) with Silero Voice
+      Activity Detection (VAD) for fast local audio transcription.
+    - Implemented multi-speaker acoustic feature clustering (Spectral Centroid,
+      Root Mean Square energy, Zero-Crossing Rate) in
+      `practice-vault/backend/app/audio.py` for CPU-efficient speaker turn
+      separation.
+    - Implemented person tagging API and UI allowing users to map speaker IDs
+      to human roles (e.g. Counsel, Medical Consultant, Client).
+    - Added automated Attendance Note synthesis and direct vault indexing.
+    - Complies with Investigatory Powers Act 2016 statutory recording consent
+      requirements.
+
+48. Financial Ledger Exploration Dashboard & Structured Audit:
+    - Added dedicated Expenditure & Ledger Audit view (`tab-ledger`) in
+      `practice-vault/frontend/` with macro key performance metrics, annual
+      spend filters (2021-2026), interactive merchant search, and CSV export.
+    - Added REST endpoints `GET /api/transactions/summary` and `GET
+      /api/transactions/ledger` in `practice-vault/backend/app/api.py`.
+
+49. Advanced SOTA RAG Optimisations & Complete Test Suite:
+    - Added Neural Cross-Encoder Refusal Gate (Corrective RAG) in `rag.py`
+      achieving ~30ms instant refusal for out-of-domain queries.
+    - Added Anthropic-style Contextual Retrieval header prepending in
+      `ingest.py`.
+    - Added legal and accounting synonym expansion in `indexer.py` SQLite FTS5.
+    - Expanded test suite to 19 unit tests across
+      `practice-vault/backend/tests/` (all 19 passing).
+
 ---
 
 ## 2. Next

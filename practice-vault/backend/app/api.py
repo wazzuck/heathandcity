@@ -19,14 +19,15 @@ Invariants:
 import os
 import re
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, File, Form, HTTPException, Response, UploadFile
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
+from .audio import AudioDiarisationEngine
 from .config import settings
 from .google_sync import GoogleWorkspaceSyncService
 from .indexer import HybridIndexEngine
-from .ingest import DocumentIngestionPipeline
+from .ingest import DocumentChunk, DocumentIngestionPipeline
 from .rag import RAGEngine
 from .tracker import job_tracker, stats_service
 from .transactions import TransactionStore
@@ -41,6 +42,7 @@ tx_store = TransactionStore()
 rag_engine = RAGEngine(indexer=index_engine, tx_store=tx_store)
 triage_engine = InboxTriageEngine()
 google_service = GoogleWorkspaceSyncService()
+audio_engine = AudioDiarisationEngine()
 
 # In-memory staging queue for active practice tasks.
 active_triage_store: List[TriageResult] = []
@@ -64,7 +66,9 @@ class QueryRequest(BaseModel):
     """Payload for RAG question answering."""
 
     query: str = Field(..., description="Plain-English question for practice.")
-    top_k: int = Field(default=5, ge=1, le=20, description="Context chunk count.")
+    top_k: int = Field(
+        default=5, ge=1, le=20, description="Context chunk count."
+    )
     model: Optional[str] = Field(
         default=None,
         description="Optional model override tag.",
@@ -91,6 +95,27 @@ class IngestRequest(BaseModel):
     folder_path: Optional[str] = Field(
         default=None, description="Custom directory path to scan."
     )
+
+
+class SpeakerTagRequest(BaseModel):
+    """Payload to tag speaker cluster IDs with names and roles."""
+
+    dictation_id: str
+    tags: Dict[str, Dict[str, str]]
+
+
+class AttendanceNoteRequest(BaseModel):
+    """Payload to generate formal chambers attendance note."""
+
+    dictation_id: str
+    matter_title: str = "Client Conference"
+
+
+class IndexNoteRequest(BaseModel):
+    """Payload to index synthesised attendance note into vault."""
+
+    dictation_id: str
+    matter_title: str = "Client Conference"
 
 
 @router.get("/status")
@@ -244,7 +269,11 @@ def trigger_ingest(payload: IngestRequest) -> Dict[str, Any]:
 def get_vault_statistics() -> Dict[str, Any]:
     """
     Return comprehensive metrics of all data volume tracked across the vault.
+    Uses cached metrics to avoid deserialising vector chunks on every poll.
     """
+    cached = stats_service.get_latest_statistics()
+    if cached and cached.get("total_chunks_indexed", 0) > 0:
+        return cached
     all_chunks = index_engine.get_all_chunks()
     return stats_service.calculate_statistics(all_chunks, index_engine.count())
 
@@ -274,7 +303,9 @@ def get_google_status() -> Dict[str, Any]:
 @router.post("/google/configure")
 def configure_google(payload: GoogleConfigureRequest) -> Dict[str, Any]:
     """Persist user-supplied Google OAuth2 Client ID and Client Secret."""
-    google_service.save_client_credentials(payload.client_id, payload.client_secret)
+    google_service.save_client_credentials(
+        payload.client_id, payload.client_secret
+    )
     return {
         "status": "configured",
         "message": "Google Client credentials saved successfully.",
@@ -292,7 +323,10 @@ def get_google_auth_url() -> Dict[str, Any]:
 
 
 @router.get("/google/callback")
-def handle_google_callback(code: Optional[str] = None, error: Optional[str] = None):
+def handle_google_callback(
+    code: Optional[str] = None,
+    error: Optional[str] = None,
+):
     """
     Handle Google OAuth2 authorization code callback and exchange for tokens.
     """
@@ -316,7 +350,10 @@ def disconnect_google() -> Dict[str, Any]:
 
 
 @router.post("/google/sync-gmail")
-def sync_gmail(max_messages: int = 100, use_checkpoint: bool = True) -> Dict[str, Any]:
+def sync_gmail(
+    max_messages: int = 100,
+    use_checkpoint: bool = True,
+) -> Dict[str, Any]:
     """
     Synchronise messages from Gmail using checkpointed pagination sweeps.
     """
@@ -443,7 +480,9 @@ def trigger_google_auto_sync() -> Dict[str, Any]:
     """
     Detect newly added or modified Google Docs and automatically index them.
     """
-    job = job_tracker.create_job(source_type="google_docs_incremental", total_items=10)
+    job = job_tracker.create_job(
+        source_type="google_docs_incremental", total_items=10
+    )
     try:
         new_chunks = google_service.detect_and_sync_new_docs(max_files=50)
         indexed = 0
@@ -472,3 +511,191 @@ def trigger_google_auto_sync() -> Dict[str, Any]:
     except Exception as err:
         job_tracker.fail_job(job.job_id, str(err))
         raise HTTPException(status_code=500, detail=str(err))
+
+
+# ==============================================================================
+# Sovereign Audio Dictation & Speaker Diarisation Endpoints
+# ==============================================================================
+
+
+@router.post("/audio/transcribe")
+async def transcribe_audio_upload(
+    file: UploadFile = File(...),
+    max_speakers: int = Form(default=4),
+) -> Dict[str, Any]:
+    """
+    Upload and transcribe audio recording with local speaker diarisation.
+
+    Execution steps:
+      1. Step 1: Save uploaded recording stream to external storage.
+      2. Step 2: Execute Faster-Whisper transcription and speaker clustering.
+      3. Step 3: Return structured speech turns with timestamp ranges.
+    """
+    dictation_dir = settings.data_dir / "dictations" / "uploads"
+    dictation_dir.mkdir(parents=True, exist_ok=True)
+    temp_file = dictation_dir / f"upload_{file.filename}"
+
+    content = await file.read()
+    temp_file.write_bytes(content)
+
+    try:
+        res = audio_engine.transcribe_audio_file(
+            temp_file, max_speakers=max_speakers
+        )
+        return res
+    except Exception as err:
+        raise HTTPException(status_code=500, detail=str(err))
+
+
+@router.post("/audio/tag")
+def tag_audio_speakers(payload: SpeakerTagRequest) -> Dict[str, Any]:
+    """
+    Assign human identity names and institutional roles to speaker cluster IDs.
+    """
+    try:
+        return audio_engine.tag_speakers(
+            dictation_id=payload.dictation_id,
+            tag_mapping=payload.tags,
+        )
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dictation not found.")
+    except Exception as err:
+        raise HTTPException(status_code=500, detail=str(err))
+
+
+@router.post("/audio/attendance-note")
+def generate_chambers_note(payload: AttendanceNoteRequest) -> Dict[str, Any]:
+    """
+    Generate formal Chambers Attendance Note or Clinical Consultation note.
+    """
+    try:
+        note_text = audio_engine.generate_attendance_note(
+            dictation_id=payload.dictation_id,
+            matter_title=payload.matter_title,
+        )
+        return {
+            "dictation_id": payload.dictation_id,
+            "matter_title": payload.matter_title,
+            "attendance_note": note_text,
+        }
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dictation not found.")
+    except Exception as err:
+        raise HTTPException(status_code=500, detail=str(err))
+
+
+@router.post("/audio/index-to-vault")
+def index_audio_note_to_vault(payload: IndexNoteRequest) -> Dict[str, Any]:
+    """
+    Index synthesised attendance note directly into sovereign Practice Vault.
+    """
+    try:
+        note_text = audio_engine.generate_attendance_note(
+            dictation_id=payload.dictation_id,
+            matter_title=payload.matter_title,
+        )
+        chunk = DocumentChunk(
+            chunk_id=f"audio#{payload.dictation_id}#p1#c0",
+            source_path=f"audio://{payload.dictation_id}",
+            file_name=f"Attendance Note: {payload.matter_title}",
+            page_number=1,
+            section_heading="Conference Attendance Note",
+            text=note_text,
+            modified_at=datetime.now(timezone.utc).isoformat(),
+        )
+        indexed = index_engine.index_chunks([chunk])
+        stats_service.update_incremental([chunk], index_engine.count())
+        return {
+            "status": "success",
+            "message": "Attendance note indexed into Practice Vault.",
+            "chunk_id": chunk.chunk_id,
+            "chunks_indexed": indexed,
+        }
+    except Exception as err:
+        raise HTTPException(status_code=500, detail=str(err))
+
+
+# ==============================================================================
+# Transaction Ledger & Deterministic Accounting Endpoints
+# ==============================================================================
+
+
+@router.get("/transactions/summary")
+def get_transaction_summary() -> Dict[str, Any]:
+    """
+    Return cumulative financial overview, year-by-year totals, and top vendors.
+    """
+    res = tx_store.query_transactions(limit=10)
+    # Extract distinct year metrics.
+    with tx_store._get_connection() as conn:
+        year_rows = conn.execute(
+            """
+            SELECT year, count(*), COALESCE(sum(amount_minor), 0)
+            FROM transactions
+            GROUP BY year
+            ORDER BY year DESC;
+            """
+        ).fetchall()
+        years = [
+            {
+                "year": r[0],
+                "count": r[1],
+                "total_minor": r[2],
+                "total_display": f"£{r[2] / 100.0:,.2f}",
+            }
+            for r in year_rows
+        ]
+
+    return {
+        "count": res.get("count", 0),
+        "total_display": res.get("total_display", "£0.00"),
+        "top_merchants": res.get("merchant_breakdown", []),
+        "year_summary": years,
+    }
+
+
+@router.get("/transactions/ledger")
+def get_transaction_ledger(
+    year: Optional[int] = None,
+    merchant: Optional[str] = None,
+    limit: int = 100,
+    format: str = "json",
+) -> Any:
+    """
+    Query individual transaction rows with optional CSV export format.
+    """
+    res = tx_store.query_transactions(year=year, merchant=merchant, limit=limit)
+    if format.lower() == "csv":
+        import csv
+        import io
+
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow([
+            "ID", "Date", "Year", "Month", "Merchant",
+            "Description", "Amount", "Currency", "Subject"
+        ])
+        for t in res.get("transactions", []):
+            writer.writerow([
+                t.get("id"),
+                t.get("transaction_date"),
+                t.get("year"),
+                t.get("month"),
+                t.get("merchant"),
+                t.get("item_description"),
+                t.get("amount_display"),
+                t.get("currency"),
+                t.get("subject"),
+            ])
+        csv_bytes = output.getvalue().encode("utf-8")
+        return Response(
+            content=csv_bytes,
+            media_type="text/csv",
+            headers={
+                "Content-Disposition": (
+                    f"attachment; filename=practice_ledger_{year or 'all'}.csv"
+                )
+            },
+        )
+
+    return res
