@@ -43,14 +43,17 @@
 ### 2.2. System B: Sovereign Practice Vault Appliance
 1. Designed for headless execution on low-power, dedicated mini-computers (e.g.
    Lenovo ThinkCentre M720q Tiny with Intel Core i3-9100T or Apple Mac Mini).
-2. Network interfaces bind exclusively to loopback (`127.0.0.1:8080`) or local
-   office subnets; zero outbound internet communication occurs during search,
+2. Network interfaces bind exclusively to loopback (`127.0.0.1:9090`) and local
+   office subnets (`0.0.0.0:9090`) protected by constant-time master passphrase
+   authentication; zero outbound internet communication occurs during search,
    vector indexing, or local Small Language Model (SLM) inference.
-3. Master practice documents are mounted over Server Message Block (SMB) or
+3. Local inference is driven by a native C++ `llama-server` engine on loopback
+   port `8081` with Flash Attention, 8,192 context, and memory locking.
+4. Master practice documents are mounted over Server Message Block (SMB) or
    Common Internet File System (CIFS) in strict read-only mode (`ro`),
    ensuring the appliance physically cannot alter or delete original files.
-4. Preserves legal professional privilege and medical confidentiality under the
-   United Kingdom (UK) General Data Protection Regulation (GDPR) and the Data
+5. Preserves legal professional privilege and medical confidentiality under the
+   United Kingdom (UK) General Data Protection Regulation (UK GDPR) and the Data
    Protection Act 2018.
 
 ---
@@ -133,14 +136,23 @@ practice-vault/
    Neural Network Exchange (ONNX) Runtime, elevating top-1 precision from
    78% to over 93%.
 
-### 4.3. Multi-Model Local Inference Engine
-The appliance communicates with an on-device Ollama daemon, supporting three
-specialised quantised Small Language Models (SLMs):
-- **`llama3.2:3b`**: General conversational summaries and daily briefings.
-- **`qwen2.5:3b`**: High-precision structured JavaScript Object Notation (JSON)
-  extraction and multi-column tabular reconciliation.
-- **`deepseek-r1:1.5b`**: Step-by-step chain-of-thought mathematical and
-  statutory limitation period auditing.
+### 4.3. High-Performance Native Inference Engine (`llama-server`)
+1. The appliance drives local inference through a native C++ `llama-server`
+   daemon (b12277) compiled with Coffee Lake hardware optimisations
+   (`-march=native -O3 -fopenmp`) running on loopback port `8081`.
+2. Features enabled:
+   - **Flash Attention**: Enabled (`--flash-attn on`) for reduced memory
+     bandwidth.
+   - **8,192 Context Window**: Supports up to 8,192 tokens across dual parallel
+     slots (`--parallel 2`, 4,096 tokens per slot).
+   - **Memory Locking**: Pinned into physical Random Access Memory (RAM) via
+     `--load-mode mmap+mlock` to eliminate page fault jitter.
+   - **Speculative Decoding**: Prompt n-gram speculation
+     (`--spec-type ngram-simple`).
+3. Delivers a 32.7% reduction in query latency compared to default containerised
+   runtimes, with transparent fallback to local Ollama if required.
+4. Primary models supported: `phi4-mini:latest` (3.8B default), `qwen2.5:3b`,
+   and `deepseek-r1:1.5b`.
 
 ### 4.4. Model Context Protocol (MCP) Server Integration
 1. Provides standard `stdio` and Server-Sent Events (SSE) transports compliant
@@ -192,6 +204,34 @@ specialised quantised Small Language Models (SLMs):
    indexes new content into LanceDB and BM25 without requiring partner
    manual intervention or disruptive bulk re-indexing.
 
+### 4.9. Claude Code-Style Interactive Terminal Agent Harness (`./vault`)
+1. The appliance provides an interactive terminal conversational harness
+   modelled after Claude Code, offering live Server-Sent Events (SSE) token
+   streaming, multi-turn conversational memory, and local tool execution.
+2. **Coreference Pronoun Resolution**: Follow-up questions containing pronouns
+   ("they", "it", "when", "that") automatically anchor against entity terms
+   from the previous user turn, preserving seamless multi-turn dialogue.
+3. **Built-In Local Tool Execution**:
+   - `read_document`: Sovereign on-the-fly extraction for Portable Document
+     Format (PDF), Microsoft Word (DOCX), Excel (XLSX), Markdown (MD), and
+     text/CSV files.
+   - `ingest_document`: Single-file indexing directly into LanceDB and Full-Text
+     Search (FTS5).
+   - `search_vault`: Instant hybrid BM25 and vector search across archives.
+   - `query_transactions`: Deterministic SQL ledger aggregations.
+4. **Natural Language File Detection**: Mentioning an existing local file
+   path in conversational English automatically triggers the `read_document`
+   tool without requiring explicit slash commands.
+
+### 4.10. Continuous Corpus Synchronization & Master Authentication
+1. **Continuous Indexer Daemon (`scripts/continuous_indexer.py`)**: Runs an
+   unattended background synchronization loop polling Gmail and Google Drive
+   with persistent SQLite checkpointing.
+2. **Master Passphrase Protection**: Port 9090 is secured with constant-time
+   master passphrase comparison (`hmac.compare_digest`), issuing 256-bit
+   cryptographic session tokens with 7-day lifespans and brute-force rate
+   limiting.
+
 ---
 
 ## 5. Module Inventory
@@ -207,9 +247,11 @@ specialised quantised Small Language Models (SLMs):
 | `sitemap.xml` | Search engine indexing roadmap. |
 | `llms.txt` | Standardised summary for LLM assistants. |
 | `llms-full.txt` | Full plain-text context corpus for AI crawlers. |
+| `vault` | Interactive Claude Code-style CLI shortcut launcher. |
 | `practice-vault/backend/` | Appliance FastAPI server, LanceDB, RAG, and MCP. |
+| `practice-vault/bin/` | Native C++ llama-server inference binaries. |
 | `practice-vault/frontend/` | Sovereign on-premises dashboard interface. |
-| `practice-vault/scripts/` | Host setup, mounting, and verification scripts. |
+| `practice-vault/scripts/` | Host setup, daemon runners, and agent CLI. |
 | `scripts/verify_site.py` | Automated compliance, hosting, and 80-col guard. |
 
 ---
