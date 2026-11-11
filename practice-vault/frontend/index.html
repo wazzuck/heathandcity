@@ -48,17 +48,33 @@
             type="text"
             id="query-input"
             class="input-query"
-            placeholder="e.g. What specific advice was given regarding offshore trust restructuring?"
+            placeholder="e.g. Compare our 2024 vs 2025 expenditure, or ask about counsel fee agreements..."
             required
           >
           <button type="submit" class="btn-primary" id="btn-query">Ask Archive</button>
           <button type="button" class="btn-secondary" id="btn-search-only">Lexical Search</button>
         </form>
+
+        <!-- Nuanced Query Starters -->
+        <div style="margin-top: 0.85rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.8rem;">
+          <span style="color: var(--gold-accent); font-weight: 600;">Nuanced Starters:</span>
+          <button type="button" class="query-chip" data-query="Compare our 2024 vs 2025 expenditure">Compare 2024 vs 2025 Spend</button>
+          <button type="button" class="query-chip" data-query="What purchases did I make last year excluding Amazon?">Purchases excluding Amazon</button>
+          <button type="button" class="query-chip" data-query="What were our major expenditure orders exceeding £200?">Orders exceeding £200</button>
+          <button type="button" class="query-chip" data-query="What is the statutory deadline for HMRC filing and what penalties apply?">HMRC Filing &amp; Penalties</button>
+          <button type="button" class="query-chip" data-query="What is our agreed fee with counsel and what terms apply if a trial is adjourned?">Counsel Fee &amp; Adjournments</button>
+        </div>
+        <div style="margin-top: 0.4rem; font-size: 0.75rem; color: var(--text-muted);">
+          Keyboard shortcuts: <kbd style="background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 3px;">Ctrl+Enter</kbd> to submit &bull; <kbd style="background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 3px;">/</kbd> to focus inquiry &bull; <kbd style="background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 3px;">Esc</kbd> to clear
+        </div>
       </div>
 
       <div id="answer-container" class="answer-container" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <h3 class="subheading" style="margin-bottom: 0;">Deterministic Finding</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <h3 class="subheading" style="margin-bottom: 0.2rem;">Deterministic Finding</h3>
+            <div id="query-meta-badge" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);"></div>
+          </div>
           <button type="button" class="btn-secondary" id="btn-copy-answer" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
             Copy Finding &amp; Citations
           </button>

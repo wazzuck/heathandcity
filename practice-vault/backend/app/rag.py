@@ -124,30 +124,66 @@ class RAGEngine:
         if not any(token in q_lower for token in purchase_tokens):
             return None
 
+        # Check for multi-year comparison intent (e.g. "compare 2024 and 2025").
+        years = [int(y) for y in re.findall(r"\b(20[12][0-9])\b", q_lower)]
+        if len(years) >= 2 and any(
+            k in q_lower for k in ["compare", "versus", "vs", "difference"]
+        ):
+            comp_res = self.tx_store.compare_years(
+                year_a=years[0], year_b=years[1]
+            )
+            comp_answer = self.tx_store.format_comparison_response(
+                user_query, comp_res
+            )
+            return RAGResponse(
+                query=user_query,
+                answer=comp_answer,
+                citations=[],
+                model_used="deterministic-sql-comparison",
+                context_chunks_count=comp_res["summary_a"]["count"]
+                + comp_res["summary_b"]["count"],
+            )
+
         # Parse target calendar year if referenced.
         target_year: Optional[int] = None
         if "last year" in q_lower:
             target_year = 2025
         elif "this year" in q_lower:
             target_year = 2026
-        else:
-            year_match = re.search(r"\b(20[12][0-9])\b", q_lower)
-            if year_match:
-                target_year = int(year_match.group(1))
+        elif years:
+            target_year = years[0]
 
         # Check for specific merchant or vendor filter.
         target_merchant: Optional[str] = None
-        for brand in [
+        excluded_merchant: Optional[str] = None
+        brands = [
             "amazon", "apple", "uber", "wagamama", "cote", "deliveroo",
             "paypal", "trainline",
-        ]:
-            if brand in q_lower:
+        ]
+        for brand in brands:
+            if (
+                f"excluding {brand}" in q_lower
+                or f"except {brand}" in q_lower
+                or f"except for {brand}" in q_lower
+                or f"without {brand}" in q_lower
+            ):
+                excluded_merchant = brand
+            elif brand in q_lower and not excluded_merchant:
                 target_merchant = brand
-                break
+
+        # Check for monetary threshold (e.g. "over £100" or "more than £50").
+        min_amt_pence: Optional[int] = None
+        m_thresh = re.search(
+            r"(?:over|more than|exceeding)\s*£?([0-9]+)", q_lower
+        )
+        if m_thresh:
+            min_amt_pence = int(m_thresh.group(1)) * 100
 
         res = self.tx_store.query_transactions(
             year=target_year,
             merchant=target_merchant,
+            exclude_merchant=excluded_merchant,
+            min_amount=min_amt_pence,
             limit=50,
         )
         if res.get("count", 0) == 0:
@@ -180,6 +216,30 @@ class RAGEngine:
             context_chunks_count=res.get("count", 0),
         )
 
+    def _decompose_query(self, user_query: str) -> List[str]:
+        """
+        Decompose compound or nuanced inquiries into distinct sub-aspects.
+
+        Identifies multi-part questions joined by conjunctions or multiple
+        sentences, allowing the retrieval engine to pull dedicated evidence for
+        every facet of the user's inquiry.
+
+        Args:
+          user_query: Original user inquiry in natural English.
+
+        Returns:
+          List of sub-aspect inquiry strings (or single query if atomic).
+        """
+        # Split on multiple questions or explicit multi-part connectors.
+        raw_parts = re.split(
+            r"\?\s+|\band\s+(?:what|how|why|when|who|where|whether|if)\b|"
+            r"\b(?:versus|vs|compared to|as well as)\b",
+            user_query,
+            flags=re.IGNORECASE,
+        )
+        cleaned = [p.strip(" ?.,;") for p in raw_parts if len(p.strip()) > 8]
+        return cleaned if len(cleaned) > 1 else [user_query.strip()]
+
     def query(
         self,
         user_query: str,
@@ -191,11 +251,11 @@ class RAGEngine:
 
         Execution steps:
           1. Step 1: Check Path B aggregation intent (deterministic ledger).
-          2. Step 2: Retrieve top_k relevant fragments via hybrid search.
+          2. Step 2: Decompose nuanced query and retrieve top_k fragments.
           3. Step 3: Assemble structured citations from retrieved chunks.
           4. Step 4: Check if context is empty; return clean refusal if so.
           5. Step 5: Construct strict institutional system prompt.
-          6. Step 6: Query local Ollama service with think=false.
+          6. Step 6: Query local Ollama service with resident pre-warming.
           7. Step 7: Filter internal reasoning tokens and validate response.
 
         Args:
@@ -211,10 +271,16 @@ class RAGEngine:
         if ledger_res is not None:
             return ledger_res
 
-        # Step 2: Retrieve top_k relevant fragments via hybrid search.
-        hits = self.indexer.search_hybrid(user_query, top_k=top_k)
+        # Step 2: Nuance Aspect Decomposition & Concurrent Retrieval.
+        aspects = self._decompose_query(user_query)
+        if len(aspects) > 1:
+            hits = self.indexer.search_aspects(
+                aspects, top_k=top_k, composite_query=user_query
+            )
+        else:
+            hits = self.indexer.search_hybrid(user_query, top_k=top_k)
 
-        # Step 2: Assemble structured citations.
+        # Step 3: Assemble structured citations.
         citations: List[Citation] = []
         context_blocks: List[str] = []
 
@@ -227,18 +293,21 @@ class RAGEngine:
                     snippet=h.get("text", "")[:300],
                 )
             )
+            fn = h.get("file_name", "Unknown")
+            pn = h.get("page_number", 1)
             block = (
-                f"[Source: {h.get('file_name')} | Page: {h.get('page_number')}]\n"
+                f"[Source: {fn} | Page: {pn}]\n"
                 f"{h.get('text')}"
             )
             context_blocks.append(block)
 
-        # Step 3: Check if context is empty or rejected by neural reranker.
+        # Step 4: Check if context is empty or rejected by neural reranker.
         if not hits:
             return RAGResponse(
                 query=user_query,
                 answer=(
-                    "The practice archive contains no record of this information."
+                    "The practice archive contains no record of this "
+                    "information."
                 ),
                 citations=[],
                 model_used="deterministic-guard",
@@ -246,52 +315,66 @@ class RAGEngine:
             )
 
         # Stage 2 Neural Cross-Encoder Grounding Guard (Corrective RAG).
-        # When even the top-ranked candidate receives an intensely negative
-        # relevance score (< -5.0), the archive contains no factual ground.
-        # Refusing immediately prevents generative hallucination in ~30ms.
         top_score = hits[0].get("rerank_score")
         if top_score is not None and float(top_score) < -5.0:
             return RAGResponse(
                 query=user_query,
                 answer=(
-                    "The practice archive contains no record of this information."
+                    "The practice archive contains no record of this "
+                    "information."
                 ),
                 citations=[],
                 model_used="cross-encoder-refusal-gate",
                 context_chunks_count=0,
             )
 
-        # Step 4: Construct institutional ambiguity-aware prompt.
+        # Step 5: Construct institutional ambiguity-aware prompt.
         context_text = "\n\n---\n\n".join(context_blocks)
         ref_date = datetime.now(timezone.utc).strftime("%d %B %Y")
+        prompt_directives = [
+            "GOVERNANCE & AMBIGUITY RESOLUTION DIRECTIVES:",
+            "1. CITATION DISCIPLINE: Every statement of fact must cite the "
+            "exact document title and page number from the header, "
+            "e.g. [Document.pdf | Page: 1].",
+            "2. MULTIPLE MATTERS / AMBIGUITY: If excerpts describe more than "
+            "one distinct agreement, matter, or person matching the inquiry, "
+            "do NOT arbitrarily choose one. Explicitly enumerate EACH matter "
+            "separately (e.g. 'Matter A: ... [Citation]', 'Matter B: ...').",
+            "3. CHRONOLOGY & SUPERSEDED TERMS: If documents contain "
+            "conflicting terms across dates, specify them chronologically "
+            "and clearly state the latest effective position.",
+            "4. PRESUPPOSITION CHECK: If the user inquiry contains an "
+            "assertion or premise that is directly contradicted by the context "
+            "(for example, asking why an event failed when the document states "
+            "it succeeded), explicitly refute the false presupposition before "
+            "citing the factual position.",
+            "5. NO EXTRAPOLATION: Do not extrapolate or assume facts not "
+            "explicitly stated. If context lacks evidence to answer, respond: "
+            "'The practice archive contains no record of this information.'",
+        ]
+
+        if len(aspects) > 1:
+            prompt_directives.append(
+                "6. MULTI-PART COMPOSITE INQUIRY: The user posed a compound "
+                "inquiry. Structure your response with distinct markdown "
+                "sub-headings addressing each part of the inquiry separately."
+            )
+
+        q_low = user_query.lower()
+        temporal_words = ["timeline", "chronology", "history", "evolve"]
+        if any(w in q_low for w in temporal_words):
+            prompt_directives.append(
+                "7. CHRONOLOGICAL SYNTHESIS: Present the sequence of events or "
+                "terms chronologically with dates and citations."
+            )
+
         system_prompt = (
             "You are the sovereign practice clerk for a boutique private "
             "practice in London.\n"
             f"Reference Date: {ref_date}\n\n"
             "Answer the client inquiry using strictly and ONLY the factual "
             "excerpts provided below.\n\n"
-            "GOVERNANCE & AMBIGUITY RESOLUTION DIRECTIVES:\n"
-            "1. CITATION DISCIPLINE: Every statement of fact must cite the "
-            "exact document title and page number from the header, "
-            "e.g. [Document.pdf | Page: 1].\n"
-            "2. MULTIPLE MATTERS / AMBIGUITY: If the retrieved excerpts describe "
-            "more than one distinct agreement, matter, person, or transaction "
-            "matching the query, you MUST NOT arbitrarily pick one. Instead, "
-            "explicitly enumerate EACH matter separately (e.g. 'Matter A: ... "
-            "[Citation]', 'Matter B: ... [Citation]').\n"
-            "3. CHRONOLOGY & SUPERSEDED TERMS: If documents contain conflicting "
-            "terms or revisions across different dates (e.g. rate revisions, "
-            "contract addenda), specify the terms chronologically by date and "
-            "clearly state the latest effective position.\n"
-            "4. PRESUPPOSITION CHECK: If the user inquiry contains an "
-            "assertion or premise that is directly contradicted by the context "
-            "(for example, asking why an event failed when the document states "
-            "it succeeded), explicitly refute the false presupposition before "
-            "citing the factual position.\n"
-            "5. NO EXTRAPOLATION: Do not extrapolate or assume facts not "
-            "explicitly stated. If the provided context does not contain factual "
-            "evidence to answer the question, respond verbatim: "
-            "'The practice archive contains no record of this information.'"
+            + "\n".join(prompt_directives)
         )
 
         user_content = (
@@ -300,7 +383,7 @@ class RAGEngine:
             f"Answer with exact citations:"
         )
 
-        # Step 5: Query local Ollama service.
+        # Step 6: Query local Ollama service with resident pre-warming.
         answer_text = ""
         active_model = model_override or self.model_name
         model_tag = active_model
@@ -316,13 +399,13 @@ class RAGEngine:
                         ],
                         "stream": False,
                         "think": False,
-                        "keep_alive": "5m",
+                        "keep_alive": "24h",
                         "options": {
                             "temperature": 0.0,
                             "top_k": 1,
                             "top_p": 1.0,
-                            "num_predict": 384,
-                            "num_ctx": 8192,
+                            "num_predict": 512,
+                            "num_ctx": 4096,
                             "num_thread": 4,
                             "repeat_penalty": 1.0,
                         },
@@ -333,11 +416,11 @@ class RAGEngine:
                     raw_content = (
                         data.get("message", {}).get("content", "").strip()
                     )
-                    # Strip reasoning tags if model emits internal thoughts.
                     if "<think>" in raw_content and "</think>" in raw_content:
                         raw_content = raw_content.split("</think>")[-1].strip()
                     answer_text = raw_content
         except Exception:
+            answer_text = ""
             answer_text = ""
 
         # Step 6: Graceful fallback synthesis if Ollama is not yet active.

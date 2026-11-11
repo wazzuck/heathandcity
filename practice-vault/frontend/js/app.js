@@ -64,15 +64,19 @@ function initSearch() {
   const resultsContainer = document.getElementById("search-results-container");
   const resultsList = document.getElementById("results-list");
 
+  const metaBadge = document.getElementById("query-meta-badge");
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const query = queryInput.value.trim();
     if (!query) return;
 
+    const startTime = performance.now();
     answerContainer.style.display = "block";
     resultsContainer.style.display = "none";
-    answerText.textContent = "Synthesising deterministic answer from practice records...";
+    answerText.innerHTML = "<em>Synthesising deterministic answer from practice records...</em>";
     citationsList.innerHTML = "";
+    if (metaBadge) metaBadge.textContent = "Processing query across hybrid index...";
 
     try {
       const res = await fetch("/api/query", {
@@ -81,8 +85,13 @@ function initSearch() {
         body: JSON.stringify({ query: query, top_k: 5 }),
       });
       const data = await res.json();
+      const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
 
-      answerText.textContent = data.answer || "No response received.";
+      if (metaBadge) {
+        metaBadge.textContent = `⚡ Answered in ${elapsed}s via ${data.model_used || "hybrid-rag"} (${data.context_chunks_count || 0} excerpts)`;
+      }
+
+      answerText.innerHTML = renderMarkdown(data.answer || "No response received.");
       citationsList.innerHTML = "";
 
       if (data.citations && data.citations.length > 0) {
@@ -100,6 +109,44 @@ function initSearch() {
       }
     } catch (err) {
       answerText.textContent = `Error querying practice vault: ${err.message}`;
+      if (metaBadge) metaBadge.textContent = "Query failed";
+    }
+  });
+
+  // Query chips click handlers.
+  const chips = document.querySelectorAll(".query-chip");
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const q = chip.getAttribute("data-query");
+      if (q && queryInput) {
+        queryInput.value = q;
+        form.dispatchEvent(new Event("submit"));
+      }
+    });
+  });
+
+  // Keyboard shortcuts.
+  if (queryInput) {
+    queryInput.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        form.dispatchEvent(new Event("submit"));
+      }
+    });
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+      e.preventDefault();
+      const tabSearchBtn = document.querySelector('[data-tab="tab-search"]');
+      if (tabSearchBtn) tabSearchBtn.click();
+      if (queryInput) {
+        queryInput.focus();
+        queryInput.select();
+      }
+    } else if (e.key === "Escape" && document.activeElement === queryInput) {
+      queryInput.value = "";
+      queryInput.blur();
     }
   });
 
@@ -1095,4 +1142,84 @@ function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text;
   return div.innerHTML;
+}
+
+/**
+ * Render basic Markdown elements (headers, bold, lists, tables) into safe HTML.
+ */
+function renderMarkdown(text) {
+  if (!text) return "";
+  const lines = text.split("\n");
+  const html = [];
+  let inTable = false;
+  let tableHeaderParsed = false;
+  let inList = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Check for Markdown table rows.
+    if (line.trim().startsWith("|") && line.trim().endsWith("|")) {
+      if (!inTable) {
+        if (inList) { html.push("</ul>"); inList = false; }
+        html.push("<table>");
+        inTable = true;
+        tableHeaderParsed = false;
+      }
+      if (line.includes("---")) {
+        tableHeaderParsed = true;
+        continue;
+      }
+      const cells = line.split("|").slice(1, -1).map((c) => c.trim());
+      const tag = tableHeaderParsed ? "td" : "th";
+      const rowHtml = cells.map((c) => `<${tag}>${formatInlineMd(c)}</${tag}>`).join("");
+      html.push(`<tr>${rowHtml}</tr>`);
+      continue;
+    } else if (inTable) {
+      html.push("</table>");
+      inTable = false;
+      tableHeaderParsed = false;
+    }
+
+    // Check for lists.
+    if (line.trim().startsWith("- ") || line.trim().startsWith("* ")) {
+      if (!inList) {
+        html.push("<ul>");
+        inList = true;
+      }
+      const itemText = line.trim().substring(2);
+      html.push(`<li>${formatInlineMd(itemText)}</li>`);
+      continue;
+    } else if (inList && line.trim() === "") {
+      html.push("</ul>");
+      inList = false;
+      continue;
+    }
+
+    // Headings.
+    if (line.startsWith("### ")) {
+      html.push(`<h3>${formatInlineMd(line.substring(4))}</h3>`);
+    } else if (line.startsWith("#### ")) {
+      html.push(`<h4>${formatInlineMd(line.substring(5))}</h4>`);
+    } else if (line.trim() === "") {
+      html.push("<br>");
+    } else {
+      html.push(`<p>${formatInlineMd(line)}</p>`);
+    }
+  }
+
+  if (inTable) html.push("</table>");
+  if (inList) html.push("</ul>");
+  return html.join("\n");
+}
+
+/**
+ * Format inline Markdown syntax (bold, italic, citations).
+ */
+function formatInlineMd(text) {
+  let s = escapeHtml(text);
+  s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  s = s.replace(/\*(.+?)\*/g, "<em>$1</em>");
+  s = s.replace(/\[([^\]]+)\]/g, '<span style="color: var(--gold-accent); font-family: var(--font-mono); font-size: 0.85em;">[$1]</span>');
+  return s;
 }

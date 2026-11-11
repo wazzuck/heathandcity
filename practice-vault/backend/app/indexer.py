@@ -17,6 +17,7 @@ Invariants:
   2. Every indexed entry maps 1:1 to an immutable source DocumentChunk.
 """
 
+import concurrent.futures
 import math
 import re
 import sqlite3
@@ -101,6 +102,7 @@ class HybridIndexEngine:
         self._bm25: Any = None
         self._bm25_chunks: List[DocumentChunk] = []
         self._reranker: NeuralReranker = NeuralReranker()
+        self._query_embed_cache: Dict[str, List[float]] = {}
 
         self._init_database()
 
@@ -117,22 +119,31 @@ class HybridIndexEngine:
 
     def _init_database(self) -> None:
         """
-        Connect to LanceDB instance on disk.
+        Connect to LanceDB instance on disk and tune SQLite FTS5 for RAM speed.
 
         Execution steps:
           1. Step 1: Ensure persistent directory exists.
-          2. Step 2: Open LanceDB connection.
-          3. Step 3: Open existing table if already created.
-          4. Step 4: Rehydrate BM25 index from stored chunks for consistency.
+          2. Step 2: Open SQLite FTS5 connection and apply high-speed RAM
+             PRAGMAs.
+          3. Step 3: Open LanceDB vector table.
         """
         # Step 1: Ensure directory exists.
         self.db_path.mkdir(parents=True, exist_ok=True)
 
-        # Step 2: Open SQLite FTS5 connection for disk-backed BM25 search.
+        # Step 2: Open SQLite FTS5 connection with high-speed memory buffers.
         try:
             self._fts_conn = sqlite3.connect(
                 str(self.fts_path), check_same_thread=False
             )
+            # High-performance in-memory cache and memory-mapped I/O pragmas.
+            self._fts_conn.execute("PRAGMA journal_mode = WAL;")
+            self._fts_conn.execute("PRAGMA synchronous = NORMAL;")
+            self._fts_conn.execute("PRAGMA cache_size = -64000;")  # 64 MB RAM
+            self._fts_conn.execute(
+                "PRAGMA mmap_size = 268435456;"
+            )  # 256 MB MMAP
+            self._fts_conn.execute("PRAGMA temp_store = MEMORY;")
+
             self._fts_conn.execute(
                 "CREATE VIRTUAL TABLE IF NOT EXISTS practice_fts USING fts5("
                 "chunk_id UNINDEXED, source_path UNINDEXED, file_name, "
@@ -194,6 +205,31 @@ class HybridIndexEngine:
             norm = math.sqrt(sum(v * v for v in vec)) or 1.0
             vectors.append([v / norm for v in vec])
         return vectors
+
+    def embed_query(self, query: str) -> List[float]:
+        """
+        Generate or retrieve cached dense embedding for a single query string.
+
+        Uses an in-memory Least Recently Used (LRU) cache capped at 2,048
+        entries to eliminate redundant embedding inference overhead for
+        recurring, re-ranked, or composite inquiries.
+
+        Args:
+          query: User inquiry string in plain English.
+
+        Returns:
+          384-dimensional dense floating-point embedding vector.
+        """
+        clean_q = query.strip()
+        if clean_q in self._query_embed_cache:
+            return self._query_embed_cache[clean_q]
+
+        vec = self.embed_texts([clean_q])[0]
+        if len(self._query_embed_cache) >= 2048:
+            first_key = next(iter(self._query_embed_cache))
+            self._query_embed_cache.pop(first_key, None)
+        self._query_embed_cache[clean_q] = vec
+        return vec
 
     def get_indexed_ids(self) -> set:
         """
@@ -320,57 +356,26 @@ class HybridIndexEngine:
 
         return len(records)
 
-    def search_hybrid(
-        self,
-        query: str,
-        top_k: int = 5,
-        rrf_k: int = 60,
-        rerank: bool = True,
+    def _search_vector(
+        self, query_vec: List[float], candidate_k: int
     ) -> List[Dict[str, Any]]:
-        """
-        Execute hybrid search using Reciprocal Rank Fusion (RRF) and Stage 2 reranking.
-
-        Execution steps:
-          1. Step 1: Query LanceDB for top vector nearest neighbours.
-          2. Step 2: Query BM25 index for top lexical keyword matches.
-          3. Step 3: Merge rankings using standard RRF: RRF_score = sum(1 / (k + rank)).
-          4. Step 4: Sort by combined score and collect candidate pool.
-          5. Step 5: If rerank is enabled, execute Stage 2 local neural
-             cross-encoder reranking to elevate top-1 precision.
-
-        Args:
-          query: User search string in plain English.
-          top_k: Number of ranked results to return.
-          rrf_k: Constant smoothing parameter for reciprocal rank fusion.
-          rerank: Whether to execute Stage 2 neural cross-encoder reranking.
-
-        Returns:
-          List of ranked result dictionaries containing chunk metadata and
-          composite fusion or neural rerank scores.
-        """
-        if not query.strip():
+        """Query LanceDB vector store for top nearest neighbour chunks."""
+        if self._table is None:
+            return []
+        try:
+            return (
+                self._table.search(query_vec)
+                .limit(candidate_k * 2)
+                .to_list()
+            )
+        except Exception:
             return []
 
-        vector_hits: List[Dict[str, Any]] = []
+    def _search_lexical(
+        self, query: str, candidate_k: int
+    ) -> List[Dict[str, Any]]:
+        """Query SQLite FTS5 index for BM25 keyword matches with synonyms."""
         lexical_hits: List[Dict[str, Any]] = []
-
-        # Candidate pool size for Stage 2 reranking.
-        candidate_k = max(top_k * 3, 10) if rerank else top_k
-
-        # Step 1: Dense vector search.
-        query_vec = self.embed_texts([query])[0]
-        if self._table is not None:
-            try:
-                results = (
-                    self._table.search(query_vec)
-                    .limit(candidate_k * 2)
-                    .to_list()
-                )
-                vector_hits = results
-            except Exception:
-                vector_hits = []
-
-        # Step 2: Lexical BM25 search via SQLite FTS5.
         if self._fts_conn is not None:
             try:
                 clean_words = [
@@ -431,6 +436,53 @@ class HybridIndexEngine:
                             "_bm25_score": scores[idx],
                         }
                     )
+        return lexical_hits
+
+    def search_hybrid(
+        self,
+        query: str,
+        top_k: int = 5,
+        rrf_k: int = 60,
+        rerank: bool = True,
+    ) -> List[Dict[str, Any]]:
+        """
+        Execute concurrent dual-tower hybrid search and Stage 2 reranking.
+
+        Execution steps:
+          1. Step 1: Obtain dense embedding (cached via in-memory LRU).
+          2. Step 2: Concurrently query LanceDB vector store and SQLite FTS5.
+          3. Step 3: Merge rankings using standard Reciprocal Rank Fusion (RRF).
+          4. Step 4: Sort by combined score and collect candidate pool.
+          5. Step 5: If rerank is enabled, execute Stage 2 neural cross-encoder.
+
+        Args:
+          query: User search string in plain English.
+          top_k: Number of ranked results to return.
+          rrf_k: Constant smoothing parameter for reciprocal rank fusion.
+          rerank: Whether to execute Stage 2 neural cross-encoder reranking.
+
+        Returns:
+          List of ranked result dictionaries with metadata and scores.
+        """
+        if not query.strip():
+            return []
+
+        # Candidate pool size for Stage 2 reranking.
+        candidate_k = max(top_k * 3, 10) if rerank else top_k
+
+        # Step 1: Obtain query embedding (using LRU cache).
+        query_vec = self.embed_query(query)
+
+        # Step 2: Concurrent dual-tower retrieval.
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            fut_vec = executor.submit(
+                self._search_vector, query_vec, candidate_k
+            )
+            fut_lex = executor.submit(
+                self._search_lexical, query, candidate_k
+            )
+            vector_hits = fut_vec.result()
+            lexical_hits = fut_lex.result()
 
         # Step 3: Reciprocal Rank Fusion calculation.
         scores_by_id: Dict[str, float] = {}
@@ -438,12 +490,14 @@ class HybridIndexEngine:
 
         for rank, item in enumerate(vector_hits, start=1):
             cid = item["chunk_id"]
-            scores_by_id[cid] = scores_by_id.get(cid, 0.0) + (1.0 / (rrf_k + rank))
+            rrf_term = 1.0 / (rrf_k + rank)
+            scores_by_id[cid] = scores_by_id.get(cid, 0.0) + rrf_term
             chunks_by_id[cid] = item
 
         for rank, item in enumerate(lexical_hits, start=1):
             cid = item["chunk_id"]
-            scores_by_id[cid] = scores_by_id.get(cid, 0.0) + (1.0 / (rrf_k + rank))
+            rrf_term = 1.0 / (rrf_k + rank)
+            scores_by_id[cid] = scores_by_id.get(cid, 0.0) + rrf_term
             if cid not in chunks_by_id:
                 chunks_by_id[cid] = item
 
@@ -477,6 +531,73 @@ class HybridIndexEngine:
             return self._reranker.rerank(query, ranked_results, top_n=top_k)
 
         return ranked_results[:top_k]
+
+    def search_aspects(
+        self,
+        aspects: List[str],
+        top_k: int = 5,
+        composite_query: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve and fuse document chunks across multiple nuanced sub-aspects.
+
+        Execution steps:
+          1. Step 1: Execute concurrent hybrid search for each sub-aspect.
+          2. Step 2: Track aspect coverage counts per chunk.
+          3. Step 3: Pool candidate chunks and apply aspect coverage boost.
+          4. Step 4: Run Stage 2 cross-encoder rerank on the composite query.
+
+        Args:
+          aspects: List of distinct sub-aspect query strings.
+          top_k: Number of final ranked chunks to return.
+          composite_query: Original full composite question string.
+
+        Returns:
+          List of top_k enriched document chunk dictionaries.
+        """
+        if not aspects:
+            return []
+        if len(aspects) == 1:
+            return self.search_hybrid(aspects[0], top_k=top_k)
+
+        pooled_chunks: Dict[str, Dict[str, Any]] = {}
+        aspect_coverage: Dict[str, int] = {}
+        base_scores: Dict[str, float] = {}
+
+        for aspect in aspects:
+            hits = self.search_hybrid(
+                aspect, top_k=max(top_k * 2, 8), rerank=False
+            )
+            for h in hits:
+                cid = h["chunk_id"]
+                pooled_chunks[cid] = h
+                aspect_coverage[cid] = aspect_coverage.get(cid, 0) + 1
+                base_scores[cid] = base_scores.get(cid, 0.0) + h.get(
+                    "rrf_score", 0.01
+                )
+
+        # Apply multi-aspect coverage multiplier.
+        scored_candidates = []
+        for cid, chunk in pooled_chunks.items():
+            coverage = aspect_coverage[cid]
+            multiplier = 1.0 + (coverage - 1) * 0.5
+            c_copy = chunk.copy()
+            c_copy["multi_aspect_score"] = round(
+                base_scores[cid] * multiplier, 5
+            )
+            c_copy["aspects_covered"] = coverage
+            scored_candidates.append(c_copy)
+
+        scored_candidates.sort(
+            key=lambda x: x.get("multi_aspect_score", 0.0), reverse=True
+        )
+
+        target_query = composite_query or " ".join(aspects)
+        candidate_pool = scored_candidates[: max(top_k * 3, 12)]
+
+        return self._reranker.rerank(
+            target_query, candidate_pool, top_n=top_k
+        )
 
     def count(self) -> int:
         """Return total indexed records in database."""
