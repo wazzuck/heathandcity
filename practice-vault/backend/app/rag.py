@@ -20,6 +20,7 @@ Invariants:
 """
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import re
 from typing import Any, Dict, List, Optional
 import httpx
@@ -244,19 +245,36 @@ class RAGEngine:
                 context_chunks_count=0,
             )
 
-        # Step 4: Construct strict institutional prompt.
+        # Step 4: Construct institutional ambiguity-aware prompt.
         context_text = "\n\n---\n\n".join(context_blocks)
+        ref_date = datetime.now(timezone.utc).strftime("%d %B %Y")
         system_prompt = (
             "You are the sovereign practice clerk for a boutique private "
-            "practice.\n"
-            "Answer the question using strictly and ONLY the factual excerpts "
-            "provided below.\n"
-            "Every assertion must cite the exact file name and page number as "
-            "given in the source header, e.g. [Document.txt, Page 1].\n"
-            "Do not invent or extrapolate facts, limitation periods, dates, or "
-            "page numbers.\n"
-            "If the provided context does not contain sufficient factual "
-            "evidence to answer the question, state verbatim: "
+            "practice in London.\n"
+            f"Reference Date: {ref_date}\n\n"
+            "Answer the client inquiry using strictly and ONLY the factual "
+            "excerpts provided below.\n\n"
+            "GOVERNANCE & AMBIGUITY RESOLUTION DIRECTIVES:\n"
+            "1. CITATION DISCIPLINE: Every statement of fact must cite the "
+            "exact document title and page number from the header, "
+            "e.g. [Document.pdf | Page: 1].\n"
+            "2. MULTIPLE MATTERS / AMBIGUITY: If the retrieved excerpts describe "
+            "more than one distinct agreement, matter, person, or transaction "
+            "matching the query, you MUST NOT arbitrarily pick one. Instead, "
+            "explicitly enumerate EACH matter separately (e.g. 'Matter A: ... "
+            "[Citation]', 'Matter B: ... [Citation]').\n"
+            "3. CHRONOLOGY & SUPERSEDED TERMS: If documents contain conflicting "
+            "terms or revisions across different dates (e.g. rate revisions, "
+            "contract addenda), specify the terms chronologically by date and "
+            "clearly state the latest effective position.\n"
+            "4. PRESUPPOSITION CHECK: If the user inquiry contains an "
+            "assertion or premise that is directly contradicted by the context "
+            "(for example, asking why an event failed when the document states "
+            "it succeeded), explicitly refute the false presupposition before "
+            "citing the factual position.\n"
+            "5. NO EXTRAPOLATION: Do not extrapolate or assume facts not "
+            "explicitly stated. If the provided context does not contain factual "
+            "evidence to answer the question, respond verbatim: "
             "'The practice archive contains no record of this information.'"
         )
 

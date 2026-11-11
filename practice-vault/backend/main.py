@@ -38,17 +38,22 @@ async def background_google_docs_watcher():
     Periodically poll Google Drive for new or modified Google Docs.
 
     Runs every 60 seconds when Google account authentication is active.
+    Uses asyncio.to_thread to prevent blocking the event loop during indexing.
     """
     while True:
         try:
             await asyncio.sleep(60)
             token = google_service.get_token()
             if token and "access_token" in token:
-                new_chunks = google_service.detect_and_sync_new_docs(max_files=30)
+                new_chunks = await asyncio.to_thread(
+                    google_service.detect_and_sync_new_docs, 30
+                )
                 if new_chunks:
-                    index_engine.index_chunks(new_chunks)
-                    stats_service.calculate_statistics(
-                        index_engine.get_all_chunks(), index_engine.count()
+                    await asyncio.to_thread(
+                        index_engine.index_chunks, new_chunks
+                    )
+                    stats_service.update_incremental(
+                        new_chunks, index_engine.count()
                     )
         except asyncio.CancelledError:
             break
@@ -64,9 +69,10 @@ async def lifespan(app: FastAPI):
     Execution steps:
       1. Step 1: Ensure persistent data directories exist.
       2. Step 2: Auto-index sample documents on startup if index is unpopulated.
-      3. Step 3: Launch background Google Docs auto-sync watcher task.
-      4. Step 4: Yield control to application runner.
-      5. Step 5: Cancel watcher task upon server shutdown.
+      3. Step 3: Initialise statistics cache efficiently.
+      4. Step 4: Launch background Google Docs auto-sync watcher task.
+      5. Step 5: Yield control to application runner.
+      6. Step 6: Cancel watcher task upon server shutdown.
     """
     settings.ensure_directories()
 
@@ -76,17 +82,19 @@ async def lifespan(app: FastAPI):
         if chunks:
             index_engine.index_chunks(chunks)
 
-    # Initialise statistics cache.
-    stats_service.calculate_statistics(
-        index_engine.get_all_chunks(), index_engine.count()
-    )
+    # Step 3: Initialise statistics cache from disk without blocking startup.
+    cached_stats = stats_service.get_latest_statistics()
+    if not cached_stats or cached_stats.get("total_chunks_indexed", 0) == 0:
+        stats_service.calculate_statistics(
+            index_engine.get_all_chunks(), index_engine.count()
+        )
 
-    # Step 3: Launch background watcher task.
+    # Step 4: Launch background watcher task.
     watcher_task = asyncio.create_task(background_google_docs_watcher())
 
     yield
 
-    # Step 5: Cancel watcher upon shutdown.
+    # Step 6: Cancel watcher upon shutdown.
     watcher_task.cancel()
     try:
         await watcher_task

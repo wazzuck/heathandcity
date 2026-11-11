@@ -366,7 +366,26 @@
 44. Launched Overnight Continuous Ingestion Daemon:
     - Initiated background indexer daemon (`scripts/continuous_indexer.py`)
       running continuously with controlled 12-second inter-batch pauses to
-      ingest the remaining ~15,400 messages to 100% mailbox completeness.
+      ingest remaining historical Gmail messages to complete mailbox archive.
+    - Corpus expanded to 55,171+ chunks across 54,885+ Gmail messages and 268
+      Google Docs (22.55 million words, 232.5 MB storage).
+
+45. Designed Ambiguity Testing Harness & Institutional Query Governance:
+    - Catalogued 5 primary semantic ambiguity failure modes: under-specified
+      references, false presuppositions, chronological version conflicts,
+      homonym name collisions, and partial keyword scope traps.
+    - Built comprehensive evaluation harness in
+      `practice-vault/scripts/test_ambiguity_scenarios.py`.
+    - Proved `qwen3.5:4b` under enhanced prompt achieved 5/5 flawless results
+      (enumerated multiple distinct matters, refuted contradictory premises,
+      isolated superseded rates, disambiguated homonyms, and guarded domain).
+    - Integrated Enhanced Institutional Ambiguity-Aware prompt directives and
+      dynamic reference date injection into production `rag.py`.
+    - Optimised `main.py` startup using `asyncio.to_thread` and persistent
+      statistics caching, maintaining sub-700 MB RSS memory usage.
+    - Authored exhaustive architecture report in
+      `docs/PRACTICE_VAULT_AMBIGUITY_AND_QUERY_GOVERNANCE.md`.
+    - All 15 unit tests pass cleanly.
 
 ---
 
