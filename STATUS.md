@@ -427,6 +427,32 @@
     - Expanded test suite to 19 unit tests across
       `practice-vault/backend/tests/` (all 19 passing).
 
+50. Sovereign Performance Tuning & In-Memory Retrieval Optimisation:
+    - Configured SQLite Full-Text Search 5 (FTS5) with high-performance RAM
+      PRAGMAs (64 MB page cache, 256 MB memory-mapped I/O, write-ahead logging).
+    - Added in-memory Least Recently Used (LRU) query embedding cache (2,048
+      entries) eliminating redundant inference for repeated searches.
+    - Implemented concurrent dual-tower retrieval in `search_hybrid()`
+      dispatching LanceDB vector search and SQLite FTS5 in parallel threads
+      using `ThreadPoolExecutor(max_workers=2)`, halving retrieval latency.
+    - Pre-warmed Ollama SLM in memory with 24-hour residency
+      (`keep_alive: "24h"`, `num_thread: 4`, `num_predict: 512`), eliminating
+      cold-load latency.
+
+51. Advanced Nuance Handling, Aspect Decomposition & Interface Enhancements:
+    - Implemented sub-aspect query decomposition in `_decompose_query()` and
+      multi-aspect candidate fusion in `search_aspects()` with coverage bonuses.
+    - Added multi-year financial variance comparison (`compare_years()` and
+      `format_comparison_response()`) resolving comparative ledger inquiries.
+    - Added deterministic merchant exclusions (`exclude_merchant`) and monetary
+      threshold filters (`min_amount`, `max_amount`) for complex constraints.
+    - Enhanced frontend Document Intelligence UI (`tab-search`): formatted
+      Markdown table and list rendering, Nuanced Query Starters chips, query
+      latency and attribution badge, and keyboard shortcuts (`Ctrl+Enter`, `/`,
+      `Esc`).
+    - Expanded test suite to 22 unit tests across
+      `practice-vault/backend/tests/` (all 22 passing).
+
 ---
 
 ## 2. Next

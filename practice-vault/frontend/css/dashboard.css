@@ -276,6 +276,63 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.answer-box table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+}
+
+.answer-box th,
+.answer-box td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-subtle);
+  text-align: left;
+}
+
+.answer-box th {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: var(--gold-accent);
+  font-weight: 600;
+}
+
+.answer-box tr:nth-child(even) td {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.answer-box h3,
+.answer-box h4 {
+  color: var(--gold-accent);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.answer-box ul {
+  margin-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.answer-box li {
+  margin-bottom: 0.25rem;
+}
+
+.query-chip {
+  background-color: rgba(197, 160, 89, 0.1);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  color: var(--text-main);
+  padding: 0.25rem 0.65rem;
+  border-radius: 3px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.query-chip:hover {
+  background-color: rgba(197, 160, 89, 0.25);
+  border-color: var(--gold-accent);
+  color: #ffffff;
+}
+
 .citations-title {
   font-size: 0.95rem;
   color: var(--gold-accent);

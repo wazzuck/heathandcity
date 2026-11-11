@@ -337,7 +337,8 @@ class TransactionStore:
         limit: int = 10000,
     ) -> int:
         """
-        Batch-scan candidate emails from SQLite FTS index into transaction store.
+        Batch-scan candidate emails from SQLite FTS index into the
+        transaction store.
 
         Execution steps:
           1. Step 1: Open read-only connection to FTS database.
@@ -397,6 +398,9 @@ class TransactionStore:
         self,
         year: Optional[int] = None,
         merchant: Optional[str] = None,
+        exclude_merchant: Optional[str] = None,
+        min_amount: Optional[int] = None,
+        max_amount: Optional[int] = None,
         date_from: Optional[str] = None,
         date_to: Optional[str] = None,
         limit: int = 100,
@@ -407,12 +411,15 @@ class TransactionStore:
         Args:
           year: Optional calendar year filter.
           merchant: Optional counterparty substring filter.
+          exclude_merchant: Optional counterparty substring to exclude.
+          min_amount: Optional minimum amount in minor currency units (pence).
+          max_amount: Optional maximum amount in minor currency units (pence).
           date_from: Optional inclusive start date (YYYY-MM-DD).
           date_to: Optional inclusive end date (YYYY-MM-DD).
           limit: Maximum rows returned.
 
         Returns:
-          Dictionary containing totals, merchant groupings, and transaction rows.
+          Dictionary of totals, merchant groupings, and transaction rows.
         """
         conditions = []
         params: List[Any] = []
@@ -423,6 +430,15 @@ class TransactionStore:
         if merchant is not None:
             conditions.append("merchant LIKE ?")
             params.append(f"%{merchant}%")
+        if exclude_merchant is not None:
+            conditions.append("merchant NOT LIKE ?")
+            params.append(f"%{exclude_merchant}%")
+        if min_amount is not None:
+            conditions.append("amount_minor >= ?")
+            params.append(min_amount)
+        if max_amount is not None:
+            conditions.append("amount_minor <= ?")
+            params.append(max_amount)
         if date_from is not None:
             conditions.append("transaction_date >= ?")
             params.append(date_from)
@@ -519,8 +535,8 @@ class TransactionStore:
 
         if count == 0:
             return (
-                "The practice financial ledger contains no recorded transactions "
-                "matching the specified criteria."
+                "The practice financial ledger contains no recorded "
+                "transactions matching the specified criteria."
             )
 
         lines: List[str] = [
@@ -543,7 +559,9 @@ class TransactionStore:
 
         if txs:
             lines.append("#### Itemised Transaction Ledger")
-            lines.append("| Date | Merchant | Item / Description | Amount | Citation |")
+            lines.append(
+                "| Date | Merchant | Item / Description | Amount | Citation |"
+            )
             lines.append("| :--- | :--- | :--- | :--- | :--- |")
             for t in txs[:25]:
                 clean_desc = t['item_description'][:40].replace("|", "/")
@@ -556,5 +574,102 @@ class TransactionStore:
                 lines.append(
                     f"\n*(Showing 25 of {len(txs)} retrieved records)*"
                 )
+
+        return "\n".join(lines)
+
+    def compare_years(
+        self,
+        year_a: int,
+        year_b: int,
+        merchant: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Compare financial performance and expenditure across two calendar
+        years.
+
+        Execution steps:
+          1. Step 1: Query deterministic totals and record counts for year_a.
+          2. Step 2: Query deterministic totals and record counts for year_b.
+          3. Step 3: Compute exact numerical difference and percentage variance.
+
+        Args:
+          year_a: Baseline calendar year (e.g. 2024).
+          year_b: Comparison calendar year (e.g. 2025).
+          merchant: Optional counterparty filter applied to both periods.
+
+        Returns:
+          Dictionary containing comparative summaries and variance figures.
+        """
+        res_a = self.query_transactions(
+            year=year_a, merchant=merchant, limit=10
+        )
+        res_b = self.query_transactions(
+            year=year_b, merchant=merchant, limit=10
+        )
+
+        tot_a = res_a.get("total_minor", 0)
+        tot_b = res_b.get("total_minor", 0)
+        diff_minor = tot_b - tot_a
+        diff_float = diff_minor / 100.0
+
+        pct_change = 0.0
+        if tot_a > 0:
+            pct_change = (diff_minor / tot_a) * 100.0
+
+        return {
+            "year_a": year_a,
+            "year_b": year_b,
+            "merchant_filter": merchant,
+            "summary_a": res_a,
+            "summary_b": res_b,
+            "delta_minor": diff_minor,
+            "delta_display": f"£{diff_float:+,.2f}",
+            "pct_change": round(pct_change, 1),
+        }
+
+    def format_comparison_response(
+        self,
+        user_query: str,
+        comp_result: Dict[str, Any],
+    ) -> str:
+        """
+        Format comparative financial findings into an executive briefing table.
+
+        Args:
+          user_query: User inquiry string in plain English.
+          comp_result: Output from compare_years method.
+
+        Returns:
+          Structured markdown analysis highlighting variance and changes.
+        """
+        y_a = comp_result["year_a"]
+        y_b = comp_result["year_b"]
+        sum_a = comp_result["summary_a"]
+        sum_b = comp_result["summary_b"]
+        delta_str = comp_result["delta_display"]
+        pct_val = comp_result["pct_change"]
+        pct_sign = "+" if pct_val > 0 else ""
+
+        lines = [
+            f"### Comparative Financial Audit: {y_a} vs {y_b}",
+            "",
+            f"| Period / Metric | {y_a} | {y_b} | Variance |",
+            f"| :--- | :--- | :--- | :--- |",
+            f"| **Cumulative Spend** | {sum_a.get('total_display', '£0.00')} | "
+            f"{sum_b.get('total_display', '£0.00')} | "
+            f"**{delta_str} ({pct_sign}{pct_val}%)** |",
+            f"| **Transaction Volume** | {sum_a.get('count', 0)} orders | "
+            f"{sum_b.get('count', 0)} orders | "
+            f"{sum_b.get('count', 0) - sum_a.get('count', 0):+d} orders |",
+            "",
+            f"#### Top Counterparties in {y_b}",
+            "| Counterparty | Transactions | Cumulative Spend |",
+            "| :--- | :--- | :--- |",
+        ]
+
+        for m in sum_b.get("merchant_breakdown", [])[:5]:
+            lines.append(
+                f"| {m['merchant']} | {m['count']} | {m['total_display']} |"
+            )
 
         return "\n".join(lines)
