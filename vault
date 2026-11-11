@@ -4,6 +4,11 @@
 # Heath & City Practice Vault
 # ==============================================================================
 
+# Delegate directly to the active Practice Vault installation if present
+if [[ -x "/home/neville/practice-vault/vault" ]]; then
+  exec /home/neville/practice-vault/vault "$@"
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYTHON_EXEC="${SCRIPT_DIR}/practice-vault/venv/bin/python"
 CLI_SCRIPT="${SCRIPT_DIR}/practice-vault/scripts/vault_cli.py"
