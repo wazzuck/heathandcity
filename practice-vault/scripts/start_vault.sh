@@ -13,11 +13,14 @@ VENV_PYTHON="${VAULT_ROOT}/venv/bin/python"
 
 echo ">>> Starting Heath & City Practice Vault..."
 
-# Ensure Ollama daemon is running.
-if ! curl -s http://127.0.0.1:11434 &>/dev/null; then
-  echo ">>> Starting Ollama service daemon..."
-  sudo systemctl start ollama || ollama serve &
-  sleep 2
+# Optional fallback: Ollama service daemon (disabled by default).
+# To activate Ollama as a secondary standby, export START_OLLAMA_FALLBACK=1.
+if [[ "${START_OLLAMA_FALLBACK:-0}" == "1" ]]; then
+  if ! curl -s http://127.0.0.1:11434 &>/dev/null; then
+    echo ">>> Starting Ollama service daemon..."
+    sudo systemctl start ollama || ollama serve &
+    sleep 2
+  fi
 fi
 
 cd "${VAULT_ROOT}/backend"
