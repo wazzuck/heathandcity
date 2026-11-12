@@ -42,7 +42,8 @@
 
 ### 2.2. System B: Sovereign Practice Vault Appliance
 1. Designed for headless execution on low-power, dedicated mini-computers (e.g.
-   Lenovo ThinkCentre M720q Tiny with Intel Core i3-9100T or Apple Mac Mini).
+   Lenovo ThinkCentre M720q Tiny with 4-core Intel Core i3-9100T, 16 GB RAM,
+   or Apple Mac Mini).
 2. Network interfaces bind exclusively to loopback (`127.0.0.1:9090`) and local
    office subnets (`0.0.0.0:9090`) protected by constant-time master passphrase
    authentication; zero outbound internet communication occurs during search,
