@@ -78,6 +78,37 @@ def style(text: str, color_code: str) -> str:
     return text
 
 
+# GNU Readline non-printing escape sequence delimiters.
+RL_PROMPT_START = "\001"
+RL_PROMPT_END = "\002"
+
+
+def rl_style(text: str, color_code: str) -> str:
+    """
+    Format prompt text with ANSI escape codes shielded for GNU Readline.
+
+    Non-printing terminal escape sequences inside an input() prompt must be
+    enclosed within RL_PROMPT_START_IGNORE (\\001) and RL_PROMPT_END_IGNORE
+    (\\002) delimiters. This enables GNU Readline to calculate the true visual
+    character width of the prompt. Consequently, pressing the Backspace key
+    cannot delete past the prompt boundary or misalign the cursor.
+
+    Args:
+        text: Prompt label or symbol to format.
+        color_code: ANSI escape sequence code (e.g. COLOR_CYAN).
+
+    Returns:
+        Formatted prompt string with non-printing sequences shielded.
+    """
+    if supports_color():
+        return (
+            f"{RL_PROMPT_START}{color_code}{RL_PROMPT_END}"
+            f"{text}"
+            f"{RL_PROMPT_START}{COLOR_RESET}{RL_PROMPT_END}"
+        )
+    return text
+
+
 class VaultClient:
     """
     HTTP client communicating with the local Practice Vault backend daemon.
@@ -349,7 +380,10 @@ def run_repl(client: VaultClient, default_model: Optional[str] = None) -> None:
     while True:
         try:
             model_tag = f" [{current_model}]" if current_model else ""
-            prompt = f"{style('vault', COLOR_CYAN)}{style(model_tag, COLOR_DIM)}> "
+            prompt = (
+                f"{rl_style('vault', COLOR_CYAN)}"
+                f"{rl_style(model_tag, COLOR_DIM)}> "
+            )
             user_input = input(prompt).strip()
         except (KeyboardInterrupt, EOFError):
             print("\nExiting Practice Vault session.")
