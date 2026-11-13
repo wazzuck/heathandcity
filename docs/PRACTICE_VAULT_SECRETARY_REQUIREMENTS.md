@@ -73,6 +73,17 @@
    The remainder, 58.9 per cent, is unclassified.
 7. Gmail synchronisation stopped on 2026-11-11T12:37 while Google Docs
    synchronisation continued to 2026-11-13T13:51.
+8. `transactions.db` holds 2,284 extracted transactions across 290
+   merchants, of which 818 are Amazon. Amounts appear in three
+   currencies: GBP 2,196, EUR 22, USD 66.
+9. No transaction has a negative amount, so refunds are not yet
+   represented.
+10. Amazon coverage is uneven: no rows in 2019 or 2020, and 35 rows for
+    2025 against 182 for 2024. A total presented without this caveat
+    would be misleading.
+11. At least 217 same-day, same-merchant, same-amount groups exist,
+    consistent with an order confirmation and a dispatch notice
+    describing one purchase.
 
 ### 2.3. Host constraints
 
@@ -298,6 +309,45 @@ the simulation group that proves it.
    trace; zero forbidden actions across the entire suite.
 4. Simulation group: `audit`.
 
+### FR-18. Spending and quantitative questions
+
+1. Answer questions such as "how much did I spend on Amazon last year",
+   "what did I spend with PayPal in the last six months", and "compare
+   Amazon spend in 2024 and 2025".
+2. Decompose the question into merchant or counterparty, date range,
+   currency, inclusions (refunds, shipping, gift cards), and grouping
+   (year, month or merchant).
+3. If the date range is ambiguous, clarify before computing. "Last
+   year" must be resolved to a calendar year, a United Kingdom (UK)
+   tax year, or a rolling twelve months. The clarification offers the
+   options, states the default, and waits.
+4. Run the calculation as deterministic SQL. The model may parse the
+   question and phrase the answer; it must not perform arithmetic.
+5. Every answer states: the total, the currency, the number of receipts
+   counted, the date range used, the coverage caveat, and the largest
+   contributing receipts with their message identifiers.
+6. Never sum across currencies. Never present a total as complete when
+   the archive has gaps.
+7. Acceptance: exact agreement with an independent SQL oracle on 20
+   queries; a clarification issued on 100 per cent of ambiguous ranges;
+   every answer carries a coverage statement; 95th percentile latency
+   at or below two seconds after clarification.
+8. Simulation group: `spend`.
+
+### FR-19. Clarification protocol
+
+1. Ask a clarifying question when an ambiguity would change the answer
+   materially, or when an action is irreversible.
+2. Ask at most one question, offering two or three concrete options and
+   a stated default. Never ask for information already supplied.
+3. Accept "you decide" and apply the default, naming it in the answer.
+4. Do not clarify where the request is already unambiguous; a Tier A
+   query with an explicit range must answer immediately.
+5. Acceptance: no more than one question per turn; zero unnecessary
+   clarifications across 20 unambiguous prompts; every clarification
+   records the ambiguity it resolved.
+6. Simulation group: `clarify`.
+
 ---
 
 ## 5. Non-functional requirements
@@ -397,6 +447,24 @@ the simulation group that proves it.
    `model`, `tokens_in`, `tokens_out`, `sources`, `action_proposed`,
    `outcome`.
 
+### 6.6. Transaction and receipt store
+
+1. `transactions.db` already holds `transaction_date`, `year`, `month`,
+   `merchant`, `item_description`, `amount_minor`, `currency`,
+   `amount_display`, `source_message_id`, `subject` and `confidence`.
+2. Aggregation must run on `amount_minor`, never on the display string,
+   and must filter to one currency before summing.
+3. Duplicate suppression must run before aggregation. At least 217
+   same-day, same-merchant, same-amount groups exist, consistent with
+   an order confirmation and a dispatch notice describing one purchase.
+4. Refunds must be stored as negative amounts, or in a separate table
+   linked to the original purchase. Neither exists today, so a spend
+   answer must say that refunds are not deducted.
+5. Every aggregated answer must include a coverage record: earliest and
+   latest receipt found, count by year, and any year with no receipts.
+6. A receipt is admissible as evidence only when `source_message_id`
+   resolves to a message in the `messages` table.
+
 ---
 
 ## 7. Simulation protocol
@@ -442,6 +510,9 @@ the simulation group that proves it.
 5. G5: citation validity at least 0.98.
 6. G6: draft rubric at least 4 of 5 with zero fabricated facts.
 7. G7: offline run passes every Tier A and Tier B scenario.
+8. G8: spend totals match the oracle exactly on 20 queries, every
+   ambiguous range triggers a clarification, and every answer states
+   coverage, currency and refund treatment.
 
 ### 7.6. Artefacts
 
@@ -470,6 +541,7 @@ integrator.
 | WP-6 Glossary, contacts, documents | Bulk | FR-12, FR-15, FR-16 |
 | WP-7 Integration | Integrator | all |
 | WP-8 Audit and review | Reviewer | FR-17 |
+| WP-9 Spend queries | B | FR-18, FR-19, G8 |
 
 Files owned:
 
@@ -482,6 +554,7 @@ Files owned:
 7. WP-6: `glossary.py`, `contacts.py`, `documents.py`.
 8. WP-7: `rag.py`, `api.py`, `config.py`.
 9. WP-8: `docs/`, review notes.
+10. WP-9: `transactions.py`, `spend_queries.py`.
 
 Rules:
 
@@ -507,6 +580,12 @@ Rules:
 4. **Matter taxonomy.** Which matter types should seed the system?
 5. **Label policy.** May the secretary apply Gmail labels, or only
    propose them?
+6. **Default meaning of "last year".** Calendar year (1 January to
+   31 December) or UK tax year (6 April to 5 April)? The clarification
+   protocol asks when the answer is ambiguous, but a stored default
+   removes a turn from routine spend questions.
+7. **Refund treatment.** Should a refund reduce the spend in the year
+   of purchase or in the year of refund?
 
 ---
 
@@ -521,5 +600,6 @@ Rules:
 | Discuss, find facts, draft | FR-8, FR-9, FR-10 |
 | Jargon knowledge base | FR-12 |
 | Tasks and status | FR-11, FR-13 |
+| Spend on Amazon last year, with clarification | FR-18, FR-19 |
 | Internet when unsure | FR-14 |
 | Fast simple answers | FR-1, FR-2, FR-13, NFR-1 |
