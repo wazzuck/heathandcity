@@ -603,8 +603,8 @@
       on every script, and British Professional English spelling.
 
 61. Built and verified the Practice Vault personal secretary on branch
-    merged into `master` (386 tests):
-    - Requirements, 31 functional requirements, a 100-task catalogue and
+    merged into `master` (412 tests):
+    - Requirements, 34 functional requirements, a 100-task catalogue and
       simulation gates in `docs/PRACTICE_VAULT_SECRETARY_REQUIREMENTS.md`.
     - Structured message store: 58,166 messages backfilled in 4.2 s;
       newest-20 query p95 0.96 ms; topic search through the full-text
@@ -643,8 +643,19 @@
     - Behavioural learning records interactions and feedback, learns a
       style profile and warms repeated slow questions overnight.
     - Monthly spend, the verified interaction catalogue and its checker.
-    - Colibri rejected on measurement: 4.9 GB dense, 0 GB expert cache and
-      a 0% hit rate on this host.
+    - Colibri overnight path: the 35B Mixture-of-Experts model completed
+      a cited summary with six citations at about 0.8 tokens per second,
+      then the worker stopped the engine and returned its memory.
+    - Deployment profession packs for legal, medical, IT support and
+      general practice. Selection is recorded per appliance; glossary
+      answers take about 0.02 s and call no model. The measured IT support
+      case extracted three ticket families and 27 distinct IP addresses
+      from 5,000 messages.
+    - IT and software support added to the website's practice types, the
+      fee calculator, `llms.txt`, `llms-full.txt` and the structured data.
+    - OAuth consent restored at 20:24 UTC; Gmail and Drive verified live.
+      The Google Calendar API is still disabled in the project and needs
+      one console action.
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
 
@@ -683,8 +694,8 @@
    - Implement 4-stage Active Practice Memory for permanent self-correction.
 2. Deploy appliance hardware image to production Lenovo ThinkCentre M720q
    appliances for commercial partner trials.
-3. Optional: Add client-specific keyword synonym dictionaries for specialised
-   chambers and clinical practices.
+3. Extend the deployment profession packs when a partner trial demands a
+   new practice type; each pack is one entry plus a test.
 4. Visibility phase 3 (one page per profession) awaits a decision.
 5. Visibility phase 4 (off-page): Google Business Profile, Search Console,
    Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
@@ -698,11 +709,15 @@
 8. Define and record the lawful basis, the OpenRouter processor
    arrangement, and the international transfer safeguard required before
    the Kay demonstration handles real client correspondence.
-9. Restart the Practice Vault service to load the merged
-   interactive-priority code and the Qwen3-4B interactive model, and set
-   `START_INDEXER=1` for it so the Gmail indexer survives that restart.
-10. Rotate the local OpenCode service password, which was printed into a
-    session transcript during diagnostics.
+9. Enable the Google Calendar API (`calendar-json.googleapis.com`) in
+   project 840262346134. Consent is restored and Gmail and Drive are
+   verified, but calendar calls return `SERVICE_DISABLED`.
+10. Restart the Practice Vault service to load the merged
+    interactive-priority code and the Qwen3-4B interactive model, and
+    set `START_INDEXER=1` for it so the Gmail indexer survives that
+    restart.
+11. Rotate the local OpenCode service password, which was printed into
+    a session transcript during diagnostics.
 
 ---
 

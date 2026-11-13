@@ -500,6 +500,23 @@ the simulation group that proves it.
    delays an interactive request.
 6. Simulation group: `orchestrator`.
 
+### FR-34. Deployment profession pack
+
+1. Each appliance serves exactly one practice and selects exactly one
+   profession pack.
+2. A pack supplies domain vocabulary, analytical directives, entity
+   patterns and representative evaluation questions.
+3. Selection is stored on the appliance and takes effect without a
+   restart or an environment edit.
+4. A known domain term is expanded deterministically, without a model, in
+   under 50 milliseconds. An unknown term falls through to retrieval.
+5. A pack is data only: it may not change a permission, a route, a
+   network call or an outbound action.
+6. Acceptance: five of five evaluation prompts return a non-empty answer;
+   extraction passes a twenty-message spot check; the verified interaction
+   catalogue and the full test suite still pass.
+7. Simulation group: `profession`.
+
 ---
 
 ## 5. Non-functional requirements

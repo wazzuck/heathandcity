@@ -5,8 +5,9 @@
 > barristers and King's Counsel (KC), single-family offices and private
 > trustees, surgeons and medical consultants, prime estate agents and
 > surveyors, commercial insurance brokers, stockbrokers and investment
-> managers, chartered accountants and tax advisers, authors, composers,
-> actors, art galleries and creative estates. Client, patient and fund records
+> managers, chartered accountants and tax advisers, IT support engineers
+> and managed service providers, authors, composers, actors, art galleries
+> and creative estates. Client, patient and fund records
 > are never uploaded to public Artificial Intelligence (AI) tools; systems run
 > on sovereign hardware in the client's office or in a private UK data vault.
 > Technology and administrative services only; no legal, medical, investment or
@@ -40,6 +41,10 @@
    broadcast repeat fees, publisher accounting, and commission milestones.
 9. **Art Galleries, Dealers & Fine Art:** Consignment agreement tracking,
    Certificate of Authenticity (COA) provenance chains, and artist royalties.
+10. **IT Support Engineers & Managed Service Providers (MSPs):** Ticket and
+    incident triage, extraction of systems, error codes and severities,
+    licence and warranty renewal tracking, and client-ready incident
+    summaries prepared on local hardware.
 
 ## Fixed Fees
 

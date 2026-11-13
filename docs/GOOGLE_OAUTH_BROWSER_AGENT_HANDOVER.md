@@ -3,9 +3,10 @@
 > Purpose: let a browser-capable Artificial Intelligence (AI) agent restore
 > durable Google Workspace authorisation for the Practice Vault appliance.
 > Date: 13 November 2026.
-> Status: completed 13 November 2026, 20:27 UTC. Publishing status is
-> now In production and a durable refresh token was issued; see the
-> "Report back" section notes appended after execution.
+> Status: completed 13 November 2026 at 20:27 UTC. Publishing status is
+> In production and a durable refresh token was issued. Gmail and Drive
+> are verified live. The Google Calendar API remains disabled in the
+> project, so calendar sync needs one console action.
 > Language: British Professional English (AGENTS.md Policy 15).
 > Line width: 80 columns.
 
@@ -140,6 +141,33 @@ curl -s -H "X-Vault-Password: ${PRACTICE_VAULT_PASSWORD}" \
 3. `/api/google/status` reports connected.
 4. `last_gmail_sync` advances.
 5. No secret appears in any log or report.
+
+## 7. Verification record, 13 November 2026
+
+1. The token file was rewritten at 20:24:34 UTC. `connected_at` is the
+   same day and `refresh_token_expires_in` is absent, which is consistent
+   with a production client rather than a Testing client.
+2. All five scopes are present, plus `openid`. The refresh token is
+   present. No access or refresh token value is recorded in this file.
+3. `GET /api/google/status` returned `is_connected: true` for
+   `nevillebryce@gmail.com`.
+4. Live calls: the Gmail profile returned 200 with 58,203 messages; the
+   Drive `about` endpoint returned 200; the Calendar list returned 403.
+5. The synchronisation state advanced: `last_gmail_sync` at 20:43:33 UTC
+   and `last_doc_sync` at 20:43:55 UTC.
+6. The Calendar failure is not an authorisation failure. Google returned
+   `SERVICE_DISABLED`: the Google Calendar API
+   (`calendar-json.googleapis.com`) is not enabled in project
+   `840262346134`. Enabling it in the console, then waiting a few minutes,
+   is the only remaining step. No re-consent is required.
+
+## 8. Remaining operator action
+
+1. Enable the Google Calendar API for project `840262346134` at
+   `https://console.developers.google.com/apis/api/calendar-json.googleapis.com/overview?project=840262346134`.
+2. Re-run the calendar check and confirm that the local mirror advances.
+3. Do not repeat the consent flow: the token and scopes are already
+   correct.
 
 ## 7. Rollback
 

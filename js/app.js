@@ -88,6 +88,15 @@ const CALCULATOR_PROFILES = Object.freeze({
       "Assumes automated chasing of missing client vouchers, faster " +
       "statutory cross-checks, and fewer deadline scrambles."
   },
+  "it-support": {
+    label: "IT Support Engineer / MSP",
+    hourlyRateGbp: 150,
+    leakageFactor: 0.05,
+    efficiencyGain: 0.7,
+    note:
+      "Assumes faster ticket triage, fewer missed licence renewals, and " +
+      "less time reconstructing an incident from email threads."
+  },
   talent: {
     label: "Author, Composer or Creative Talent",
     hourlyRateGbp: 200,
