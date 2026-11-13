@@ -384,3 +384,9 @@ absent. Add project-specific rules only where they apply.
    contamination (GPL/AGPL), strict 100% on-premises UK GDPR sovereignty,
    preservation of Legal Professional Privilege, and NHS Caldicott information
    governance compliance.
+6. **Verified Interaction Catalogue**:
+   The Practice Vault keeps `docs/VERIFIED_INTERACTIONS.md` and
+   `scripts/verify_interactions.py` as its tested contract. Whenever a
+   capability, route, model or supported phrasing changes, update both in
+   the same commit and run the checker against the live appliance. A stale
+   catalogue is a defect; the next session will trust it.
