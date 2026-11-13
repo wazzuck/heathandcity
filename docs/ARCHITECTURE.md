@@ -152,8 +152,11 @@ practice-vault/
      (`--spec-type ngram-simple`).
 3. Delivers a 32.7% reduction in query latency compared to default containerised
    runtimes, with transparent fallback to local Ollama if required.
-4. Primary models supported: `phi4-mini:latest` (3.8B default), `qwen2.5:3b`,
-   and `deepseek-r1:1.5b`.
+4. Primary models: `qwen3-4b-instruct-2507` (interactive default),
+   `Qwen2.5-7B-Instruct` (background, low priority) and `Qwen3-1.7B`
+   (optional orchestrator fallback). `phi4-mini` remains a low-memory
+   fallback. The measured decision is recorded in
+   `practice-vault/docs/MODEL_SELECTION_2026-11.md`.
 
 ### 4.4. Model Context Protocol (MCP) Server Integration
 1. Provides standard `stdio` and Server-Sent Events (SSE) transports compliant
