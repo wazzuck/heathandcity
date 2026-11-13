@@ -562,29 +562,45 @@
       arrangement and international transfer safeguard still to be
       defined; OpenRouter key rotation deferred by operator decision.
 
-60. Built the private Kay demonstration subpage (`clients/kay/index.html`):
-    - Single self-contained page matching the brand palette, marked
-      `noindex,nofollow`, excluded from `sitemap.xml`, and deliberately
-      unlinked from `index.html`, `robots.txt` and the `llms*` files.
-    - Added a client-side access gate (user `kay`) comparing a SHA-256
-      digest rather than plaintext; recorded that static hosting cannot
-      authenticate, so this is a soft gate, not a security boundary.
-    - Wired live classification to the `kay-classify` Worker with a
-      saved-result fallback, so the demonstration completes even when
-      the Worker or OpenRouter credit is unavailable.
+60. Published the Kay demonstration on the website, identical to the
+    Kay project's own demo (`harness/standalone_classifier`):
+    - Copied `index.html`, `style.css` and `app.js` verbatim into
+      `clients/kay/`; `style.css` is byte-identical to the Kay
+      project, and `app.js` differs only by a Worker base-URL
+      constant plus the two fetch paths it prefixes.
+    - Extended the Worker with the two routes the demo calls:
+      `GET /api/classifier/data` (14 buckets, 77-term glossary and
+      12 scenario emails, exported from the Kay project by a
+      regeneration script rather than hand-copied) and
+      `POST /api/classifier/classify` (dual Jev and Luna pipeline).
+    - Ported the classification half of `kayharness/classifier.py`
+      to JavaScript in `~/kay-worker/src/pipeline.js`: identical
+      prompts, scoring rules and deterministic fallbacks. Verified
+      by running the Python original and the port side by side on
+      the default scenario with live calls disabled: the outputs are
+      canonically identical.
+    - Verified live dual classification through OpenRouter: Jev
+      `typesafe/jev-1.14` returned `risk` at 0.77 (High) and Luna
+      (alias `~openai/gpt-luna-latest`, served by `gpt-6-luna`)
+      returned a full briefing with 13 recognised terms.
+    - Kept the page `noindex,nofollow`, excluded from `sitemap.xml`,
+      and deliberately unlinked from `index.html`, `robots.txt` and
+      the `llms*` files.
+    - Retained the client-side access gate (user `kay`) comparing a
+      SHA-256 digest rather than plaintext, and the credential link
+      form (`#<user>:<password>`) whose fragment is never sent to
+      the server and is stripped from the address bar on arrival.
+      Recorded that static hosting cannot authenticate, so this is
+      a soft gate, not a security boundary.
     - Fixed a defect in the specification's Worker: it answered the
-      Cross-Origin Resource Sharing (CORS) preflight `OPTIONS` request
-      with 405, which would have blocked every browser request. The
-      Worker now answers preflights with 204 and allow-listed headers,
-      verified at 204 (approved origin), 403 (foreign origin) and 200
-      (live classification).
-    - Verified 80-column wrapping, JavaScript syntax under `node
-      --check`, and British Professional English spelling.
-    - Added a credential link form (`#<user>:<password>`) so the
-      client can be given one URL that unlocks the page directly; the
-      fragment is never transmitted to the server, is stripped from
-      the address bar on arrival, and the link itself must be handled
-      as the password.
+      Cross-Origin Resource Sharing (CORS) preflight `OPTIONS`
+      request with 405, which would have blocked every browser
+      request. The Worker now answers preflights with 204 for the
+      approved origin and 403 for any other.
+    - Verified the handover's Section 10 checks still pass (404
+      root, 403 foreign origin, 200 legacy `/classify`, zero
+      `sk-or-` occurrences), plus 80-column wrapping, `node --check`
+      on every script, and British Professional English spelling.
 
 ---
 
