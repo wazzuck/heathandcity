@@ -296,6 +296,9 @@ practice-vault/
 | `practice-vault/backend/app/gmail_metadata.py` | Thread, label and recipient enrichment. |
 | `practice-vault/backend/app/model_manager.py` | On-demand model residency and eviction. |
 | `practice-vault/backend/app/answer_cache.py` | Exact repeated answers, revision-guarded. |
+| `practice-vault/backend/app/deep_tasks.py` | Checkpointed deep-work queue. |
+| `practice-vault/backend/app/deep_worker.py` | Overnight worker using the 14B model. |
+| `practice-vault/backend/app/learning.py` | Interaction log, feedback and style profile. |
 | `practice-vault/scripts/manage_models.py` | Operator control for model residency. |
 | `practice-vault/scripts/manage_matters.py` | Operator control for the matter registry. |
 | `practice-vault/scripts/nightly_maintenance.sh` | Idle-window maintenance and model pass. |

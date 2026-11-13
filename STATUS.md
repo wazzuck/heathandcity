@@ -603,7 +603,7 @@
       on every script, and British Professional English spelling.
 
 61. Built and verified the Practice Vault personal secretary on branch
-    merged into `master` (372 tests):
+    merged into `master` (386 tests):
     - Requirements, 31 functional requirements, a 100-task catalogue and
       simulation gates in `docs/PRACTICE_VAULT_SECRETARY_REQUIREMENTS.md`.
     - Structured message store: 58,166 messages backfilled in 4.2 s;
@@ -638,6 +638,13 @@
       draft model measured slower and was rejected.
     - Exact-answer cache serves a repeated 105.65-second answer in 0.02
       seconds, invalidated by any ingest.
+    - Deep-task queue: a 14B model completed a cited summary while the 4B
+      stayed resident, then was evicted.
+    - Behavioural learning records interactions and feedback, learns a
+      style profile and warms repeated slow questions overnight.
+    - Monthly spend, the verified interaction catalogue and its checker.
+    - Colibri rejected on measurement: 4.9 GB dense, 0 GB expert cache and
+      a 0% hit rate on this host.
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
 
