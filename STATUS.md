@@ -656,6 +656,14 @@
     - OAuth consent restored at 20:24 UTC; Gmail and Drive verified live.
       The Google Calendar API is still disabled in the project and needs
       one console action.
+    - Overnight digest workflow: the secretary answers "what did you do
+      overnight" from the deep queue, and a cited Markdown digest is
+      written nightly. The before/after analysis is in
+      `practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
+    - Background 7B fixed: the model manager now exports
+      `LD_LIBRARY_PATH`; the morning battery starts and unloads the 7B to
+      confirm it.
+    - 418 tests pass (up from 412).
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
 

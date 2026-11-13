@@ -1039,6 +1039,10 @@ Recorded 13 November 2026 after the first build and live activation.
     `deep_worker.py --engine colibri`. A grounded 35B summary with six
     citations completed at about 0.8 tokens per second, then the engine
     stopped and returned its memory.
+20. Overnight workflow: `deep_digest.py`, the secretary's
+    **"what did you do overnight"** answer, and the nightly Markdown
+    digest. The before/after analysis is in
+    `practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
 
 ### B.2. Partial
 
