@@ -554,8 +554,11 @@ the simulation group that proves it.
    `date_utc`, `sender_address`, `sender_name` and `subject`.
 3. Gmail metadata calls supply `thread_id`, `recipients`, `labels` and
    read state.
-4. `duplicate_of` is set only when two rows share a normalised subject,
-   sender and date within 48 hours.
+4. `duplicate_of` is set only when two rows share the same normalised
+   sender, the same normalised subject, a timestamp within 48 hours and
+   an identical body hash. Metadata alone is insufficient: 402 groups
+   share sender, subject and second but carry different bodies, so a
+   metadata-only rule would wrongly merge distinct messages.
 
 ### 6.2. Calendar mirror
 
