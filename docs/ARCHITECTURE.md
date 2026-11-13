@@ -144,8 +144,8 @@ practice-vault/
 2. Features enabled:
    - **Flash Attention**: Enabled (`--flash-attn on`) for reduced memory
      bandwidth.
-   - **8,192 Context Window**: Supports up to 8,192 tokens across dual parallel
-     slots (`--parallel 2`, 4,096 tokens per slot).
+   - **8,192 Context Window**: One slot holds the full 8,192 tokens. Two
+     4,096-token slots were measured to reject a 4,992-token thread.
    - **Memory Locking**: Pinned into physical Random Access Memory (RAM) via
      `--load-mode mmap+mlock` to eliminate page fault jitter.
    - **Speculative Decoding**: Prompt n-gram speculation
@@ -241,7 +241,8 @@ practice-vault/
 1. `query_router.py` classifies every request deterministically before
    retrieval, resolving list, spend, ticket and calendar intents.
 2. `secretary.py` answers Tier A requests from structured storage without
-   a model: correspondence lists, spend totals and ticket status.
+   a model: correspondence lists, unread, spend totals, ticket status,
+   matter status and diary listings.
 3. `message_store.py` holds one row per message with the columns in
    section 6.1 of the requirements; `scripts/backfill_messages.py`
    populates it in about four seconds for 58,166 messages.
@@ -249,12 +250,21 @@ practice-vault/
    optional embedding tier, and a model only for the unknown minority.
 5. `tickets.py` stores the audited ticket lifecycle, portfolio queries and
    the explainable next-task recommendation.
-6. `governor.py` gives interactive requests priority: background workers
+6. `matters.py` stores the matter registry, an append-only status history
+   and loose name, reference and identifier resolution.
+7. `gmail_metadata.py` fills thread identifiers, labels and recipients;
+   `UNREAD` in the labels is what makes the unread capability real.
+8. `governor.py` gives interactive requests priority: background workers
    are paused with `SIGSTOP` and resumed with `SIGCONT`.
-7. `orchestrator.py` is an optional, disabled-by-default small-model
+9. `model_manager.py` loads the background and orchestrator models only
+   when needed, then terminates them and drops their page cache so the
+   RAM returns to the interactive path.
+10. `orchestrator.py` is an optional, disabled-by-default small-model
    fallback for requests the router cannot classify.
-8. `spend_queries.py` wraps the existing ledger with strong-evidence
+11. `spend_queries.py` wraps the existing ledger with strong-evidence
    de-duplication and a coverage record.
+12. `rag.py` answers diary questions for today, tomorrow, this week and
+   next week from the local calendar mirror, before any model call.
 
 ---
 
@@ -280,6 +290,12 @@ practice-vault/
 | `practice-vault/backend/app/governor.py` | Interactive priority and background preemption. |
 | `practice-vault/backend/app/query_router.py` | Rules-first intent routing before retrieval. |
 | `practice-vault/backend/app/spend_queries.py` | Spend totals with coverage and duplicate evidence. |
+| `practice-vault/backend/app/matters.py` | Matter registry and append-only status history. |
+| `practice-vault/backend/app/gmail_metadata.py` | Thread, label and recipient enrichment. |
+| `practice-vault/backend/app/model_manager.py` | On-demand model residency and eviction. |
+| `practice-vault/scripts/manage_models.py` | Operator control for model residency. |
+| `practice-vault/scripts/manage_matters.py` | Operator control for the matter registry. |
+| `practice-vault/scripts/nightly_maintenance.sh` | Idle-window maintenance and model pass. |
 | `practice-vault/bin/` | Native C++ llama-server inference binaries. |
 | `practice-vault/frontend/` | Sovereign on-premises dashboard interface. |
 | `practice-vault/scripts/` | Host setup, daemon runners, and agent CLI. |
