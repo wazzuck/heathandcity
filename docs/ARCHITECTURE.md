@@ -254,6 +254,8 @@ practice-vault/
    and loose name, reference and identifier resolution.
 7. `gmail_metadata.py` fills thread identifiers, labels and recipients;
    `UNREAD` in the labels is what makes the unread capability real.
+   The continuous indexer uses a seven-day Gmail forward query, so
+   new mail arrives without consuming the archive checkpoint.
 8. `governor.py` gives interactive requests priority: background workers
    are paused with `SIGSTOP` and resumed with `SIGCONT`.
 9. `model_manager.py` loads the background and orchestrator models only
