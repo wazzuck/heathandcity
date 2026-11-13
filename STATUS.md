@@ -509,6 +509,31 @@
     - Initialised 25-interaction catalog with initial baseline tests passed
       (clinical fact retrieval, coreference anchoring, document parsing,
       negative refusal).
+58. Exported Cloudflare Worker setup handover for the Kay demonstration:
+    - Authored `docs/CLOUDFLARE_WORKER_SETUP.md`, a self-contained
+      specification for an external Artificial Intelligence (AI) agent to
+      provision the proxy that protects the OpenRouter credential.
+    - Recorded that the key cannot be held by GitHub Pages, because System A
+      has zero server execution, and that a private repository cannot serve a
+      credential at request time.
+    - Documented the Worker as the sole role: store the secret, accept one
+      route, forward to OpenRouter, return a stable JSON shape.
+    - Verified free-plan limits against Cloudflare pricing (October and
+      November 2026): 100,000 requests per day, 10 milliseconds Central
+      Processing Unit (CPU) time per invocation, subrequests unbilled.
+    - Recorded that OpenRouter inference remains chargeable separately, and
+      that the free plan is described as unsuited to business-critical use.
+    - Made rotation of the plaintext OpenRouter credential a binding
+      prerequisite, with the key found tracked at `HEAD` in `wazzuck/vunderland`
+      across five commits at mode `664`.
+    - Included a complete origin-allow-listed Worker, its narrative
+      walkthrough, endpoint verification commands, rollback, and an
+      execution record table for completion during deployment.
+    - Reported 29 further credential files tracked under `keys/` in the same
+      repository as findings for the operator.
+    - Verified `scripts/verify_site.py` and `scripts/verify_legal_compliance.py`
+      both pass, and confirmed the embedded Worker source parses under
+      `node --check`.
 
 ---
 
