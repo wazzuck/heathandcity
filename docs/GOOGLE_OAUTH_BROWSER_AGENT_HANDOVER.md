@@ -3,7 +3,9 @@
 > Purpose: let a browser-capable Artificial Intelligence (AI) agent restore
 > durable Google Workspace authorisation for the Practice Vault appliance.
 > Date: 13 November 2026.
-> Status: action required before 17 November 2026, 12:19 UTC.
+> Status: completed 13 November 2026, 20:27 UTC. Publishing status is
+> now In production and a durable refresh token was issued; see the
+> "Report back" section notes appended after execution.
 > Language: British Professional English (AGENTS.md Policy 15).
 > Line width: 80 columns.
 
@@ -156,3 +158,43 @@ curl -s -H "X-Vault-Password: ${PRACTICE_VAULT_PASSWORD}" \
 3. New token expiry, or confirmation that it has none.
 4. Whether `last_gmail_sync` advanced.
 5. Any step that required operator intervention.
+
+---
+
+## 9. Execution report (13 November 2026)
+
+1. **Publishing status:** was `Testing`, now `In production`
+   (project `marketcalc`, user type `External`).
+2. **Verification:** never requested and never submitted. Google showed
+   the standard "Google hasn't verified this app" warning during
+   consent; the owner continued via Advanced. No verification, Cloud
+   Application Security Assessment (CASA) or security-assessment form
+   was opened.
+3. **New token:** written 2026-11-13T20:24:34Z with
+   `refresh_token_expires_in` absent, so no seven-day expiry applies.
+   All five scopes granted plus `openid`.
+4. **`last_gmail_sync`:** advanced from 19:21:00Z to 20:27:16Z, and
+   `total_synced_gmails` rose from 68,873 to 68,874.
+5. **Operator intervention:** Google sign-in (password and session) was
+   performed by the operator in the local Chromium window.
+
+### Corrections to the facts in Section 2
+
+1. Fact 3 was wrong: the OAuth client was registered only with
+   `http://127.0.0.1:8080/api/google/callback`. The 9090 URI caused
+   `Error 400: redirect_uri_mismatch` until it was added. The 8080
+   entry was left untouched, as Section 5 requires.
+2. The consent screen could not be published until Branding held an
+   Application home page, an Application privacy policy link and an
+   authorised domain. The privacy notice at
+   `https://heathandcity.com/privacy-policy/` was created for this
+   (`privacy-policy/index.html`, committed and pushed).
+3. The appliance runs on a separate host reached over Secure Shell
+   (SSH) at `86.27.171.186` (port 22), not from this developer
+   container; `192.168.0.13` was unreachable. The authorisation URL
+   was fetched on the appliance and a local tunnel forwarded port
+   9090 for the callback, then closed.
+4. The continuous indexer had to be started with
+   `start_indexer.sh`; the running server still carries
+   `START_INDEXER=0`, so a service restart stops it again (recorded
+   under `Next` in `STATUS.md`).
