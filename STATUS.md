@@ -562,6 +562,25 @@
       arrangement and international transfer safeguard still to be
       defined; OpenRouter key rotation deferred by operator decision.
 
+60. Built the private Kay demonstration subpage (`clients/kay/index.html`):
+    - Single self-contained page matching the brand palette, marked
+      `noindex,nofollow`, excluded from `sitemap.xml`, and deliberately
+      unlinked from `index.html`, `robots.txt` and the `llms*` files.
+    - Added a client-side access gate (user `kay`) comparing a SHA-256
+      digest rather than plaintext; recorded that static hosting cannot
+      authenticate, so this is a soft gate, not a security boundary.
+    - Wired live classification to the `kay-classify` Worker with a
+      saved-result fallback, so the demonstration completes even when
+      the Worker or OpenRouter credit is unavailable.
+    - Fixed a defect in the specification's Worker: it answered the
+      Cross-Origin Resource Sharing (CORS) preflight `OPTIONS` request
+      with 405, which would have blocked every browser request. The
+      Worker now answers preflights with 204 and allow-listed headers,
+      verified at 204 (approved origin), 403 (foreign origin) and 200
+      (live classification).
+    - Verified 80-column wrapping, JavaScript syntax under `node
+      --check`, and British Professional English spelling.
+
 ---
 
 ## 2. Next

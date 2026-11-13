@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <!--
+    ====================================================================
+    FILE: clients/kay/index.html
+    ====================================================================
+
+    PURPOSE:
+    A private, unlinked demonstration page for the Kay client. It shows
+    sample broker email and classifies it live through the kay-classify
+    Cloudflare Worker, which holds the OpenRouter credential that a
+    static site can never hold.
+
+    WHAT THIS FILE IS NOT FOR:
+    - It is not part of the public site: it is marked noindex, is
+      absent from sitemap.xml, and is deliberately not linked from
+      index.html, robots.txt, llms.txt or llms-full.txt.
+    - It is not a server-side authenticated area. GitHub Pages executes
+      no code, so the access gate below is a client-side soft gate
+      only (see the INVARIANTS).
+    - It is not a store of any secret: no credential appears in this
+      file, and the Worker never returns its key.
+
+    INVARIANTS RELIED UPON:
+    1. robots meta is "noindex,nofollow", so compliant crawlers that
+       fetch the page will not add it to an index.
+    2. The access gate compares a SHA-256 digest, never plaintext, and
+       the digest is the only credential material in this file.
+    3. All rendered strings are inserted with textContent, never
+       innerHTML, so no remote response can inject markup.
+    4. Live classification posts to
+       https://kay-classify.heathandcity.workers.dev/classify with
+       Origin https://heathandcity.com, which the Worker allow-lists;
+       any other origin receives 403 before credit is spent.
+  -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Step 1: keep this page out of every search and AI index. -->
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Private Classification Demonstration | Heath &amp; City</title>
+  <style>
+    /*
+     * Brand tokens copied from css/styles.css so the demonstration
+     * reads as the same house style without importing site-wide CSS
+     * that this unlinked page must not depend on.
+     */
+    :root {
+      --bg-primary: #f7f5f0;
+      --bg-elevated: #efece4;
+      --bg-card: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #5b6678;
+      --accent-gold: #8a5d12;
+      --accent-emerald: #0f766e;
+      --accent-amber: #b45309;
+      --border-subtle: rgba(15, 23, 42, 0.12);
+      --border-strong: rgba(138, 93, 18, 0.4);
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.07);
+      --font-sans: "Plus Jakarta Sans", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas,
+        monospace;
+      --radius-md: 16px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    /* --- Access gate --------------------------------------------- */
+    #gate {
+      position: fixed;
+      inset: 0;
+      background-color: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    .gate-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      padding: 32px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .gate-card h1 {
+      font-size: 1.15rem;
+      margin: 0 0 4px;
+    }
+
+    .gate-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 14px 0 4px;
+      color: var(--text-secondary);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    input:focus {
+      outline: 2px solid var(--border-strong);
+      outline-offset: 1px;
+    }
+
+    .gate-error {
+      color: var(--accent-amber);
+      font-size: 0.85rem;
+      min-height: 1.2em;
+      margin: 10px 0 0;
+    }
+
+    /* --- Buttons -------------------------------------------------- */
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      padding: 11px 20px;
+      background-color: var(--accent-gold);
+      color: #ffffff;
+    }
+
+    button:hover { background-color: #6e4a0c; }
+    button:disabled { opacity: 0.6; cursor: wait; }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--accent-gold);
+    }
+
+    .btn-secondary:hover { background-color: rgba(138, 93, 18, 0.1); }
+
+    /* --- Page sections -------------------------------------------- */
+    header.demo-head {
+      border-bottom: 1px solid var(--border-strong);
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      font-weight: 700;
+      margin: 0;
+    }
+
+    header.demo-head h1 {
+      font-size: 1.6rem;
+      margin: 6px 0 4px;
+    }
+
+    header.demo-head .sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .notice {
+      background-color: var(--bg-elevated);
+      border-left: 3px solid var(--accent-gold);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .panel h2 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin: 0 0 14px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 6px 14px;
+      font-size: 0.9rem;
+      margin-top: 16px;
+    }
+
+    .meta-grid dt {
+      color: var(--text-muted);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .meta-grid dd { margin: 0; }
+
+    .body-snippet {
+      white-space: pre-wrap;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* --- Result ---------------------------------------------------- */
+    #result-panel[hidden] { display: none; }
+
+    .result-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 4px 12px;
+      border: 1px solid var(--border-subtle);
+      background-color: var(--bg-elevated);
+      color: var(--text-secondary);
+    }
+
+    .badge.live {
+      background-color: rgba(15, 118, 110, 0.1);
+      color: var(--accent-emerald);
+      border-color: rgba(15, 118, 110, 0.3);
+    }
+
+    .badge.saved {
+      background-color: rgba(180, 83, 9, 0.1);
+      color: var(--accent-amber);
+      border-color: rgba(180, 83, 9, 0.3);
+    }
+
+    .result-dept {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 14px 0 2px;
+      text-transform: capitalize;
+    }
+
+    .result-conf {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0 0 14px;
+    }
+
+    .result-summary {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    footer.demo-foot {
+      border-top: 1px solid var(--border-subtle);
+      margin-top: 32px;
+      padding-top: 16px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    footer.demo-foot p { margin: 4px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       Access gate. Client-side only: static hosting cannot
+       authenticate. Shown until the digest matches.
+       ============================================================ -->
+  <div id="gate">
+    <div class="gate-card">
+      <h1>Private demonstration</h1>
+      <p>Enter the credentials issued for this review.</p>
+      <form id="gate-form" autocomplete="off">
+        <label for="gate-user">User</label>
+        <input id="gate-user" name="user" type="text"
+               autocomplete="username" required>
+        <label for="gate-pass">Password</label>
+        <input id="gate-pass" name="pass" type="password"
+               autocomplete="current-password" required>
+        <p class="gate-error" id="gate-error" role="alert"></p>
+        <button type="submit" id="gate-submit">Unlock</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       Demonstration content. Hidden until the gate is unlocked.
+       ============================================================ -->
+  <main class="wrap" id="demo" hidden>
+    <header class="demo-head">
+      <p class="brand">Heath &amp; City Technology Hampstead</p>
+      <h1>Private email classification demonstration</h1>
+      <p class="sub">Prepared for Kay &middot; not published, not
+        indexed</p>
+    </header>
+
+    <div class="notice">
+      <strong>Before you begin.</strong> This page transmits the sample
+      text you classify to a Cloudflare Worker and on to OpenRouter for
+      processing, then returns the result. Keep to the sample scenarios
+      supplied here, or to correspondence you are authorised to share.
+    </div>
+
+    <section class="panel" aria-labelledby="scenario-label">
+      <h2 id="scenario-label">1. Choose a sample email</h2>
+      <select id="scenario" aria-label="Sample email scenario"></select>
+      <dl class="meta-grid">
+        <dt>From</dt><dd id="sc-from"></dd>
+        <dt>Subject</dt><dd id="sc-subject"></dd>
+      </dl>
+      <div class="body-snippet" id="sc-body"></div>
+      <div class="actions">
+        <button id="classify" type="button">Classify this email</button>
+        <span class="status" id="classify-status"
+              role="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="panel" id="result-panel" hidden
+             aria-labelledby="result-label">
+      <h2 id="result-label">2. Classification result</h2>
+      <div class="result-top">
+        <span class="badge" id="result-badge">Awaiting run</span>
+        <span class="status" id="result-model"></span>
+      </div>
+      <p class="result-dept" id="result-dept"></p>
+      <p class="result-conf" id="result-conf"></p>
+      <p class="result-summary" id="result-summary"></p>
+    </section>
+
+    <footer class="demo-foot">
+      <p>Heath &amp; City Technology Hampstead &middot; private
+        demonstration for Kay &middot; 13 November 2026</p>
+      <p>This page is excluded from the sitemap and marked
+        <code>noindex</code>, and is not linked from the public
+        website.</p>
+    </footer>
+  </main>
+
+  <script>
+    /*
+     * Demonstration logic, in execution order:
+     *   Step 1 - hold the sample scenarios and their saved results.
+     *   Step 2 - unlock the page when the SHA-256 digest matches.
+     *   Step 3 - render the selected scenario without innerHTML.
+     *   Step 4 - classify through the Worker, or fall back to the
+     *            saved result when the Worker is unreachable.
+     */
+
+    // Step 1: the sample scenarios. Each carries a saved result so the
+    // page still demonstrates the output shape when the Worker or the
+    // OpenRouter credit is unavailable. The "confidence" values here
+    // are illustrative, not measured.
+    const SCENARIOS = [
+      {
+        id: "renewal",
+        label: "Renewal order from a broker",
+        sender: "j.harper@meridianbrokers.example",
+        subject: "Renewal order - contractor's plant fleet",
+        body: "Please quote on the attached slip for the contractor's " +
+              "plant fleet. The insured requires cover to start on 1 " +
+              "December. Prior insurer is withdrawing, and the claims " +
+              "record for the last three years is attached.",
+        glossary: [
+          {
+            term: "slip",
+            definition: "The broker's summary of the risk presented " +
+                        "to an insurer for underwriting."
+          }
+        ],
+        saved: {
+          department: "placement",
+          confidence: 0.96,
+          summary: "Requests a quotation for a renewal of contractor's " +
+                   "plant fleet cover with a 1 December inception, " +
+                   "including the claims record."
+        }
+      },
+      {
+        id: "claims",
+        label: "New claim notification",
+        sender: "claims@northbankadjusters.example",
+        subject: "Notification of loss - stock damage, NW10 warehouse",
+        body: "We notify a claim for water damage to stock at the " +
+              "NW10 warehouse discovered this morning. The insured " +
+              "has secured the premises and requests an adjuster " +
+              "visit this week. Reserve is not yet quantified.",
+        glossary: [
+          {
+            term: "reserve",
+            definition: "The sum an insurer sets aside as the likely " +
+                        "cost of a claim."
+          }
+        ],
+        saved: {
+          department: "claims",
+          confidence: 0.94,
+          summary: "Notifies a new water damage claim at an NW10 " +
+                   "warehouse and requests an adjuster visit; the " +
+                   "reserve is not yet quantified."
+        }
+      },
+      {
+        id: "compliance",
+        label: "Regulator correspondence",
+        sender: "supervision@fca.example",
+        subject: "Request for information - client money arrangements",
+        body: "We request your response within ten business days " +
+              "describing your client money arrangements, including " +
+              "the reconciliation frequency and the responsible " +
+              "individual. This is a supervisory request and does " +
+              "not indicate enforcement action.",
+        glossary: [
+          {
+            term: "client money",
+            definition: "Client funds held by a firm subject to the " +
+                        "Client Assets Sourcebook rules."
+          }
+        ],
+        saved: {
+          department: "compliance",
+          confidence: 0.97,
+          summary: "Financial Conduct Authority supervisory request " +
+                   "for client money arrangements information, due " +
+                   "within ten business days."
+        }
+      },
+      {
+        id: "internal",
+        label: "Internal diary request",
+        sender: "p.carter@heathandcity.example",
+        subject: "Diary - Wednesday's pipeline review",
+        body: "Reminder that Wednesday's pipeline review moves to " +
+              "10:00. Please update your entries before then so the " +
+                      "figures are current. No client action is " +
+                      "required.",
+        glossary: [],
+        saved: {
+          department: "internal",
+          confidence: 0.99,
+          summary: "Internal reminder that the Wednesday pipeline " +
+                   "review moves to 10:00, with entries to be " +
+                   "updated beforehand."
+        }
+      }
+    ];
+
+    // The Worker endpoint. Cross-origin posts are allowed only from
+    // https://heathandcity.com, which the Worker allow-lists.
+    const WORKER_URL =
+      "https://kay-classify.heathandcity.workers.dev/classify";
+
+    // SHA-256 digest of "kay:ferncroft". Stored as a digest rather
+    // than plaintext so the source reveals no usable password.
+    const GATE_DIGEST =
+      "7db7be3e0c92d613d7ac7e994600dc9e625ce7105a8ab6bf83e9bbdea252bc65";
+
+    // Session storage key. Cleared when the browser session ends, so
+    // an unlocked page does not stay unlocked indefinitely.
+    const SESSION_KEY = "kay-demo-unlocked";
+
+    // Step 2: unlock the page when the digest matches.
+    //
+    // The gate is a soft gate: a static host runs no server code, so
+    // anything on this page can be read by anyone who views the page
+    // source. It keeps casual visitors out; it is not a security
+    // boundary for sensitive material.
+    //
+    // @param {string} user - the user name entered by the visitor.
+    // @param {string} pass - the password entered by the visitor.
+    // @returns {Promise<boolean>} true when the credentials match.
+    async function credentialsMatch(user, pass) {
+      const text = user.trim().toLowerCase() + ":" + pass;
+      const bytes = new TextEncoder().encode(text);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      const hex = Array.from(new Uint8Array(digest))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+      // Compare against the stored digest without short-circuiting
+      // early, so the check takes the same time either way.
+      let diff = 0;
+      for (let i = 0; i < hex.length; i += 1) {
+        diff |= hex.charCodeAt(i) ^ GATE_DIGEST.charCodeAt(i);
+      }
+      return diff === 0;
+    }
+
+    // Step 3: render the selected scenario into the page.
+    //
+    // Every value is written with textContent, never innerHTML, so
+    // neither sample text nor a remote response can inject markup.
+    //
+    // @param {object} sc - one entry of the SCENARIOS array.
+    // @returns {void}
+    function renderScenario(sc) {
+      document.getElementById("sc-from").textContent = sc.sender;
+      document.getElementById("sc-subject").textContent = sc.subject;
+      document.getElementById("sc-body").textContent = sc.body;
+    }
+
+    // Step 4a: paint a classification result into the result panel.
+    //
+    // @param {object} result - department, confidence, summary.
+    // @param {boolean} live - true for a live run, false for a saved
+    //                          result shown as a fallback.
+    // @param {string} note - short provenance line for the badge.
+    // @returns {void}
+    function renderResult(result, live, note) {
+      const badge = document.getElementById("result-badge");
+      badge.textContent = note;
+      badge.className = "badge " + (live ? "live" : "saved");
+      document.getElementById("result-model").textContent = live
+        ? "Model: Luna via OpenRouter"
+        : "Showing a saved result";
+      document.getElementById("result-dept").textContent =
+        result.department;
+      document.getElementById("result-conf").textContent =
+        "Confidence: " + Number(result.confidence).toFixed(2);
+      document.getElementById("result-summary").textContent =
+        result.summary;
+      document.getElementById("result-panel").hidden = false;
+    }
+
+    // Step 4b: classify the selected scenario.
+    //
+    // Sends one POST to the Worker. On any failure, such as a network
+    // error, an expired credit balance or a rejected origin, the
+    // saved result is shown instead so the demonstration still
+    // completes.
+    //
+    // @returns {Promise<void>} resolves once the panel is painted.
+    async function classify() {
+      const button = document.getElementById("classify");
+      const status = document.getElementById("classify-status");
+      const select = document.getElementById("scenario");
+      const sc = SCENARIOS[Number(select.value)];
+      button.disabled = true;
+      status.textContent = "Classifying...";
+
+      // Step 4b-i: one bounded request. The 45-second ceiling stops
+      // the visitor waiting indefinitely on a slow upstream reply.
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 45000);
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: {
+              sender: sc.sender,
+              subject: sc.subject,
+              body: sc.body
+            },
+            glossary_override: sc.glossary
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timer);
+        if (!response.ok) {
+          throw new Error("Worker replied " + response.status);
+        }
+        const data = await response.json();
+        if (!data.ok || !data.luna) {
+          throw new Error("Malformed reply");
+        }
+        // Step 4b-ii: live success. Fields are read defensively so a
+        // missing key falls back to the saved scenario values.
+        renderResult(
+          {
+            department: data.luna.department || sc.saved.department,
+            confidence: data.luna.confidence || sc.saved.confidence,
+            summary: data.luna.executive_summary || sc.saved.summary
+          },
+          true,
+          "Live classification"
+        );
+        status.textContent = "Complete.";
+      } catch (err) {
+        // Step 4b-iii: fallback path. The error text is logged for
+        // the operator but never shown as if it were a result.
+        console.warn("Live classification unavailable:", err);
+        renderResult(sc.saved, false, "Saved result");
+        status.textContent =
+          "Live service unavailable; showing a saved result.";
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    // Step 2 (cont): wire the gate, the scenario picker and the
+    // classify button once the document is ready.
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("gate-form");
+      const error = document.getElementById("gate-error");
+      const gate = document.getElementById("gate");
+      const demo = document.getElementById("demo");
+      const select = document.getElementById("scenario");
+
+      // Populate the picker from the scenario data so the labels and
+      // the sample content can never drift apart.
+      SCENARIOS.forEach((sc, index) => {
+        const option = document.createElement("option");
+        option.value = String(index);
+        option.textContent = sc.label;
+        select.appendChild(option);
+      });
+      renderScenario(SCENARIOS[0]);
+
+      select.addEventListener("change", () => {
+        renderScenario(SCENARIOS[Number(select.value)]);
+        document.getElementById("result-panel").hidden = true;
+        document.getElementById("classify-status").textContent = "";
+      });
+
+      document.getElementById("classify")
+        .addEventListener("click", classify);
+
+      // A visitor already unlocked in this session passes straight
+      // through without re-entering credentials.
+      if (sessionStorage.getItem(SESSION_KEY) === "1") {
+        gate.hidden = true;
+        gate.style.display = "none";
+        demo.hidden = false;
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        error.textContent = "";
+        const user = document.getElementById("gate-user").value;
+        const pass = document.getElementById("gate-pass").value;
+        if (await credentialsMatch(user, pass)) {
+          sessionStorage.setItem(SESSION_KEY, "1");
+          gate.style.display = "none";
+          demo.hidden = false;
+        } else {
+          // Identical message for a wrong user and a wrong password,
+          // so the message reveals nothing about which was wrong.
+          error.textContent = "Those credentials were not recognised.";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
