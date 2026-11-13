@@ -602,6 +602,31 @@
       `sk-or-` occurrences), plus 80-column wrapping, `node --check`
       on every script, and British Professional English spelling.
 
+61. Built and verified the Practice Vault personal secretary on branch
+    `task/secretary-simulation` (21 commits, 344 tests):
+    - Requirements, 31 functional requirements, a 100-task catalogue and
+      simulation gates in `docs/PRACTICE_VAULT_SECRETARY_REQUIREMENTS.md`.
+    - Structured message store: 58,166 messages backfilled in 4.2 s;
+      newest-20 query p95 0.96 ms; topic search through the full-text
+      index with relevance ranking.
+    - Deterministic router and secretary path: list, spend, ticket and
+      clarification questions answered before retrieval, fixing the
+      original "recent emails" defect.
+    - Rules-first classifier: 58,166 messages in 12.8 s, 84.3 per cent
+      assigned; an optional overnight model pass covers the unknown
+      minority.
+    - Ticket engine with an audited lifecycle, portfolio queries, hygiene
+      proposals and an explainable next-task recommendation.
+    - Interactive-priority governor: background workers are paused with
+      `SIGSTOP` and resumed with `SIGCONT`; verified with a real process.
+    - Quota watcher every five minutes, pausing background work below
+      five per cent remaining.
+    - Offline simulation harness: 7/7 scenarios pass gates G1, G2, G3, G8
+      and G9 at p95 107 ms.
+    - Model bake-off and adoption: Qwen3-4B interactive, Qwen2.5-7B
+      background, Qwen3-1.7B optional orchestrator; Phi-4-mini retained
+      as the low-memory fallback.
+
 ---
 
 ## 2. Next
@@ -629,6 +654,12 @@
 8. Define and record the lawful basis, the OpenRouter processor
    arrangement, and the international transfer safeguard required before
    the Kay demonstration handles real client correspondence.
+9. Publish the Google OAuth consent screen to production before
+   17 November 2026, or re-consent weekly; the refresh token expires then.
+10. Restart the Practice Vault service after the merge to load the
+    interactive-priority code and the Qwen3-4B interactive model.
+11. Rotate the local OpenCode service password, which was printed into a
+    session transcript during diagnostics.
 
 ---
 
@@ -638,3 +669,10 @@
    pre-existing false positives (`scipy`, `pandas`, `docutils`). The
    operator has deferred the fix to a `Next` item; sale-readiness checks
    remain blocked until the gate passes cleanly.
+2. Accept or replace the MPL-2.0 transitive dependencies (`certifi`)
+   before merging `task/secretary-simulation`; the licence gate does not
+   flag MPL. The branch is otherwise ready.
+3. Decide the appliance network binding: it listens on `0.0.0.0:9090` and
+   the log records requests from public addresses. Bind loopback,
+   firewall port 9090 to the local subnet, or require a Virtual Private
+   Network.
