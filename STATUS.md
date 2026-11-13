@@ -711,7 +711,8 @@
    the Kay demonstration handles real client correspondence.
 9. Enable the Google Calendar API (`calendar-json.googleapis.com`) in
    project 840262346134. Consent is restored and Gmail and Drive are
-   verified, but calendar calls return `SERVICE_DISABLED`.
+   verified, but calendar calls return `SERVICE_DISABLED`. The handover is
+   `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`.
 10. Restart the Practice Vault service to load the merged
     interactive-priority code and the Qwen3-4B interactive model, and
     set `START_INDEXER=1` for it so the Gmail indexer survives that
@@ -723,11 +724,34 @@
 
 ## 3. Blocked
 
-1. Legal Gate 1 of `scripts/verify_legal_compliance.py` fails on three
-   pre-existing false positives (`scipy`, `pandas`, `docutils`). The
-   operator has deferred the fix to a `Next` item; sale-readiness checks
-   remain blocked until the gate passes cleanly.
-2. Decide the appliance network binding: it listens on `0.0.0.0:9090` and
-   the log records requests from public addresses. Bind loopback,
-   firewall port 9090 to the local subnet, or require a Virtual Private
-   Network.
+1. **Appliance network binding.** The service is currently loopback-only,
+   but the router still forwards port 9090. Remove the forward, then
+   decide whether the service returns to the Local Area Network (LAN) or
+   stays on loopback behind a Virtual Private Network (VPN).
+
+---
+
+## 4. Known failures and deferred fixes
+
+The authoritative appliance register is Section 5 of
+`practice-vault/STATUS.md`, items KF-01 to KF-12. This section records the
+cross-repository actions that need an operator or a site change.
+
+1. **KF-01: Google Calendar API disabled.** Calendar calls return
+   `SERVICE_DISABLED`, so the diary cannot refresh. The handover is
+   `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`. Severity: high.
+2. **KF-02: no scheduled calendar sync.** Enabling the API restores
+   access but does not create a sync job. A calendar sync script, a
+   nightly step and a `last_calendar_sync` timestamp are still needed.
+   Severity: high.
+3. **KF-03: restart stops the forward indexer.** The running service
+   carries `START_INDEXER=0`; restart it with `START_INDEXER=1`.
+   Severity: medium.
+4. **KF-04: OpenCode password.** It appeared in a diagnostic transcript
+   and should be rotated. Severity: medium.
+5. **Resolved on 13 November:** the Legal Gate 1 false positives for
+   `scipy`, `pandas` and `docutils` no longer reproduce. The gate passes
+   all four checks, so the earlier sale-readiness block is lifted.
+6. **No real IT support deployment yet.** The website and the appliance
+   pack are ready, but the measured case used the operator's own archive,
+   not a client practice. A partner trial is still required.

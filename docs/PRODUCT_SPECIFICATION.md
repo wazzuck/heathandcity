@@ -15,8 +15,8 @@
    (or private sovereign UK data vault).
 2. It acts as an autonomous digital assistant ("Automated Practice Clerk")
    for boutique professional practices (barristers, medical consultants,
-   family offices, prime estate agents, brokers, accountants, and creative
-   studios).
+   family offices, prime estate agents, brokers, accountants, IT support
+   engineers, managed service providers and creative studios).
 3. The design philosophy is **Zero Operational Disruption**:
    - The client never changes their existing daily software (Outlook, Word,
      Excel).

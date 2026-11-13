@@ -1032,18 +1032,27 @@ Recorded 13 November 2026 after the first build and live activation.
     style profile and nightly cache warming.
 17. Monthly spend and the verified interaction catalogue, with its
     executable checker.
+18. Deployment profession packs: `professions.py`, `scripts/profession.py`
+    and `GET/POST /api/profession`. Four packs ship; the measured IT
+    support case is in `practice-vault/docs/IT_SUPPORT_TEST_CASE.md`.
+19. Colibri overnight path: `colibri.py` and
+    `deep_worker.py --engine colibri`. A grounded 35B summary with six
+    citations completed at about 0.8 tokens per second, then the engine
+    stopped and returned its memory.
 
 ### B.2. Partial
 
 1. Fact answers and drafting: the streaming path and Qwen3-4B are live,
    but gates G5 and G6 have no scored run yet.
 2. Invitations: 50 are listed from the classifier's category, but
-   accept/decline and clash write-back wait for the calendar scope.
-3. Glossary: not built; the router and prompts do not yet expand jargon.
-4. Web look-up and offline persistence: the existing enrichment module is
+   accept/decline and clash write-back wait for calendar write access and
+   a working calendar sync.
+3. Web look-up and offline persistence: the existing enrichment module is
    present but was not re-tested in this build.
-5. Contacts and relationship memory: the existing engines are present but
+4. Contacts and relationship memory: the existing engines are present but
    were not re-tested in this build.
+5. Mixed-currency spend: the engine refuses a total that spans currencies
+   rather than presenting a per-currency breakdown.
 
 ### B.3. Not built
 

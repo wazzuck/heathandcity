@@ -268,6 +268,26 @@ practice-vault/
 12. `rag.py` answers diary questions for today, tomorrow, this week and
    next week from the local calendar mirror, before any model call.
 
+### 4.12. Deployment Profession Packs and the Overnight 35B Engine
+
+1. `professions.py` holds four packs: `legal` (the default), `medical`,
+   `it_support` and `general`. A pack supplies domain vocabulary,
+   analytical directives, entity patterns and evaluation questions.
+2. Exactly one pack is active per appliance. The selection is stored in
+   `~/practice-vault-data/profession.json` and takes effect on the next
+   question, without a restart or an environment edit.
+3. A known term is expanded deterministically in about 20 milliseconds
+   with no model call. An unknown term falls through to retrieval rather
+   than receiving a confident wrong definition.
+4. `colibri.py` starts, health-checks, questions and stops the streamed
+   Qwen3.6-35B-A3B Mixture-of-Experts engine. The overnight worker reaches
+   it with `deep_worker.py --engine colibri`.
+5. Colibri runs at about 0.8 tokens per second on the central processor,
+   so it is confined to the nightly overflow batch and is never on the
+   interactive path. It stops and releases its memory when the batch ends.
+6. A pack changes interpretation only. It cannot change a permission, a
+   route or an outbound action.
+
 ---
 
 ## 5. Module Inventory
