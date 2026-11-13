@@ -1005,6 +1005,8 @@ Recorded 13 November 2026 after the first build and live activation.
     G2, G3, G8 and G9.
 12. Licence: MPL-2.0 accepted for `certifi`, full text shipped, gate
     amended and passing.
+13. Exact-answer cache: `answer_cache.py`; a repeated 105.65-second
+    answer served in 0.02 seconds, invalidated by any ingest.
 
 ### B.2. Partial
 

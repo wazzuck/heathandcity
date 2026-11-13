@@ -293,6 +293,7 @@ practice-vault/
 | `practice-vault/backend/app/matters.py` | Matter registry and append-only status history. |
 | `practice-vault/backend/app/gmail_metadata.py` | Thread, label and recipient enrichment. |
 | `practice-vault/backend/app/model_manager.py` | On-demand model residency and eviction. |
+| `practice-vault/backend/app/answer_cache.py` | Exact repeated answers, revision-guarded. |
 | `practice-vault/scripts/manage_models.py` | Operator control for model residency. |
 | `practice-vault/scripts/manage_matters.py` | Operator control for the matter registry. |
 | `practice-vault/scripts/nightly_maintenance.sh` | Idle-window maintenance and model pass. |
