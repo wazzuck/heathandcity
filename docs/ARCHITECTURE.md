@@ -236,6 +236,26 @@ practice-vault/
    cryptographic session tokens with 7-day lifespans and brute-force rate
    limiting.
 
+### 4.11. Personal Secretary Layer
+
+1. `query_router.py` classifies every request deterministically before
+   retrieval, resolving list, spend, ticket and calendar intents.
+2. `secretary.py` answers Tier A requests from structured storage without
+   a model: correspondence lists, spend totals and ticket status.
+3. `message_store.py` holds one row per message with the columns in
+   section 6.1 of the requirements; `scripts/backfill_messages.py`
+   populates it in about four seconds for 58,166 messages.
+4. `classifier.py` assigns one of nine categories using rules first, an
+   optional embedding tier, and a model only for the unknown minority.
+5. `tickets.py` stores the audited ticket lifecycle, portfolio queries and
+   the explainable next-task recommendation.
+6. `governor.py` gives interactive requests priority: background workers
+   are paused with `SIGSTOP` and resumed with `SIGCONT`.
+7. `orchestrator.py` is an optional, disabled-by-default small-model
+   fallback for requests the router cannot classify.
+8. `spend_queries.py` wraps the existing ledger with strong-evidence
+   de-duplication and a coverage record.
+
 ---
 
 ## 5. Module Inventory
@@ -253,6 +273,13 @@ practice-vault/
 | `llms-full.txt` | Full plain-text context corpus for AI crawlers. |
 | `vault` | Interactive Claude Code-style CLI shortcut launcher. |
 | `practice-vault/backend/` | Appliance FastAPI server, LanceDB, RAG, and MCP. |
+| `practice-vault/backend/app/message_store.py` | Structured message table and full-text topic search. |
+| `practice-vault/backend/app/secretary.py` | Deterministic answers for lists, spend and tickets. |
+| `practice-vault/backend/app/classifier.py` | Rules-first, nine-category mail classification. |
+| `practice-vault/backend/app/tickets.py` | Audited ticket lifecycle and next-task recommendation. |
+| `practice-vault/backend/app/governor.py` | Interactive priority and background preemption. |
+| `practice-vault/backend/app/query_router.py` | Rules-first intent routing before retrieval. |
+| `practice-vault/backend/app/spend_queries.py` | Spend totals with coverage and duplicate evidence. |
 | `practice-vault/bin/` | Native C++ llama-server inference binaries. |
 | `practice-vault/frontend/` | Sovereign on-premises dashboard interface. |
 | `practice-vault/scripts/` | Host setup, daemon runners, and agent CLI. |
