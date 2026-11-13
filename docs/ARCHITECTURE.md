@@ -288,6 +288,24 @@ practice-vault/
 6. A pack changes interpretation only. It cannot change a permission, a
    route or an outbound action.
 
+### 4.13. Overnight Deep-Work Workflow
+
+1. `deep_tasks.py` queues work during the day; `deep_worker.py` runs it
+   overnight with the dense 14B or the streamed 35B engine.
+2. The interactive 4B is stopped for the window and restored by the
+   wrapper, with the monitor as a second guard.
+3. `deep_digest.py` turns completed tasks into a cited digest. The
+   secretary answers **"what did you do overnight"** deterministically,
+   and the nightly job writes
+   `reports/overnight_digest_YYYYMMDD.md`.
+4. The digest is a review queue. Nothing is sent, filed or written to a
+   matter until the operator approves it.
+5. `scripts/performance_smoke.py` measures Tier A, glossary, digest and
+   model-bound latency; `scripts/overnight_tests.sh` runs the morning
+   battery and writes a Markdown report.
+6. The measured before-and-after comparison is in
+   `practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
+
 ---
 
 ## 5. Module Inventory
@@ -321,8 +339,11 @@ practice-vault/
 | `practice-vault/backend/app/learning.py` | Interaction log, feedback and style profile. |
 | `practice-vault/backend/app/professions.py` | Deployment tailoring. |
 | `practice-vault/backend/app/colibri.py` | Control of the 35B engine. |
+| `practice-vault/backend/app/deep_digest.py` | Overnight review digest. |
 | `practice-vault/scripts/profession.py` | Pack selection and evaluation. |
 | `practice-vault/scripts/manage_colibri.py` | Control of the 35B engine. |
+| `practice-vault/scripts/performance_smoke.py` | Latency and timing. |
+| `practice-vault/scripts/overnight_tests.sh` | Morning battery. |
 | `practice-vault/scripts/manage_models.py` | Operator control for model residency. |
 | `practice-vault/scripts/manage_matters.py` | Operator control for the matter registry. |
 | `practice-vault/scripts/nightly_maintenance.sh` | Idle-window maintenance and model pass. |
