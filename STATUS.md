@@ -663,7 +663,8 @@
     - Background 7B fixed: the model manager now exports
       `LD_LIBRARY_PATH`; the morning battery starts and unloads the 7B to
       confirm it.
-    - 418 tests pass (up from 412).
+    - 420 tests pass (up from 412); the morning battery passed all
+      functional checks, including the 7B start after the library-path fix.
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
 
