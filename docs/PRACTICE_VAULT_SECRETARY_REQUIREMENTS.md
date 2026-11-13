@@ -1009,6 +1009,12 @@ Recorded 13 November 2026 after the first build and live activation.
     answer served in 0.02 seconds, invalidated by any ingest.
 14. Forward Gmail sync: `scripts/sync_gmail_new.py` and the
     continuous indexer; 66 new messages fetched through a seven-day query.
+15. Deep-task queue: `deep_tasks.py` and `deep_worker.py`; a 14B cited
+    summary completed while the 4B stayed resident.
+16. Behavioural learning: `learning.py`; interaction log, feedback,
+    style profile and nightly cache warming.
+17. Monthly spend and the verified interaction catalogue, with its
+    executable checker.
 
 ### B.2. Partial
 
