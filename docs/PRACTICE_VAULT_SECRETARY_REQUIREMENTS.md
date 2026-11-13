@@ -348,6 +348,124 @@ the simulation group that proves it.
    records the ambiguity it resolved.
 6. Simulation group: `clarify`.
 
+### FR-20. Ticket creation
+
+1. Create a ticket from a message, a document, a calendar event, or an
+   explicit instruction.
+2. Fields: identifier, title, matter, requester, priority, due date,
+   status, owner, source link, created time.
+3. Deduplicate against open tickets by matter, normalised subject and
+   counterparty within 14 days. If a match exists, propose a link
+   instead of creating a second ticket.
+4. Acceptance: 30 seeded messages create the expected ticket or link;
+   a re-run creates no duplicates; every ticket cites a source.
+5. Simulation group: `ticket-create`.
+
+### FR-21. Ticket lifecycle
+
+1. States: new, triaged, in progress, waiting on client, waiting on
+   third party, blocked, done, cancelled.
+2. Transitions are explicit and audited. Closing requires a completion
+   note and a link back to the source.
+3. Reopening preserves history rather than erasing it.
+4. Acceptance: the state machine rejects illegal transitions; 100 per
+   cent of transitions are audited; a close without a note is refused.
+5. Simulation group: `ticket-lifecycle`.
+
+### FR-22. Ticket queries and portfolio views
+
+1. Answer "what is open", "what is overdue", "what is waiting on me",
+   "what did I close this week", "what is the status of <matter>",
+   "what is due tomorrow", and "who is blocking".
+2. Tier A from SQL, under two seconds.
+3. Acceptance: exact agreement on 25 queries; every answer lists
+   identifier, title, status and due date.
+4. Simulation group: `ticket-query`.
+
+### FR-23. Next-task recommendation
+
+1. Recommend the next task with a deterministic, stored score built
+   from deadline proximity, client importance, matter value, age,
+   dependency, effort and operator pinning.
+2. Show the top three, each with the reason for its position. The
+   recommendation must be explainable from stored fields alone.
+3. Acceptance: agreement with a manual ranking on 10 scenarios, at
+   least 80 per cent for the first choice and 100 per cent containment
+   in the top three.
+4. Simulation group: `ticket-recommend`.
+
+### FR-24. Ticket hygiene
+
+1. Detect tickets with no activity beyond a threshold, blocked tickets
+   whose dependency has cleared, and probable duplicates.
+2. Propose an action; never close or merge automatically.
+3. Acceptance: 15 known cases, recall at least 0.90 and precision at
+   least 0.85.
+4. Simulation group: `ticket-hygiene`.
+
+### FR-25. Administrative extraction
+
+1. Extract deadlines, invoices and amounts, renewal dates, travel
+   bookings, deliveries, subscriptions, appointments, reference
+   numbers and requested actions.
+2. Each extraction proposes a ticket or a calendar entry; it never
+   makes a silent commitment.
+3. Acceptance: 40 seeded messages across eight types, extraction F1 at
+   least 0.85; zero tickets created without a source.
+4. Simulation group: `admin-extract`.
+
+### FR-26. Routine correspondence
+
+1. Draft acknowledgements, holding replies, chasers, thank-you notes,
+   appointment confirmations and document cover notes.
+2. Never send. Stage for approval.
+3. Acceptance: rubric at least 4 of 5 on 20 drafts; no fabricated
+   facts; British Professional English throughout.
+4. Simulation group: `draft-admin`.
+
+### FR-27. Meeting preparation
+
+1. One page per meeting: attendees and last contact, open tickets,
+   relevant documents, recent messages, and three suggested questions.
+2. Acceptance: 10 meetings; every item cites a source; generation
+   within 90 seconds.
+3. Simulation group: `meeting-prep`.
+
+### FR-28. Weekly review
+
+1. Produce, every Friday or on request: closed, opened, overdue and
+   stale tickets, the week ahead, and one recommendation.
+2. Acceptance: figures match SQL; under two seconds from cache; names
+   the three most at-risk items.
+3. Simulation group: `weekly`.
+
+### FR-29. Matter lifecycle
+
+1. Maintain checklists for opening, active, closing and archived
+   matters. Checklist items become ticket templates.
+2. Acceptance: checklist completeness; no item closes without
+   evidence.
+3. Simulation group: `matter-lifecycle`.
+
+### FR-30. Risk and compliance flags
+
+1. Flag phishing, suspicious payment requests, complaints, data
+   subject requests, regulatory deadlines, possible privilege issues
+   and conflict-check names.
+2. Flags are advisory, cite the trigger text, and never state a legal
+   conclusion.
+3. Acceptance: 30 seeded cases, recall at least 0.90, false-positive
+   rate at most 0.10; zero automated legal conclusions.
+4. Simulation group: `risk-flags`.
+
+### FR-31. Personal administration
+
+1. Maintain reminders for renewals, appointments, travel and personal
+   deadlines, linked to their source.
+2. Acceptance: 20 prompts, correct date and entity, no duplicate
+   reminders.
+3. Simulation group: `personal-admin`.
+
 ---
 
 ## 5. Non-functional requirements
@@ -404,6 +522,23 @@ the simulation group that proves it.
 
 1. The existing `./vault` command-line interface and dashboard continue
    to work throughout.
+
+### NFR-11. Stack review and change mandate
+
+1. Review the technology stack before and after the build against
+   measured performance, not fashion.
+2. The review covers at least: inference engine and build flags, model
+   choice and quantisation, embedding model, reranker, index
+   technology, job scheduling, and dependency licences.
+3. Every proposed change states the measured baseline, the expected
+   gain, the cost, the risk, and the effect on offline operation.
+4. A change is adopted only when it passes the regression suite and a
+   benchmark on this host. No cloud dependency may enter the runtime
+   path.
+5. Decisions are committed as a dated record under `docs/`, including
+   rejected options and the reason for rejection.
+6. Acceptance: gate G12. Each proposal is reproducible from a script
+   in `scripts/benchmarks/`.
 
 ---
 
@@ -513,6 +648,13 @@ the simulation group that proves it.
 8. G8: spend totals match the oracle exactly on 20 queries, every
    ambiguous range triggers a clarification, and every answer states
    coverage, currency and refund treatment.
+9. G9: ticket creation, lifecycle and queries pass 30, 20 and 25
+   scenarios respectively.
+10. G10: top-three recommendation containment is 100 per cent, and
+    first-choice agreement is at least 80 per cent.
+11. G11: administrative extraction F1 is at least 0.85.
+12. G12: the stack review is committed with measured baselines and a
+    written decision for every proposed change.
 
 ### 7.6. Artefacts
 
@@ -542,6 +684,7 @@ integrator.
 | WP-7 Integration | Integrator | all |
 | WP-8 Audit and review | Reviewer | FR-17 |
 | WP-9 Spend queries | B | FR-18, FR-19, G8 |
+| WP-10 Stack review | Reviewer | G12 |
 
 Files owned:
 
@@ -555,6 +698,8 @@ Files owned:
 8. WP-7: `rag.py`, `api.py`, `config.py`.
 9. WP-8: `docs/`, review notes.
 10. WP-9: `transactions.py`, `spend_queries.py`.
+11. WP-10: `docs/STACK_REVIEW_2026-11.md`,
+    `scripts/benchmarks/`.
 
 Rules:
 
@@ -601,5 +746,166 @@ Rules:
 | Jargon knowledge base | FR-12 |
 | Tasks and status | FR-11, FR-13 |
 | Spend on Amazon last year, with clarification | FR-18, FR-19 |
+| Create and manage tickets | FR-20, FR-21 |
+| Status of tickets and matters | FR-13, FR-22 |
+| Close out completed work | FR-21, FR-29 |
+| Recommend the next task | FR-23 |
+| Admin and routine correspondence | FR-25, FR-26, FR-31 |
+| Examine and change the stack | NFR-11, WP-10 |
 | Internet when unsure | FR-14 |
 | Fast simple answers | FR-1, FR-2, FR-13, NFR-1 |
+
+---
+
+## Appendix A. Secretary task catalogue
+
+This catalogue defines the intent taxonomy the router must cover. Each
+line is a task the secretary should recognise, even where the required
+action is only to draft or to propose.
+
+### A.1. Inbox and correspondence
+
+1. Show recent, unread or flagged messages.
+2. Show messages from a named person or organisation.
+3. Show messages about a matter, project or property.
+4. Show messages with attachments or invitations.
+5. Summarise a long thread.
+6. Summarise everything received today.
+7. Find the last message from or to a person.
+8. Find a message by approximate date and topic.
+9. Find an attachment by name or type.
+10. Draft a reply to a thread.
+11. Draft a new message from facts in the archive.
+12. Draft a holding reply or acknowledgement.
+13. Draft a chase for an unanswered message.
+14. Draft a thank-you or confirmation note.
+15. Rewrite a draft in a different register.
+16. Translate a technical passage into plain English.
+17. Extract the action list from a message.
+18. Detect the requested response date in a message.
+19. Compare two messages or two versions of a thread.
+20. Identify who said what in a thread.
+
+### A.2. Calendar and scheduling
+
+1. Show today's or this week's commitments.
+2. Show the next meeting and its preparation.
+3. Find a free slot of a given length.
+4. Check whether a proposed time clashes.
+5. Propose three alternative times.
+6. Accept, decline or tentatively accept an invitation.
+7. Create, move or cancel an event.
+8. Add travel time around a meeting.
+9. Detect back-to-back or over-running days.
+10. Summarise a meeting from the invitation and related mail.
+11. Prepare a briefing note for a meeting.
+12. List invitations awaiting a response.
+
+### A.3. Tickets, matters and work management
+
+1. Create a ticket from an email.
+2. Create a ticket from a document or a verbal instruction.
+3. Link an email to an existing ticket.
+4. Merge duplicate tickets.
+5. Change a ticket's priority, owner or due date.
+6. Move a ticket through its lifecycle.
+7. Close a ticket with a completion note.
+8. Reopen a closed ticket.
+9. List open, overdue or blocked tickets.
+10. List tickets waiting on the operator.
+11. List tickets waiting on a client or third party.
+12. Show the status of a matter.
+13. Show everything due tomorrow or this week.
+14. Show what was closed this week.
+15. Recommend the next task.
+16. Explain why a task is ranked where it is.
+17. Detect stale tickets.
+18. Detect tickets whose blocker has cleared.
+19. Detect probable duplicate tickets.
+20. Produce a matter close-out checklist.
+21. Produce a weekly review.
+22. Estimate effort for a task.
+23. Record time or effort against a ticket.
+24. Reassign a ticket between matters.
+25. Archive a completed matter.
+
+### A.4. Documents and knowledge
+
+1. Find a document by name, date or content.
+2. Summarise a document in five bullets.
+3. Compare two versions of a document.
+4. Extract obligations or deadlines from an agreement.
+5. Extract parties and defined terms.
+6. File a document to a matter.
+7. Draft a covering note for a document.
+8. Produce an index for a bundle.
+9. Find the governing law or jurisdiction clause.
+10. Find a signature page or execution date.
+11. Explain a term using the glossary.
+12. Add or edit a glossary entry.
+
+### A.5. Finance and receipts
+
+1. Total spend with a merchant over a period.
+2. Compare spend across two periods.
+3. List the largest receipts in a period.
+4. Find a receipt for a specific purchase.
+5. List recurring subscriptions and renewal dates.
+6. Detect a price increase on a subscription.
+7. Match a receipt to a transaction.
+8. List invoices awaiting payment.
+9. Draft a payment reminder.
+10. Categorise transactions by matter.
+11. Report spend against a matter budget.
+12. Flag a duplicate charge.
+13. Flag an unusual or unexpected payment.
+
+### A.6. Contacts and relationships
+
+1. Identify a person and their organisation.
+2. Show the last contact with a person.
+3. Show all correspondence with an organisation.
+4. Detect a change of role, address or telephone number.
+5. List people not contacted for a long period.
+6. Prepare a relationship summary before a meeting.
+7. Detect a possible conflict of interest.
+8. Correct or merge a contact record.
+
+### A.7. Risk, compliance and security
+
+1. Flag a suspected phishing message.
+2. Flag a suspicious payment or bank-detail change.
+3. Detect a complaint or a threat of one.
+4. Detect a data subject request.
+5. Detect a regulatory or statutory deadline.
+6. Flag a possible privilege issue.
+7. Flag confidential material sent to the wrong recipient.
+8. Detect a possible conflict of interest.
+9. Record a compliance decision.
+10. Produce an audit trail for a matter.
+
+### A.8. Reporting and planning
+
+1. Produce the morning brief.
+2. Produce the end-of-day summary.
+3. Produce the weekly review.
+4. Produce the monthly practice report.
+5. Report on response times.
+6. Report on overdue work by client.
+7. Report on work in progress by matter.
+8. Identify the three most at-risk items.
+9. Forecast the week ahead.
+10. Recommend what to delegate or defer.
+
+### A.9. Personal administration
+
+1. Remind about a renewal or expiry.
+2. Remind about an appointment.
+3. Remind about a travel booking.
+4. Track a delivery.
+5. Record a personal deadline.
+6. List personal tasks for the day.
+7. Find a booking confirmation.
+8. Summarise a trip.
+9. Cancel or change a booking.
+10. Keep a personal note or fact.
