@@ -696,7 +696,7 @@ Files owned:
 3. WP-2: `query_router.py`, `temporal_filter.py`.
 4. WP-3: `classifier.py`, `triage.py`.
 5. WP-4: `calendar_engine.py`, `invitations.py`.
-6. WP-5: `crm.py`.
+6. WP-5: `tickets.py`.
 7. WP-6: `glossary.py`, `contacts.py`, `documents.py`.
 8. WP-7: `rag.py`, `api.py`, `config.py`.
 9. WP-8: `docs/`, review notes.
