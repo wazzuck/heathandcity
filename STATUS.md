@@ -628,6 +628,11 @@
       as the low-memory fallback.
     - MPL-2.0 accepted for `certifi`; the full licence text ships at
       `licences/MPL-2.0.txt`, and the legal gate now reports it.
+    - Matter registry with status-by-matter answers, a diary listing for
+      today, tomorrow, this week and next week, and nightly maintenance
+      scheduled at 02:15 daily.
+    - Qwen3-4B is live on port 8081, and over 18,000 messages carry
+      thread, label and recipient metadata.
 
 ---
 
