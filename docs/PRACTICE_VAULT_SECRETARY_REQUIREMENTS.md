@@ -466,6 +466,40 @@ the simulation group that proves it.
    reminders.
 3. Simulation group: `personal-admin`.
 
+### FR-32. Interactive priority and preemption
+
+1. Every user-facing request holds an interactive lease for its whole
+   duration, including streamed responses.
+2. While any interactive lease is held, background work must not consume
+   Central Processing Unit (CPU) time. Cooperative workers check the
+   governor before each batch; registered background processes are paused
+   with `SIGSTOP` and resumed with `SIGCONT`.
+3. Background work resumes only after an idle grace period, configurable
+   and defaulting to three seconds, so a burst of quick questions does not
+   thrash the scheduler.
+4. A background task interrupted by an interactive request must resume
+   from a checkpoint, never from the beginning.
+5. Acceptance: no interactive request waits on a background batch; a
+   paused worker resumes and completes; no work is lost across a pause.
+6. Simulation group: `governor`.
+
+### FR-33. Model roles and orchestration
+
+1. Models are assigned to explicit roles: `interactive` answers the user,
+   `background` performs slow classification and summarisation, and
+   `orchestrator` resolves an ambiguous request into a capability.
+2. The deterministic router runs first. The orchestrator model is used
+   only when the router returns `unknown`, and its budget is capped so it
+   cannot breach the interactive latency tier.
+3. Background models run at low process priority and reduced thread count,
+   and never share a server slot with the interactive model.
+4. A model may be loaded or unloaded by the governor, but an unload may
+   never happen while an interactive lease is held.
+5. Acceptance: role assignment is declared in configuration; the
+   orchestrator is measurably optional; a background model swap never
+   delays an interactive request.
+6. Simulation group: `orchestrator`.
+
 ---
 
 ## 5. Non-functional requirements
@@ -539,6 +573,18 @@ the simulation group that proves it.
    rejected options and the reason for rejection.
 6. Acceptance: gate G12. Each proposal is reproducible from a script
    in `scripts/benchmarks/`.
+
+### NFR-12. Resource isolation
+
+1. Interactive requests take priority over every background task.
+2. Background work uses at most half the processor threads and the lowest
+   scheduling priority, and is paused while an interactive lease is held.
+3. A paused background task resumes from its checkpoint and loses no
+   completed work.
+4. The appliance remains usable when the provider quota is exhausted:
+   Tier A and offline capabilities continue, and background work pauses.
+5. A quota check runs at most every five minutes and never blocks an
+   interactive request.
 
 ---
 
@@ -658,6 +704,10 @@ the simulation group that proves it.
 11. G11: administrative extraction F1 is at least 0.85.
 12. G12: the stack review is committed with measured baselines and a
     written decision for every proposed change.
+13. G13: with a background batch running, interactive p95 is no more than
+    1.2 times the idle p95, and the batch resumes without losing work.
+14. G14: the orchestrator is disabled by default; when enabled, it stays
+   within the interactive latency tier on the routing suite.
 
 ### 7.6. Artefacts
 
@@ -688,6 +738,7 @@ integrator.
 | WP-8 Audit and review | Reviewer | FR-17 |
 | WP-9 Spend queries | B | FR-18, FR-19, G8 |
 | WP-10 Stack review | Reviewer | G12 |
+| WP-11 Governor and quota | Integrator | G13, G14 |
 
 Files owned:
 
@@ -703,6 +754,9 @@ Files owned:
 10. WP-9: `transactions.py`, `spend_queries.py`.
 11. WP-10: `docs/STACK_REVIEW_2026-11.md`,
     `scripts/benchmarks/`.
+12. WP-11: `governor.py`, `orchestrator.py`,
+    `scripts/governorctl.py`, `scripts/quota_watch.py`,
+    `scripts/start_background_model.sh`.
 
 Rules:
 
@@ -755,6 +809,8 @@ Rules:
 | Recommend the next task | FR-23 |
 | Admin and routine correspondence | FR-25, FR-26, FR-31 |
 | Examine and change the stack | NFR-11, WP-10 |
+| Use the hardware fully without delaying the user | FR-32, FR-33, |
+| | NFR-12, WP-11 |
 | Internet when unsure | FR-14 |
 | Fast simple answers | FR-1, FR-2, FR-13, NFR-1 |
 
