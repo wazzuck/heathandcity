@@ -614,9 +614,12 @@ the simulation group that proves it.
 
 ### 6.3. Matters and tasks
 
-1. Tables: `matters`, `tasks`, `task_message_links`, `matter_summaries`.
-2. `matter_summaries` is written only by the nightly worker and carries
-   a generation timestamp.
+1. Delivered: `matters` and `matter_events`. The registry holds the name,
+   client, reference, state and timestamps; events are append-only.
+2. Tickets are the task record, and `ticket_links` links them to messages
+   and documents. A separate `tasks` table was not needed.
+3. `matter_summaries` remains future work for the nightly per-matter
+   summary.
 
 ### 6.4. Glossary
 
@@ -968,3 +971,56 @@ action is only to draft or to propose.
 8. Summarise a trip.
 9. Cancel or change a booking.
 10. Keep a personal note or fact.
+
+---
+
+## Appendix B. Implementation status
+
+Recorded 13 November 2026 after the first build and live activation.
+
+### B.1. Delivered
+
+1. Correspondence lists, unread, invitations and topics:
+   `message_store.py` and `secretary.py`; 58,166 rows, newest-20 p95
+   0.96 ms, live unread results.
+2. Deterministic routing and clarification: `query_router.py`; 64 tests,
+   including the "recent emails" regression and the "last year" menu.
+3. Spend totals: `spend_queries.py`; £2,637.61 for Amazon 2024 across
+   182 receipts, with coverage and refund caveats.
+4. Classification: `classifier.py`; 58,166 messages in 12.8 s, 84.3 per
+   cent assigned, 15.7 per cent unknown.
+5. Ticket lifecycle and recommendation: `tickets.py`; 51 tests and gate
+   G9 in the simulation.
+6. Matter registry and status by matter: `matters.py`; 19 tests and a
+   live "no matter recorded" answer.
+7. Calendar reading for today, tomorrow, this week and next week:
+   `rag.py` and `calendar_engine.py`; live next-week commitment shown.
+8. Interactive priority and quota pause: `governor.py` and
+   `quota_watch.py`; `SIGSTOP` verified with a real process.
+9. Model residency: `model_manager.py`; background 7B started on demand
+   and evicted with its page cache dropped.
+10. Gmail metadata: `gmail_metadata.py`; over 18,000 messages enriched
+    with threads, labels and recipients.
+11. Offline simulation: `simulation/`; 7 of 7 scenarios pass gates G1,
+    G2, G3, G8 and G9.
+12. Licence: MPL-2.0 accepted for `certifi`, full text shipped, gate
+    amended and passing.
+
+### B.2. Partial
+
+1. Fact answers and drafting: the streaming path and Qwen3-4B are live,
+   but gates G5 and G6 have no scored run yet.
+2. Invitations: 50 are listed from the classifier's category, but
+   accept/decline and clash write-back wait for the calendar scope.
+3. Glossary: not built; the router and prompts do not yet expand jargon.
+4. Web look-up and offline persistence: the existing enrichment module is
+   present but was not re-tested in this build.
+5. Contacts and relationship memory: the existing engines are present but
+   were not re-tested in this build.
+
+### B.3. Not built
+
+1. Calendar writing, blocked by the read-only OAuth scope.
+2. Attachment indexing and filtering.
+3. Forward Gmail synchronisation after 11 November 2026.
+4. A user-facing thread view, although `thread_id` is now populated.

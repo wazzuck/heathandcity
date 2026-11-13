@@ -603,7 +603,7 @@
       on every script, and British Professional English spelling.
 
 61. Built and verified the Practice Vault personal secretary on branch
-    merged into `master` (350 tests):
+    merged into `master` (367 tests):
     - Requirements, 31 functional requirements, a 100-task catalogue and
       simulation gates in `docs/PRACTICE_VAULT_SECRETARY_REQUIREMENTS.md`.
     - Structured message store: 58,166 messages backfilled in 4.2 s;
@@ -631,8 +631,11 @@
     - Matter registry with status-by-matter answers, a diary listing for
       today, tomorrow, this week and next week, and nightly maintenance
       scheduled at 02:15 daily.
-    - Qwen3-4B is live on port 8081, and over 18,000 messages carry
-      thread, label and recipient metadata.
+    - Qwen3-4B is live on port 8081 with one 8,192-token slot, and over
+      18,000 messages carry thread, label and recipient metadata.
+    - Model residency manager loads the background 7B on demand and evicts
+      it afterwards, dropping its page cache so the RAM returns. A 0.6B
+      draft model measured slower and was rejected.
 
 ---
 
@@ -663,6 +666,8 @@
    the Kay demonstration handles real client correspondence.
 9. Publish the Google OAuth consent screen to production before
    17 November 2026, or re-consent weekly; the refresh token expires then.
+10. Repair forward Gmail synchronisation: the indexer reports
+    end-of-stream and has not fetched mail after 11 November 2026.
 10. Restart the Practice Vault service to load the merged
     interactive-priority code and the Qwen3-4B interactive model.
 11. Rotate the local OpenCode service password, which was printed into a
