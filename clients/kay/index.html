@@ -1,356 +1,138 @@
 <!DOCTYPE html>
+<!--
+  London Market - Corporate Insurance Placement Triage Demo.
+  Standalone Full-Page Application (British English).
+
+  Architecture:
+  1. Guide Section: Descriptive step-by-step guidance for non-technical users.
+  2. Top Section: Lloyd's corporate insurance dictionary & acronyms directory.
+  3. Bottom Section: Email intake with pre-prepared London market scenarios
+     and intelligent analysis (automated routing, match confidence, executive
+     briefing, and recognised market terminology).
+
+  Deployment note (Heath & City site):
+  Served at https://heathandcity.com/clients/kay/ as a private
+  demonstration. It is marked noindex, is absent from sitemap.xml, and
+  is not linked from the public homepage. Both /api/classifier routes
+  are answered by the kay-classify Cloudflare Worker, which holds the
+  OpenRouter credential in its secret store; this page never sees a
+  key. The source of truth for this page is
+  harness/standalone_classifier in the Kay project; keep the two in
+  step.
+-->
 <html lang="en-GB">
 <head>
-  <!--
-    ====================================================================
-    FILE: clients/kay/index.html
-    ====================================================================
-
-    PURPOSE:
-    A private, unlinked demonstration page for the Kay client. It shows
-    sample broker email and classifies it live through the kay-classify
-    Cloudflare Worker, which holds the OpenRouter credential that a
-    static site can never hold.
-
-    WHAT THIS FILE IS NOT FOR:
-    - It is not part of the public site: it is marked noindex, is
-      absent from sitemap.xml, and is deliberately not linked from
-      index.html, robots.txt, llms.txt or llms-full.txt.
-    - It is not a server-side authenticated area. GitHub Pages executes
-      no code, so the access gate below is a client-side soft gate
-      only (see the INVARIANTS).
-    - It is not a store of any secret: no credential appears in this
-      file, and the Worker never returns its key.
-
-    INVARIANTS RELIED UPON:
-    1. robots meta is "noindex,nofollow", so compliant crawlers that
-       fetch the page will not add it to an index.
-    2. The access gate compares a SHA-256 digest, never plaintext, and
-       the digest is the only credential material in this file.
-    3. All rendered strings are inserted with textContent, never
-       innerHTML, so no remote response can inject markup.
-    4. Live classification posts to
-       https://kay-classify.heathandcity.workers.dev/classify with
-       Origin https://heathandcity.com, which the Worker allow-lists;
-       any other origin receives 403 before credit is spent.
-  -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Step 1: keep this page out of every search and AI index. -->
+  <!-- Keep this private demonstration out of every search index. -->
   <meta name="robots" content="noindex,nofollow">
-  <meta name="referrer" content="no-referrer">
-  <title>Private Classification Demonstration | Heath &amp; City</title>
+  <title>
+    London Market - Corporate Insurance Dictionary &amp;
+    Intelligent Email Triage
+  </title>
+  <meta name="description"
+        content="Corporate insurance dictionary, terms, acronyms, and
+                 automated email triage for Lloyd's and the London Market.">
+  <meta name="theme-color" content="#0c1017">
+  <link rel="stylesheet" href="style.css">
+  <!--
+    Access gate styles. Scoped to #gate so they cannot alter the
+    demonstration's own layout, and drawn in the demo's dark palette
+    so the page reads as one product. The gate is a client-side soft
+    gate: static hosting runs no server code, so it keeps casual
+    visitors out but is not a security boundary.
+  -->
   <style>
-    /*
-     * Brand tokens copied from css/styles.css so the demonstration
-     * reads as the same house style without importing site-wide CSS
-     * that this unlinked page must not depend on.
-     */
-    :root {
-      --bg-primary: #f7f5f0;
-      --bg-elevated: #efece4;
-      --bg-card: #ffffff;
-      --text-primary: #0f172a;
-      --text-secondary: #334155;
-      --text-muted: #5b6678;
-      --accent-gold: #8a5d12;
-      --accent-emerald: #0f766e;
-      --accent-amber: #b45309;
-      --border-subtle: rgba(15, 23, 42, 0.12);
-      --border-strong: rgba(138, 93, 18, 0.4);
-      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.07);
-      --font-sans: "Plus Jakarta Sans", -apple-system,
-        BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas,
-        monospace;
-      --radius-md: 16px;
-      --radius-sm: 8px;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: var(--font-sans);
-      line-height: 1.6;
-    }
-
-    .wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 32px 20px 64px;
-    }
-
-    /* --- Access gate --------------------------------------------- */
     #gate {
       position: fixed;
       inset: 0;
-      background-color: var(--bg-elevated);
+      z-index: 1000;
+      background: #0c1017;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      z-index: 10;
     }
 
     .gate-card {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-card);
-      padding: 32px;
+      background: #151b23;
+      border: 1px solid #263342;
+      border-radius: 10px;
+      padding: 2rem;
       width: 100%;
       max-width: 380px;
     }
 
     .gate-card h1 {
+      margin: 0 0 0.35rem;
       font-size: 1.15rem;
-      margin: 0 0 4px;
+      color: #e6edf3;
     }
 
-    .gate-card p {
-      color: var(--text-muted);
+    .gate-card .gate-note {
+      margin: 0 0 1.25rem;
       font-size: 0.85rem;
-      margin-top: 0;
+      color: #8d9baa;
     }
 
-    label {
+    .gate-card label {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
-      margin: 14px 0 4px;
-      color: var(--text-secondary);
+      color: #8d9baa;
+      margin: 0.9rem 0 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
-    input {
+    .gate-card input {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.7rem;
+      border: 1px solid #263342;
+      border-radius: 6px;
+      background: #0d121a;
+      color: #e6edf3;
       font-size: 0.95rem;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
     }
 
-    input:focus {
-      outline: 2px solid var(--border-strong);
-      outline-offset: 1px;
+    .gate-card input:focus {
+      outline: none;
+      border-color: #58a6ff;
     }
 
     .gate-error {
-      color: var(--accent-amber);
-      font-size: 0.85rem;
       min-height: 1.2em;
-      margin: 10px 0 0;
+      margin: 0.8rem 0 0;
+      font-size: 0.83rem;
+      color: #d29922;
     }
 
-    /* --- Buttons -------------------------------------------------- */
-    button {
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border-strong);
-      padding: 11px 20px;
-      background-color: var(--accent-gold);
+    .gate-card button {
+      margin-top: 0.4rem;
+      padding: 0.6rem 1.4rem;
+      border: 1px solid #2f81f7;
+      border-radius: 6px;
+      background: #2f81f7;
       color: #ffffff;
-    }
-
-    button:hover { background-color: #6e4a0c; }
-    button:disabled { opacity: 0.6; cursor: wait; }
-
-    .btn-secondary {
-      background-color: transparent;
-      color: var(--accent-gold);
-    }
-
-    .btn-secondary:hover { background-color: rgba(138, 93, 18, 0.1); }
-
-    /* --- Page sections -------------------------------------------- */
-    header.demo-head {
-      border-bottom: 1px solid var(--border-strong);
-      padding-bottom: 18px;
-      margin-bottom: 24px;
-    }
-
-    .brand {
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent-gold);
-      font-weight: 700;
-      margin: 0;
-    }
-
-    header.demo-head h1 {
-      font-size: 1.6rem;
-      margin: 6px 0 4px;
-    }
-
-    header.demo-head .sub {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin: 0;
-    }
-
-    .notice {
-      background-color: var(--bg-elevated);
-      border-left: 3px solid var(--accent-gold);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      padding: 12px 16px;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-bottom: 24px;
-    }
-
-    .panel {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-card);
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-
-    .panel h2 {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin: 0 0 14px;
-    }
-
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
       font-size: 0.95rem;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: inherit;
-    }
-
-    .meta-grid {
-      display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 6px 14px;
-      font-size: 0.9rem;
-      margin-top: 16px;
-    }
-
-    .meta-grid dt {
-      color: var(--text-muted);
       font-weight: 600;
-      margin: 0;
+      cursor: pointer;
     }
 
-    .meta-grid dd { margin: 0; }
-
-    .body-snippet {
-      white-space: pre-wrap;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      background-color: var(--bg-primary);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      margin-top: 14px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-top: 18px;
-      flex-wrap: wrap;
-    }
-
-    .status {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    /* --- Result ---------------------------------------------------- */
-    #result-panel[hidden] { display: none; }
-
-    .result-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border-radius: 999px;
-      padding: 4px 12px;
-      border: 1px solid var(--border-subtle);
-      background-color: var(--bg-elevated);
-      color: var(--text-secondary);
-    }
-
-    .badge.live {
-      background-color: rgba(15, 118, 110, 0.1);
-      color: var(--accent-emerald);
-      border-color: rgba(15, 118, 110, 0.3);
-    }
-
-    .badge.saved {
-      background-color: rgba(180, 83, 9, 0.1);
-      color: var(--accent-amber);
-      border-color: rgba(180, 83, 9, 0.3);
-    }
-
-    .result-dept {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin: 14px 0 2px;
-      text-transform: capitalize;
-    }
-
-    .result-conf {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin: 0 0 14px;
-    }
-
-    .result-summary {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      margin: 0;
-    }
-
-    footer.demo-foot {
-      border-top: 1px solid var(--border-subtle);
-      margin-top: 32px;
-      padding-top: 16px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    footer.demo-foot p { margin: 4px 0; }
+    .gate-card button:hover { background: #58a6ff; }
   </style>
 </head>
 <body>
-
   <!-- ============================================================
-       Access gate. Client-side only: static hosting cannot
-       authenticate. Shown until the digest matches.
+       Access gate. Shown until the credential digest matches; the
+       demonstration behind it is untouched by this overlay.
        ============================================================ -->
   <div id="gate">
     <div class="gate-card">
       <h1>Private demonstration</h1>
-      <p>Enter the credentials issued for this review.</p>
+      <p class="gate-note">
+        Enter the credentials issued for this review.
+      </p>
       <form id="gate-form" autocomplete="off">
         <label for="gate-user">User</label>
         <input id="gate-user" name="user" type="text"
@@ -364,421 +146,956 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       Demonstration content. Hidden until the gate is unlocked.
-       ============================================================ -->
-  <main class="wrap" id="demo" hidden>
-    <header class="demo-head">
-      <p class="brand">Heath &amp; City Technology Hampstead</p>
-      <h1>Private email classification demonstration</h1>
-      <p class="sub">Prepared for Kay &middot; not published, not
-        indexed</p>
-    </header>
-
-    <div class="notice">
-      <strong>Before you begin.</strong> This page transmits the sample
-      text you classify to a Cloudflare Worker and on to OpenRouter for
-      processing, then returns the result. Keep to the sample scenarios
-      supplied here, or to correspondence you are authorised to share.
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand-col">
+      <div>
+        <h1 class="brand-title">
+          London Market
+          <span class="brand-badge">Placement Triage</span>
+        </h1>
+        <p class="brand-subtitle">
+          Lloyd's &amp; London Market Email Triage: Automated Routing &amp;
+          Executive Briefing
+        </p>
+      </div>
     </div>
 
-    <section class="panel" aria-labelledby="scenario-label">
-      <h2 id="scenario-label">1. Choose a sample email</h2>
-      <select id="scenario" aria-label="Sample email scenario"></select>
-      <dl class="meta-grid">
-        <dt>From</dt><dd id="sc-from"></dd>
-        <dt>Subject</dt><dd id="sc-subject"></dd>
-      </dl>
-      <div class="body-snippet" id="sc-body"></div>
-      <div class="actions">
-        <button id="classify" type="button">Classify this email</button>
-        <span class="status" id="classify-status"
-              role="status" aria-live="polite"></span>
+    <!-- Header Actions (Left blank per user request) -->
+    <div class="header-actions"></div>
+  </header>
+
+  <!-- Main Full-Page Workspace -->
+  <main class="page-container">
+
+    <!-- Getting Started Guide for Non-Technical Users -->
+    <section class="user-guide-card">
+      <div class="guide-header">
+        <div class="guide-badge">User Guide &amp; How It Works</div>
+        <h2 class="guide-title">
+          How to Use the London Market Email Triage System
+        </h2>
+        <p class="guide-subtitle">
+          This system automatically reviews incoming insurance correspondence,
+          determines which department should handle it, extracts key policy
+          details, and produces a plain-English briefing for your team.
+          Use the three steps below to explore or triage incoming emails.
+        </p>
+      </div>
+
+      <div class="guide-steps-grid">
+        <!-- Step 1 Card -->
+        <div class="guide-step-card">
+          <div class="step-number-pill">Step 1</div>
+          <h3 class="step-card-title">London Market Dictionary</h3>
+          <div class="step-target-badge">Top Section: Dictionary Directory</div>
+          <p class="step-card-desc">
+            <strong>What it is for:</strong> A central directory of technical
+            Lloyd’s and London Market insurance terminology, abbreviations,
+            and acronyms.
+          </p>
+          <ul class="step-card-bullets">
+            <li>
+              <strong>Browse &amp; Search:</strong> Search through the 77
+              active corporate terms or filter by category (e.g. Contract
+              Documentation, Claims, Capacity).
+            </li>
+            <li>
+              <strong>Standard Definitions &amp; Context:</strong> Review the
+              formal market definition and practical usage example for each
+              term.
+            </li>
+            <li>
+              <strong>How it helps:</strong> Every term in this dictionary is
+              automatically recognised by the system to ensure incoming
+              correspondence is understood accurately.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Step 2 Card -->
+        <div class="guide-step-card">
+          <div class="step-number-pill">Step 2</div>
+          <h3 class="step-card-title">Choose or Paste an Email</h3>
+          <div class="step-target-badge">
+            Bottom Left: Incoming Email Intake
+          </div>
+          <p class="step-card-desc">
+            <strong>What it is for:</strong> The intake workbench where new
+            broker emails, placing slips, claims notifications, or
+            underwriting queries are loaded.
+          </p>
+          <ul class="step-card-bullets">
+            <li>
+              <strong>Pre-Prepared Examples:</strong> Select from 12 realistic
+              London market scenarios (or click one of the quick-load buttons)
+              to test different email types.
+            </li>
+            <li>
+              <strong>Custom Email:</strong> Or paste any live email message
+              directly into the form fields (plain text or email HTML).
+            </li>
+            <li>
+              <strong>Reclassify on Change:</strong> The default scenario is
+              pre-classified on load. When you choose another scenario or
+              edit the email text, previous results clear and a
+              <span class="highlight-action">&#9658; Reclassify</span> button
+              appears in the results panel to re-run the evaluation.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Step 3 Card -->
+        <div class="guide-step-card">
+          <div class="step-number-pill">Step 3</div>
+          <h3 class="step-card-title">Review Analysis &amp; Routing</h3>
+          <div class="step-target-badge">Bottom Right: Automated Analysis</div>
+          <p class="step-card-desc">
+            <strong>What it is for:</strong> Instant operational
+            intelligence and recommended actions presented across two
+            complementary views:
+          </p>
+          <ul class="step-card-bullets">
+            <li>
+              <strong>Department Routing:</strong> Recommends the exact
+              business department to handle the message (e.g. Risk Placement,
+              Claims, Servicing) with an exact confidence score and category
+              breakdown.
+            </li>
+            <li>
+              <strong>Executive Briefing:</strong> Delivers a plain-English
+              summary, extracts key parameters (Insured, Class of Business,
+              Reference, Limit), flags conditions/subjectivities, and
+              highlights recognised terms (hover to view definitions).
+            </li>
+            <li>
+              <strong>View Toggle:</strong> Switch between Combined View,
+              Routing only, or Executive Summary only.
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
 
-    <section class="panel" id="result-panel" hidden
-             aria-labelledby="result-label">
-      <h2 id="result-label">2. Classification result</h2>
-      <div class="result-top">
-        <span class="badge" id="result-badge">Awaiting run</span>
-        <span class="status" id="result-model"></span>
+    <!-- Top Section: Two-Box Lloyd's Glossary & Acronyms Directory -->
+    <section class="section-card glossary-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            <span>&#128214; Lloyd's Corporate Insurance Dictionary &amp;
+            Acronyms Directory</span>
+          </h2>
+          <p class="section-desc">
+            Words, terms, and acronyms from the corporate world of Lloyd's and
+            the London Market. Active terms in this dictionary automatically
+            guide how incoming emails are evaluated and understood below.
+          </p>
+        </div>
       </div>
-      <p class="result-dept" id="result-dept"></p>
-      <p class="result-conf" id="result-conf"></p>
-      <p class="result-summary" id="result-summary"></p>
+
+      <!-- Glossary Search & Filter Toolbar -->
+      <div class="glossary-toolbar">
+        <div class="search-box-wrapper">
+          <span class="search-icon">&#128269;</span>
+          <input type="search" id="glossary-search-input"
+                 placeholder="Search terms, acronyms, categories..."
+                 aria-label="Search terms and definitions">
+        </div>
+        <div class="category-filter-wrapper">
+          <label for="glossary-category-filter"
+                 class="inline-label">Category:</label>
+          <select id="glossary-category-filter" aria-label="Filter by category">
+            <option value="">All Categories (77 Terms)</option>
+            <option value="Contract Documentation">
+              Contract Documentation
+            </option>
+            <option value="Capacity & Placing">Capacity &amp; Placing</option>
+            <option value="Underwriting Conditions">
+              Underwriting Conditions
+            </option>
+            <option value="Claims & Adjustment">Claims &amp; Adjustment</option>
+            <option value="Reinsurance & Treaty">
+              Reinsurance &amp; Treaty
+            </option>
+            <option value="Regulatory & Compliance">
+              Regulatory &amp; Compliance
+            </option>
+            <option value="Policy Servicing">Policy Servicing</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Insurance Terms & Acronyms Directory Panel -->
+      <div class="glossary-directory-panel">
+        <div class="box-panel box-directory">
+          <div class="box-panel-header">
+            <span class="box-panel-title">
+              Current Insurance Terms &amp; Acronyms Directory
+            </span>
+            <span id="directory-count-badge"
+                  class="badge-count">77 loaded</span>
+          </div>
+
+          <div id="glossary-items-list" class="directory-scroll-list"
+               role="listbox" aria-label="Insurance terms list">
+            <!-- Dynamically populated term items -->
+          </div>
+
+          <div class="box-panel-footer">
+            <small id="directory-footer-hint" style="color: var(--text-muted);">
+              All 77 market terms are active and automatically applied during
+              triage.
+            </small>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <footer class="demo-foot">
-      <p>Heath &amp; City Technology Hampstead &middot; private
-        demonstration for Kay &middot; 13 November 2026</p>
-      <p>This page is excluded from the sitemap and marked
-        <code>noindex</code>, and is not linked from the public
-        website.</p>
-    </footer>
+    <!-- Visual Divider: Knowledge Bridge -->
+    <div class="knowledge-bridge-banner">
+      <div class="bridge-line"></div>
+      <div class="bridge-pill">
+        <span class="bridge-icon">&#8681;</span>
+        <strong>Active Dictionary Synchronised:</strong>
+        All terms and definitions above automatically teach the system how
+        to interpret incoming emails below
+        <span class="bridge-icon">&#8681;</span>
+      </div>
+      <div class="bridge-line"></div>
+    </div>
+
+    <!-- Bottom Section: Email Intake & Dual-Model Classification Section -->
+    <section class="email-and-models-grid">
+
+      <!-- Left Column: Email Intake & Pre-prepared Scenarios -->
+      <div class="panel-section intake-column">
+        <div class="section-header"
+             style="margin-bottom: 0.85rem; padding-bottom: 0.65rem;">
+          <h2 class="section-title">
+            <span>&#9993; Incoming Email Intake</span>
+          </h2>
+          <span id="scenario-badge" class="badge-scenario">
+            Scenario: New Risk: Global Marine Cargo Open Cover Slip
+          </span>
+        </div>
+
+        <!-- Pre-prepared Demonstration Selector -->
+        <div class="preset-dropdown-container">
+          <label for="preset-select" class="form-label">
+            Select a Pre-Prepared Example Email (12 London Market Scenarios):
+          </label>
+          <select id="preset-select"
+                  aria-label="Choose pre-prepared demonstration email">
+            <option value="">
+              -- Choose a Pre-prepared Demonstration Email --
+            </option>
+            <option value="sample_marine_slip" selected>
+              1. New Risk: Global Marine Cargo Open Cover Slip
+            </option>
+            <option value="sample_underwriting_query">
+              2. Underwriting Query: Port Facility Fire Survey &amp; Warranties
+            </option>
+            <option value="sample_firm_order_binding">
+              3. Binding: Aviation Hull &amp; Cargo Fleet Firm Order
+            </option>
+            <option value="sample_mta_endorsement">
+              4. Servicing: Mid-Term Adjustment (MTA) Route Extension
+            </option>
+            <option value="sample_fnol_claim">
+              5. Claims: Urgent FNOL Chemical Contamination
+            </option>
+            <option value="sample_treaty_bordereau">
+              6. Finance: Quarterly Reinsurance Treaty Premium &amp; Claims
+              Bordereau
+            </option>
+            <option value="sample_sanctions_kyc">
+              7. Compliance: Enhanced Due Diligence &amp; LMA3100 Sanctions
+              Audit
+            </option>
+            <option value="sample_mga_audit">
+              8. MGA: Delegated Underwriting Authority &amp; Coverholder Audit
+            </option>
+            <option value="sample_market_submission">
+              9. Marketing: Multi-Syndicate Property Placement Presentation
+            </option>
+            <option value="sample_written_line_quote">
+              10. Placing: Lead Syndicate Written Line Quotation &amp; Stamp
+            </option>
+            <option value="sample_dispute_decline">
+              11. Review Queue: Mixed Intent &amp; Syndicate Line Declination
+            </option>
+            <option value="sample_broker_peer_review">
+              12. Internal: Senior Broker Placing Review &amp; Wording Sign-off
+            </option>
+          </select>
+        </div>
+
+        <!-- Quick-load Chips for Top Scenarios -->
+        <div class="quick-chips-row">
+          <span class="quick-chips-label">Quick Load:</span>
+          <button type="button" class="quick-chip"
+                  data-preset="sample_marine_slip">Marine Cargo Slip</button>
+          <button type="button" class="quick-chip"
+                  data-preset="sample_underwriting_query">
+            Underwriting Query
+          </button>
+          <button type="button" class="quick-chip"
+                  data-preset="sample_firm_order_binding">
+            Aviation Binding
+          </button>
+          <button type="button" class="quick-chip"
+                  data-preset="sample_mta_endorsement">MTA Endorsement</button>
+          <button type="button" class="quick-chip"
+                  data-preset="sample_fnol_claim">FNOL Claim</button>
+          <button type="button" class="quick-chip"
+                  data-preset="sample_treaty_bordereau">
+            Treaty Bordereau
+          </button>
+        </div>
+
+        <!-- Email Message Form -->
+        <form id="email-form" onsubmit="return false;" class="email-input-form">
+          <div class="email-meta-grid">
+            <div>
+              <label for="input-from" class="form-label">From (Sender):</label>
+              <input type="text" id="input-from"
+                     value="daniel.osei@meridian-broking.com"
+                     placeholder="e.g. broker@meridian.com" required>
+            </div>
+            <div>
+              <label for="input-to" class="form-label">To (Recipient):</label>
+              <input type="text" id="input-to"
+                     value="marcus.bell@lloydsbroker.test"
+                     placeholder="e.g. marcus.bell@lloydsbroker.test" required>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 0.75rem;">
+            <label for="input-subject" class="form-label">Subject Line:</label>
+            <input type="text" id="input-subject"
+  value="NEW SLIP PRESENTATION: Global Cargo Open Cover MRC Placement"
+                   placeholder="e.g. SLIP PRESENTATION: Marine Cargo Open Cover"
+                   required>
+          </div>
+
+          <div class="body-field-wrapper">
+            <label for="input-body" class="form-label">
+              Email Message Content (Plain text or pasted email HTML):
+            </label>
+            <textarea id="input-body" class="email-textarea"
+                      placeholder="Paste plain text or email HTML..."
+                      required>Dear Marcus,
+
+We have received an RFQ under a freshly executed BOR letter. Please find
+attached the draft MRC placing slip for the 2026/2027 global open cover for
+BioHealth International PLC.
+
+Placing Structure &amp; Contract Specifications:
+- Placement Mode: Open Market Risk via PPL (excluded from Line Slip Facility
+  due to temperature-sensitive cargo parameters)
+- Insured: BioHealth International PLC
+- Class: Marine Cargo &amp; Specie
+- Coverage Trigger: Losses Occurring Basis throughout policy period
+- Policy Schedule Limit: USD 25,000,000 any one vessel or conveyance
+- Conditions &amp; Clauses: Institute Cargo Clauses (A), Institute War and
+  Strikes Clauses buyback included, GA covered
+- Subjectivity: Continuous calibrated temperature data logger records on
+  active pharmaceutical shipments
+- Settlement Terms: 60-day PPW
+- Target Inception: 1st December 2026
+
+We are approaching syndicates for terms on this open market slip. We will be
+queuing at the leader's Lloyd's Box in The Room tomorrow morning to obtain the
+initial written line and slip scratch. Please advise recommended leading
+syndicate underwriters.
+
+Best regards,
+Daniel Osei
+Meridian Global Insurance Brokers</textarea>
+          </div>
+
+          <div class="actions-row" style="justify-content: flex-end;">
+            <button id="btn-clear-form" type="button"
+                    class="btn-action btn-secondary">
+              Clear Email Form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right Column: Dual Model Results Dashboard -->
+      <div class="panel-section results-column">
+        <div class="section-header"
+             style="margin-bottom: 0.85rem; padding-bottom: 0.65rem;">
+          <h2 class="section-title">
+            <span>&#9881; Automated Analysis &amp; Recommendations</span>
+          </h2>
+          <!-- Model View Switcher -->
+          <div class="view-toggle-group" role="group"
+               aria-label="Analysis View Selection">
+            <button id="toggle-view-both" class="view-toggle-btn active"
+                    type="button">
+              Combined View
+            </button>
+            <button id="toggle-view-jev" class="view-toggle-btn" type="button">
+              Categorisation &amp; Routing
+            </button>
+            <button id="toggle-view-luna" class="view-toggle-btn" type="button">
+              Executive Summary
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty State Placeholder with Reclassify Button -->
+        <div id="results-empty-view" class="results-empty-state" hidden>
+          <div class="results-empty-icon">&#128221;</div>
+          <h3 style="margin: 0 0 0.45rem; font-size: 1.15rem;
+                     color: var(--text-main);">
+            Email Modified &mdash; Reclassification Required
+          </h3>
+          <p style="margin: 0 0 1.25rem; font-size: 0.9rem;
+                    color: var(--text-muted); max-width: 480px;
+                    text-align: center; line-height: 1.45;">
+            The email content has changed. Click <strong>Reclassify</strong>
+            below to re-run automated department routing and generate a fresh
+            executive briefing with recognised market terms.
+          </p>
+          <button id="btn-reclassify" type="button" class="btn-run-dual">
+            <span id="reclassify-spinner" class="spinner" hidden>&#9696;</span>
+            <span id="reclassify-btn-text">&#9658; Reclassify</span>
+          </button>
+        </div>
+
+        <!-- Dual Results Container -->
+        <div id="dual-results-container" class="dual-results-container">
+
+          <!-- Department Routing Card -->
+          <div id="jev-card" class="model-result-card jev-card">
+            <div class="model-card-header jev-header">
+              <div class="model-header-title">
+                <span class="model-icon">&#9670;</span>
+                <span class="model-name">Department Routing</span>
+              </div>
+              <span class="model-pill jev-pill">14 Placement Categories</span>
+            </div>
+
+            <!-- Lead Bucket Hero Box -->
+            <div class="lead-bucket-hero">
+              <div class="hero-top-row">
+                <div>
+                  <div class="hero-small-caption">
+                    Recommended Destination &amp; Department:
+                  </div>
+                  <h3 class="bucket-name-title" id="jev-lead-name">
+                    Risk register
+                  </h3>
+                </div>
+                <div style="text-align: right;">
+                  <div class="prob-chip-large" id="jev-lead-prob">
+                    96.4%
+                  </div>
+                  <div class="confidence-tag" id="jev-confidence-tier">
+                    Confidence: High
+                  </div>
+                </div>
+              </div>
+
+              <div class="rationale-block" id="jev-rationale">
+                Evaluated top placement match as &#39;Risk register&#39; (risk)
+                with 96.4% calibrated probability. Decisive signals detected
+                from domain phrasing and Lloyd&#39;s market conventions.
+              </div>
+            </div>
+
+            <!-- Full Probability Distribution Table -->
+            <div class="distribution-wrapper">
+              <div class="table-caption">
+                Department &amp; Category Confidence Breakdown:
+              </div>
+              <table class="distribution-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34%;">Category / Routing Department</th>
+                    <th style="width: 18%;">Match Confidence</th>
+                    <th style="width: 48%;">Confidence Indicator</th>
+                  </tr>
+                </thead>
+                <tbody id="jev-distribution-tbody">
+                  <tr>
+                    <td style="font-weight: 700; color: #79c0ff;">
+                      Risk register
+                    </td>
+                    <td style="font-family: ui-monospace, monospace;
+                               font-weight: 700; color: var(--ok);">
+                      96.4%
+                    </td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill lead-fill"
+                             style="width: 96.4%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Terms and placing</td>
+                    <td style="font-family: ui-monospace, monospace;">2.6%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 2.6%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Query register</td>
+                    <td style="font-family: ui-monospace, monospace;">0.8%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.8%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Compliance</td>
+                    <td style="font-family: ui-monospace, monospace;">0.1%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.1%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Market submission register</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Binding</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Servicing</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Finance routing</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Claims</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>MGA operations</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Internal activity</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Review queue</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>No record change</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Security quarantine</td>
+                    <td style="font-family: ui-monospace, monospace;">0.0%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: 0.0%;"></div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Executive Briefing Card -->
+          <div id="luna-card" class="model-result-card luna-card">
+            <div class="model-card-header luna-header">
+              <div class="model-header-title">
+                <span class="model-icon">&#9671;</span>
+                <span class="model-name">Executive Briefing</span>
+              </div>
+              <span class="model-pill luna-pill">Executive Overview</span>
+            </div>
+
+            <!-- Executive Summary Hero Box -->
+            <div class="summary-hero-card">
+              <div class="summary-title-line">Plain-English Summary</div>
+              <p class="summary-body-text" id="luna-summary-body">
+                The email outlines a new slip presentation for a global cargo
+                open cover placement for BioHealth International PLC, with a
+                target inception date of 1st December 2026. The draft MRC slip
+                is attached, and the broker is seeking recommendations for
+                leading syndicate underwriters for the initial written line.
+              </p>
+            </div>
+
+            <!-- Extracted Placement Parameters Grid -->
+            <div class="deal-meta-section">
+              <div class="meta-caption">
+                Extracted Policy &amp; Placement Details:
+              </div>
+              <div class="meta-spec-grid">
+                <div class="meta-field-item">
+                  <label>Insured / Client Name</label>
+                  <div class="val" id="luna-meta-insured">
+                    BioHealth International PLC
+                  </div>
+                </div>
+                <div class="meta-field-item">
+                  <label>Class of Business</label>
+                  <div class="val" id="luna-meta-cob">
+                    Marine Cargo &amp; Specie
+                  </div>
+                </div>
+                <div class="meta-field-item">
+                  <label>Policy / Risk Reference</label>
+                  <div class="val" id="luna-meta-ref">
+                    2026/2027 global open cover
+                  </div>
+                </div>
+                <div class="meta-field-item">
+                  <label>Sum Insured / Limit</label>
+                  <div class="val" id="luna-meta-limit">
+                    USD 25,000,000 any one vessel or conveyance
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detected Jargon Chips -->
+            <div class="jargon-detection-section">
+              <div class="jargon-caption">
+                Recognised Insurance Terms &amp; Acronyms
+                (Hover for Definitions):
+              </div>
+              <div id="luna-jargon-chips-grid" class="jargon-chips-grid">
+                <span class="jargon-chip"
+                      title="[Capacity &amp; Placing]
+                             Freshly executed BOR letter.">
+                  BOR (Broker of Record)
+                </span>
+                <span class="jargon-chip"
+                      title="[Contract Documentation]
+                             Draft MRC placing slip.">
+                  MRC (Market Reform Contract)
+                </span>
+                <span class="jargon-chip"
+                      title="[Contract Documentation]
+                             Draft placing slip.">
+                  Slip
+                </span>
+                <span class="jargon-chip"
+                      title="[Contract Documentation]
+                             Slip scratch in the Room.">
+                  Slip Scratch
+                </span>
+                <span class="jargon-chip"
+                      title="[Contract Documentation]
+                             Declared policy schedule limit.">
+                  Policy Schedule
+                </span>
+                <span class="jargon-chip"
+                      title="[Contract Documentation]
+                             Placement via PPL.">
+                  PPL (Placing Platform Limited)
+                </span>
+                <span class="jargon-chip"
+                      title="[Capacity &amp; Placing]
+                             Initial written line.">
+                  Written Line
+                </span>
+                <span class="jargon-chip"
+                      title="[Capacity &amp; Placing]
+                             Recommended leading syndicate.">
+                  Leading Syndicate / Leader
+                </span>
+                <span class="jargon-chip"
+                      title="[Capacity &amp; Placing]
+                             Excluded from Line Slip Facility.">
+                  Line Slip Facility
+                </span>
+                <span class="jargon-chip"
+                      title="[Capacity &amp; Placing]
+                             Order to quote RFQ received.">
+                  RFQ (Request for Quotation / Order to Quote)
+                </span>
+                <span class="jargon-chip"
+                      title="[Capacity &amp; Placing]
+                             Open market risk presentation.">
+                  Open Market Risk
+                </span>
+                <span class="jargon-chip"
+                      title="[Underwriting Conditions]
+                             Temperature data logger subjectivity.">
+                  Subjectivity
+                </span>
+                <span class="jargon-chip"
+                      title="[Underwriting Conditions]
+                             Settlement under 60-day PPW.">
+                  PPW (Premium Payment Warranty)
+                </span>
+                <span class="jargon-chip"
+                      title="[Underwriting Conditions]
+                             Losses Occurring Basis trigger.">
+                  Losses Occurring Basis
+                </span>
+                <span class="jargon-chip"
+                      title="[Claims &amp; Adjustment]
+                             General Average covered.">
+                  General Average (GA)
+                </span>
+                <span class="jargon-chip"
+                      title="[Regulatory &amp; Compliance]
+                             Approaching syndicates for terms.">
+                  Syndicate
+                </span>
+                <span class="jargon-chip"
+                      title="[Regulatory &amp; Compliance]
+                             Box in The Room at Lloyd's.">
+                  The Room
+                </span>
+                <span class="jargon-chip"
+                      title="[Regulatory &amp; Compliance]
+                             Queuing at leader's Lloyd's Box.">
+                  Lloyd's Box
+                </span>
+              </div>
+            </div>
+
+            <!-- Subjectivities & Warranties -->
+            <div class="subjs-section">
+              <div class="subjs-caption">
+                Outstanding Conditions &amp; Subjectivities to Track:
+              </div>
+              <ul id="luna-subjs-list" class="subjs-list">
+                <li>
+                  Continuous calibrated temperature data logger records on
+                  active pharmaceutical shipments
+                </li>
+              </ul>
+            </div>
+
+            <!-- Prioritised Actions -->
+            <div class="actions-section">
+              <div class="actions-caption">
+                Recommended Next Steps for Team:
+              </div>
+              <ol id="luna-actions-list" class="actions-ordered-list">
+                <li>
+                  Advise recommended leading syndicate underwriters for the
+                  initial written line.
+                </li>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
   </main>
 
+  <!-- Hidden Inspector Modal (Maintained for System Compatibility) -->
+  <div id="prompt-modal" class="modal-overlay"
+       style="display: none !important;" hidden aria-hidden="true">
+    <div class="modal-window">
+      <div class="modal-title-bar">
+        <div>
+          <h3 class="modal-title">System Analysis Details</h3>
+          <small style="color: var(--text-muted);">
+            Internal operational instructions and active terminology.
+          </small>
+        </div>
+        <button id="btn-close-prompt" class="btn-close"
+                type="button">&times;</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="prompt-tabs-bar">
+        <button id="tab-prompt-jev" class="prompt-tab-btn active"
+                type="button">Routing Instructions</button>
+        <button id="tab-prompt-luna" class="prompt-tab-btn"
+                type="button">Briefing Instructions</button>
+      </div>
+
+      <div class="modal-scroll-area">
+        <pre id="prompt-content-view" class="prompt-code-view"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <!--
+    Access gate logic, kept in a separate script from app.js so the
+    demonstration's own controller is never modified by it.
+
+    Execution order:
+      Step 1 - unlock() reveals the page and records the session.
+      Step 2 - a credential link (#user:password) unlocks directly,
+               then the fragment is stripped from the address bar.
+      Step 3 - the form path unlocks on a matching digest.
+    Only a SHA-256 digest of the credentials is stored in this page,
+    never plaintext, and no secret of any kind appears here.
+  -->
   <script>
-    /*
-     * Demonstration logic, in execution order:
-     *   Step 1 - hold the sample scenarios and their saved results.
-     *   Step 2 - unlock the page when the SHA-256 digest matches.
-     *   Step 3 - render the selected scenario without innerHTML.
-     *   Step 4 - classify through the Worker, or fall back to the
-     *            saved result when the Worker is unreachable.
-     */
+    (function () {
+      "use strict";
 
-    // Step 1: the sample scenarios. Each carries a saved result so the
-    // page still demonstrates the output shape when the Worker or the
-    // OpenRouter credit is unavailable. The "confidence" values here
-    // are illustrative, not measured.
-    const SCENARIOS = [
-      {
-        id: "renewal",
-        label: "Renewal order from a broker",
-        sender: "j.harper@meridianbrokers.example",
-        subject: "Renewal order - contractor's plant fleet",
-        body: "Please quote on the attached slip for the contractor's " +
-              "plant fleet. The insured requires cover to start on 1 " +
-              "December. Prior insurer is withdrawing, and the claims " +
-              "record for the last three years is attached.",
-        glossary: [
-          {
-            term: "slip",
-            definition: "The broker's summary of the risk presented " +
-                        "to an insurer for underwriting."
-          }
-        ],
-        saved: {
-          department: "placement",
-          confidence: 0.96,
-          summary: "Requests a quotation for a renewal of contractor's " +
-                   "plant fleet cover with a 1 December inception, " +
-                   "including the claims record."
-        }
-      },
-      {
-        id: "claims",
-        label: "New claim notification",
-        sender: "claims@northbankadjusters.example",
-        subject: "Notification of loss - stock damage, NW10 warehouse",
-        body: "We notify a claim for water damage to stock at the " +
-              "NW10 warehouse discovered this morning. The insured " +
-              "has secured the premises and requests an adjuster " +
-              "visit this week. Reserve is not yet quantified.",
-        glossary: [
-          {
-            term: "reserve",
-            definition: "The sum an insurer sets aside as the likely " +
-                        "cost of a claim."
-          }
-        ],
-        saved: {
-          department: "claims",
-          confidence: 0.94,
-          summary: "Notifies a new water damage claim at an NW10 " +
-                   "warehouse and requests an adjuster visit; the " +
-                   "reserve is not yet quantified."
-        }
-      },
-      {
-        id: "compliance",
-        label: "Regulator correspondence",
-        sender: "supervision@fca.example",
-        subject: "Request for information - client money arrangements",
-        body: "We request your response within ten business days " +
-              "describing your client money arrangements, including " +
-              "the reconciliation frequency and the responsible " +
-              "individual. This is a supervisory request and does " +
-              "not indicate enforcement action.",
-        glossary: [
-          {
-            term: "client money",
-            definition: "Client funds held by a firm subject to the " +
-                        "Client Assets Sourcebook rules."
-          }
-        ],
-        saved: {
-          department: "compliance",
-          confidence: 0.97,
-          summary: "Financial Conduct Authority supervisory request " +
-                   "for client money arrangements information, due " +
-                   "within ten business days."
-        }
-      },
-      {
-        id: "internal",
-        label: "Internal diary request",
-        sender: "p.carter@heathandcity.example",
-        subject: "Diary - Wednesday's pipeline review",
-        body: "Reminder that Wednesday's pipeline review moves to " +
-              "10:00. Please update your entries before then so the " +
-                      "figures are current. No client action is " +
-                      "required.",
-        glossary: [],
-        saved: {
-          department: "internal",
-          confidence: 0.99,
-          summary: "Internal reminder that the Wednesday pipeline " +
-                   "review moves to 10:00, with entries to be " +
-                   "updated beforehand."
-        }
-      }
-    ];
+      // SHA-256 digest of "kay:ferncroft". Held as a digest so the
+      // page source reveals no usable password.
+      var GATE_DIGEST =
+        "7db7be3e0c92d613d7ac7e994600dc9e625ce7105a8ab6bf83e9bbdea252bc65";
 
-    // The Worker endpoint. Cross-origin posts are allowed only from
-    // https://heathandcity.com, which the Worker allow-lists.
-    const WORKER_URL =
-      "https://kay-classify.heathandcity.workers.dev/classify";
+      // Session key. Cleared when the browser session ends, so an
+      // unlocked page does not stay unlocked indefinitely.
+      var SESSION_KEY = "kay-demo-unlocked";
 
-    // SHA-256 digest of "kay:ferncroft". Stored as a digest rather
-    // than plaintext so the source reveals no usable password.
-    const GATE_DIGEST =
-      "7db7be3e0c92d613d7ac7e994600dc9e625ce7105a8ab6bf83e9bbdea252bc65";
+      var gate = document.getElementById("gate");
+      var error = document.getElementById("gate-error");
 
-    // Session storage key. Cleared when the browser session ends, so
-    // an unlocked page does not stay unlocked indefinitely.
-    const SESSION_KEY = "kay-demo-unlocked";
-
-    // Step 2: unlock the page when the digest matches.
-    //
-    // The gate is a soft gate: a static host runs no server code, so
-    // anything on this page can be read by anyone who views the page
-    // source. It keeps casual visitors out; it is not a security
-    // boundary for sensitive material.
-    //
-    // @param {string} user - the user name entered by the visitor.
-    // @param {string} pass - the password entered by the visitor.
-    // @returns {Promise<boolean>} true when the credentials match.
-    async function credentialsMatch(user, pass) {
-      const text = user.trim().toLowerCase() + ":" + pass;
-      const bytes = new TextEncoder().encode(text);
-      const digest = await crypto.subtle.digest("SHA-256", bytes);
-      const hex = Array.from(new Uint8Array(digest))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-      // Compare against the stored digest without short-circuiting
-      // early, so the check takes the same time either way.
-      let diff = 0;
-      for (let i = 0; i < hex.length; i += 1) {
-        diff |= hex.charCodeAt(i) ^ GATE_DIGEST.charCodeAt(i);
-      }
-      return diff === 0;
-    }
-
-    // Step 3: render the selected scenario into the page.
-    //
-    // Every value is written with textContent, never innerHTML, so
-    // neither sample text nor a remote response can inject markup.
-    //
-    // @param {object} sc - one entry of the SCENARIOS array.
-    // @returns {void}
-    function renderScenario(sc) {
-      document.getElementById("sc-from").textContent = sc.sender;
-      document.getElementById("sc-subject").textContent = sc.subject;
-      document.getElementById("sc-body").textContent = sc.body;
-    }
-
-    // Step 4a: paint a classification result into the result panel.
-    //
-    // @param {object} result - department, confidence, summary.
-    // @param {boolean} live - true for a live run, false for a saved
-    //                          result shown as a fallback.
-    // @param {string} note - short provenance line for the badge.
-    // @returns {void}
-    function renderResult(result, live, note) {
-      const badge = document.getElementById("result-badge");
-      badge.textContent = note;
-      badge.className = "badge " + (live ? "live" : "saved");
-      document.getElementById("result-model").textContent = live
-        ? "Model: Luna via OpenRouter"
-        : "Showing a saved result";
-      document.getElementById("result-dept").textContent =
-        result.department;
-      document.getElementById("result-conf").textContent =
-        "Confidence: " + Number(result.confidence).toFixed(2);
-      document.getElementById("result-summary").textContent =
-        result.summary;
-      document.getElementById("result-panel").hidden = false;
-    }
-
-    // Step 4b: classify the selected scenario.
-    //
-    // Sends one POST to the Worker. On any failure, such as a network
-    // error, an expired credit balance or a rejected origin, the
-    // saved result is shown instead so the demonstration still
-    // completes.
-    //
-    // @returns {Promise<void>} resolves once the panel is painted.
-    async function classify() {
-      const button = document.getElementById("classify");
-      const status = document.getElementById("classify-status");
-      const select = document.getElementById("scenario");
-      const sc = SCENARIOS[Number(select.value)];
-      button.disabled = true;
-      status.textContent = "Classifying...";
-
-      // Step 4b-i: one bounded request. The 45-second ceiling stops
-      // the visitor waiting indefinitely on a slow upstream reply.
-      try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 45000);
-        const response = await fetch(WORKER_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: {
-              sender: sc.sender,
-              subject: sc.subject,
-              body: sc.body
-            },
-            glossary_override: sc.glossary
-          }),
-          signal: controller.signal
-        });
-        clearTimeout(timer);
-        if (!response.ok) {
-          throw new Error("Worker replied " + response.status);
-        }
-        const data = await response.json();
-        if (!data.ok || !data.luna) {
-          throw new Error("Malformed reply");
-        }
-        // Step 4b-ii: live success. Fields are read defensively so a
-        // missing key falls back to the saved scenario values.
-        renderResult(
-          {
-            department: data.luna.department || sc.saved.department,
-            confidence: data.luna.confidence || sc.saved.confidence,
-            summary: data.luna.executive_summary || sc.saved.summary
-          },
-          true,
-          "Live classification"
-        );
-        status.textContent = "Complete.";
-      } catch (err) {
-        // Step 4b-iii: fallback path. The error text is logged for
-        // the operator but never shown as if it were a result.
-        console.warn("Live classification unavailable:", err);
-        renderResult(sc.saved, false, "Saved result");
-        status.textContent =
-          "Live service unavailable; showing a saved result.";
-      } finally {
-        button.disabled = false;
-      }
-    }
-
-    // Step 2 (cont): wire the gate, the scenario picker and the
-    // classify button once the document is ready.
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("gate-form");
-      const error = document.getElementById("gate-error");
-      const gate = document.getElementById("gate");
-      const demo = document.getElementById("demo");
-      const select = document.getElementById("scenario");
-
-      // Populate the picker from the scenario data so the labels and
-      // the sample content can never drift apart.
-      SCENARIOS.forEach((sc, index) => {
-        const option = document.createElement("option");
-        option.value = String(index);
-        option.textContent = sc.label;
-        select.appendChild(option);
-      });
-      renderScenario(SCENARIOS[0]);
-
-      select.addEventListener("change", () => {
-        renderScenario(SCENARIOS[Number(select.value)]);
-        document.getElementById("result-panel").hidden = true;
-        document.getElementById("classify-status").textContent = "";
-      });
-
-      document.getElementById("classify")
-        .addEventListener("click", classify);
-
-      // Step 5: reveal the page. Shared by the password form and by
-      // the credential link below, so the unlock behaviour can never
-      // drift between the two paths.
-      //
-      // @returns {void}
+      // Step 1: reveal the page. Shared by the link path and the
+      // form path so the two can never behave differently.
       function unlock() {
         sessionStorage.setItem(SESSION_KEY, "1");
         gate.style.display = "none";
-        demo.hidden = false;
       }
 
-      // Step 6: honour credentials carried in the URL fragment.
+      // Compare the supplied credentials against the stored digest
+      // without short-circuiting, so the check takes the same time
+      // whether it succeeds or fails.
       //
-      // The fragment (everything after "#") is never sent to the web
-      // server, so the password does not reach server logs the way a
-      // "?password=" query string would. It remains visible in the
-      // address bar, browser history, and any message the link is
-      // pasted into, so the whole link must be handled as if it were
-      // the password itself.
-      //
-      // Accepted format: #<user>:<password>, for example #kay:ferncroft.
-      // The fragment is stripped from the address bar immediately
-      // after it has been read, whether or not it unlocks.
-      //
-      // @returns {Promise<void>} resolves once the gate state is set.
-      async function unlockFromLink() {
-        if (!location.hash || location.hash.length < 2) {
-          return;
-        }
-        let pair = location.hash.slice(1);
+      // @param {string} user - the user name entered.
+      // @param {string} pass - the password entered.
+      // @returns {Promise<boolean>} true when they match.
+      function credentialsMatch(user, pass) {
+        var text = user.trim().toLowerCase() + ":" + pass;
+        var bytes = new TextEncoder().encode(text);
+        return crypto.subtle.digest("SHA-256", bytes)
+          .then(function (buffer) {
+            var hex = Array.from(new Uint8Array(buffer))
+              .map(function (b) {
+                return b.toString(16).padStart(2, "0");
+              })
+              .join("");
+            var diff = 0;
+            for (var i = 0; i < hex.length; i += 1) {
+              diff |= hex.charCodeAt(i) ^ GATE_DIGEST.charCodeAt(i);
+            }
+            return diff === 0;
+          });
+      }
+
+      // Step 2: honour credentials carried in the URL fragment. The
+      // fragment is never sent to the web server, so the password
+      // cannot reach server logs the way a query string would, but
+      // the link itself must still be handled as the password. The
+      // fragment is stripped from the address bar at once, whether
+      // or not it unlocks.
+      function unlockFromLink() {
+        if (!location.hash || location.hash.length < 2) return;
+        var pair = location.hash.slice(1);
         try {
           pair = decodeURIComponent(pair);
         } catch (err) {
           pair = "";
         }
-        const separator = pair.indexOf(":");
-        if (separator < 1) {
-          return;
-        }
-        const user = pair.slice(0, separator);
-        const pass = pair.slice(separator + 1);
+        var separator = pair.indexOf(":");
+        if (separator < 1) return;
+        var user = pair.slice(0, separator);
+        var pass = pair.slice(separator + 1);
         history.replaceState(
           null, "", location.pathname + location.search
         );
-        // A failure of the Web Crypto API must leave the gate closed
-        // rather than raising an unhandled rejection.
-        const ok = await credentialsMatch(user, pass).catch(
-          () => false
-        );
-        if (ok) {
-          unlock();
-        } else {
-          // Identical message to the form path, so the link reveals
-          // nothing about which half was wrong.
-          error.textContent =
-            "Those credentials were not recognised.";
-        }
+        credentialsMatch(user, pass).then(function (ok) {
+          if (ok) {
+            unlock();
+          } else {
+            error.textContent =
+              "Those credentials were not recognised.";
+          }
+        }).catch(function () {
+          // A failure of the Web Crypto API leaves the gate closed.
+        });
       }
 
       // A visitor already unlocked in this session passes straight
-      // through without re-entering credentials; otherwise a
-      // credential link unlocks the page directly.
+      // through; otherwise a credential link unlocks directly.
       if (sessionStorage.getItem(SESSION_KEY) === "1") {
         gate.style.display = "none";
-        demo.hidden = false;
       } else {
         unlockFromLink();
       }
 
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        error.textContent = "";
-        const user = document.getElementById("gate-user").value;
-        const pass = document.getElementById("gate-pass").value;
-        if (await credentialsMatch(user, pass)) {
-          unlock();
-        } else {
-          // Identical message for a wrong user and a wrong password,
-          // so the message reveals nothing about which was wrong.
-          error.textContent = "Those credentials were not recognised.";
-        }
-      });
-    });
+      // Step 3: the manual password form.
+      document.getElementById("gate-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          error.textContent = "";
+          var user = document.getElementById("gate-user").value;
+          var pass = document.getElementById("gate-pass").value;
+          credentialsMatch(user, pass).then(function (ok) {
+            if (ok) {
+              unlock();
+            } else {
+              // Identical message for a wrong user and a wrong
+              // password, so it reveals which half was wrong.
+              error.textContent =
+                "Those credentials were not recognised.";
+            }
+          });
+        });
+    })();
   </script>
 </body>
 </html>
