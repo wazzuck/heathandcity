@@ -696,12 +696,73 @@
       document.getElementById("classify")
         .addEventListener("click", classify);
 
-      // A visitor already unlocked in this session passes straight
-      // through without re-entering credentials.
-      if (sessionStorage.getItem(SESSION_KEY) === "1") {
-        gate.hidden = true;
+      // Step 5: reveal the page. Shared by the password form and by
+      // the credential link below, so the unlock behaviour can never
+      // drift between the two paths.
+      //
+      // @returns {void}
+      function unlock() {
+        sessionStorage.setItem(SESSION_KEY, "1");
         gate.style.display = "none";
         demo.hidden = false;
+      }
+
+      // Step 6: honour credentials carried in the URL fragment.
+      //
+      // The fragment (everything after "#") is never sent to the web
+      // server, so the password does not reach server logs the way a
+      // "?password=" query string would. It remains visible in the
+      // address bar, browser history, and any message the link is
+      // pasted into, so the whole link must be handled as if it were
+      // the password itself.
+      //
+      // Accepted format: #<user>:<password>, for example #kay:ferncroft.
+      // The fragment is stripped from the address bar immediately
+      // after it has been read, whether or not it unlocks.
+      //
+      // @returns {Promise<void>} resolves once the gate state is set.
+      async function unlockFromLink() {
+        if (!location.hash || location.hash.length < 2) {
+          return;
+        }
+        let pair = location.hash.slice(1);
+        try {
+          pair = decodeURIComponent(pair);
+        } catch (err) {
+          pair = "";
+        }
+        const separator = pair.indexOf(":");
+        if (separator < 1) {
+          return;
+        }
+        const user = pair.slice(0, separator);
+        const pass = pair.slice(separator + 1);
+        history.replaceState(
+          null, "", location.pathname + location.search
+        );
+        // A failure of the Web Crypto API must leave the gate closed
+        // rather than raising an unhandled rejection.
+        const ok = await credentialsMatch(user, pass).catch(
+          () => false
+        );
+        if (ok) {
+          unlock();
+        } else {
+          // Identical message to the form path, so the link reveals
+          // nothing about which half was wrong.
+          error.textContent =
+            "Those credentials were not recognised.";
+        }
+      }
+
+      // A visitor already unlocked in this session passes straight
+      // through without re-entering credentials; otherwise a
+      // credential link unlocks the page directly.
+      if (sessionStorage.getItem(SESSION_KEY) === "1") {
+        gate.style.display = "none";
+        demo.hidden = false;
+      } else {
+        unlockFromLink();
       }
 
       form.addEventListener("submit", async (event) => {
@@ -710,9 +771,7 @@
         const user = document.getElementById("gate-user").value;
         const pass = document.getElementById("gate-pass").value;
         if (await credentialsMatch(user, pass)) {
-          sessionStorage.setItem(SESSION_KEY, "1");
-          gate.style.display = "none";
-          demo.hidden = false;
+          unlock();
         } else {
           // Identical message for a wrong user and a wrong password,
           // so the message reveals nothing about which was wrong.

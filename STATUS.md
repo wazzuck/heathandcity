@@ -580,6 +580,11 @@
       (live classification).
     - Verified 80-column wrapping, JavaScript syntax under `node
       --check`, and British Professional English spelling.
+    - Added a credential link form (`#<user>:<password>`) so the
+      client can be given one URL that unlocks the page directly; the
+      fragment is never transmitted to the server, is stripped from
+      the address bar on arrival, and the link itself must be handled
+      as the password.
 
 ---
 
