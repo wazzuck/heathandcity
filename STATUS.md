@@ -636,6 +636,8 @@
     - Model residency manager loads the background 7B on demand and evicts
       it afterwards, dropping its page cache so the RAM returns. A 0.6B
       draft model measured slower and was rejected.
+    - Exact-answer cache serves a repeated 105.65-second answer in 0.02
+      seconds, invalidated by any ingest.
 
 ---
 
