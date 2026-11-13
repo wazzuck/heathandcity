@@ -535,6 +535,33 @@
       both pass, and confirmed the embedded Worker source parses under
       `node --check`.
 
+59. Provisioned and deployed the Kay classification Cloudflare Worker
+    (operational task, Worker kept outside this repository at
+    `~/kay-worker`):
+    - Installed `wrangler` 4.86.0 (MIT OR Apache-2.0, permissive) and
+      authorised it through the operator's browser; recorded Cloudflare
+      account `bb26d0a4c5bcf535f66597313ab3c8c7`.
+    - Chose hostname Option A (`workers.dev`) per `STATUS.md` entry 7
+      (DNS remains at Spaceship); registered the account subdomain
+      `heathandcity` through the Cloudflare Representational State
+      Transfer (REST) API.
+    - Deployed Worker `kay-classify` at
+      `https://kay-classify.heathandcity.workers.dev` with the
+      origin-allow-listed source from `docs/CLOUDFLARE_WORKER_SETUP.md`
+      Section 8, storing `OPENROUTER_API_KEY` only in Cloudflare's
+      secret store.
+    - Substituted model `openai/gpt-6-luna` because the specification's
+      `openai/gpt-luna-latest` is rejected by OpenRouter (HTTP 400).
+    - Verified all four endpoint checks (404 root, 403 disallowed
+      origin, 200 happy path returning department `placement` at 0.96
+      confidence, zero `sk-or-` occurrences in any response).
+    - Recorded execution details and deviations in
+      `docs/CLOUDFLARE_WORKER_SETUP.md` Section 13.
+    - Decisions recorded: free plan retained; demonstration accepts
+      real client correspondence, with lawful basis, processor
+      arrangement and international transfer safeguard still to be
+      defined; OpenRouter key rotation deferred by operator decision.
+
 ---
 
 ## 2. Next
@@ -552,9 +579,22 @@
 4. Visibility phase 3 (one page per profession) awaits a decision.
 5. Visibility phase 4 (off-page): Google Business Profile, Search Console,
    Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
+6. Fix Legal Gate 1 false positives in `scripts/verify_legal_compliance.py`:
+   match SPDX licence identifiers or classifiers instead of free text, and
+   provision `practice-vault/venv` so the audit runs against the appliance
+   environment rather than the host Python installation.
+7. Rotate the OpenRouter credential (deferred operator decision) and
+   update the secret stored by Worker `kay-classify`; also report the 29
+   credential files tracked under `keys/` in `wazzuck/vunderland`.
+8. Define and record the lawful basis, the OpenRouter processor
+   arrangement, and the international transfer safeguard required before
+   the Kay demonstration handles real client correspondence.
 
 ---
 
 ## 3. Blocked
 
-1. None. All acceptance criteria and user directives satisfied.
+1. Legal Gate 1 of `scripts/verify_legal_compliance.py` fails on three
+   pre-existing false positives (`scipy`, `pandas`, `docutils`). The
+   operator has deferred the fix to a `Next` item; sale-readiness checks
+   remain blocked until the gate passes cleanly.

@@ -657,16 +657,55 @@ Complete this section during and after execution.
 
 | Item | Value |
 | :--- | :--- |
-| wrangler version | _pending_ |
-| Cloudflare account identifier | _pending_ |
-| Hostname option chosen (Section 4) | _pending_ |
-| Worker URL | _pending_ |
-| OpenRouter key rotated (Section 3.1) | _pending_ |
-| `wrangler` licence confirmed permissive | _pending_ |
-| `verify_legal_compliance.py` result | _pending_ |
-| `verify_site.py` result | _pending_ |
-| Data protection position recorded | _pending_ |
-| Date of execution | _pending_ |
+| wrangler version | 4.86.0 (MIT OR Apache-2.0) |
+| Cloudflare account identifier | `bb26d0a4c5bcf535f66597313ab3c8c7` |
+| Hostname option chosen (Section 4) | Option A, `workers.dev` |
+| Worker URL | `https://kay-classify.heathandcity.workers.dev` |
+| OpenRouter key rotated (Section 3.1) | Deferred by operator decision |
+| `wrangler` licence confirmed permissive | Yes, MIT OR Apache-2.0 |
+| `verify_legal_compliance.py` result | Gate 1 FAIL, pre-existing |
+| `verify_site.py` result | PASS |
+| Data protection position recorded | Yes, real correspondence, Section 13.1 |
+| Date of execution | 13 November 2026 |
+
+### 13.1 Execution notes
+
+1. **Account and subdomain.** The Cloudflare account was created and
+   authorised through the operator's browser. The account had no
+   `workers.dev` subdomain, so `heathandcity` was registered with
+   `PUT /accounts/{id}/workers/subdomain` before the first deploy.
+2. **Model substitution.** The model identifier in Section 8,
+   `openai/gpt-luna-latest`, is rejected by OpenRouter with HTTP 400
+   ("not a valid model ID"). The deployed Worker uses
+   `openai/gpt-6-luna`, the current Luna generation and the cheapest
+   Luna tier ($0.10 / $0.50 per million tokens).
+3. **Key rotation deferred.** The operator instructed that Section 3.1
+   be skipped for now, so the credential previously committed to
+   `wazzuck/vunderland` is the value stored in Cloudflare's secret
+   store. Rotation remains an open security item, recorded in
+   `STATUS.md`.
+4. **Certificate delay.** After the first deploy, Transport Layer
+   Security (TLS) for the new hostname failed with a handshake error
+   for roughly ten minutes while Cloudflare issued the wildcard
+   certificate for `*.heathandcity.workers.dev`. No action was
+   required; the endpoint then served normally.
+5. **Verification results.** All four Section 10 checks pass: 404 on
+   the root route, 403 on a disallowed origin, 200 on the happy path
+   (department `placement`, confidence 0.96), and zero occurrences of
+   `sk-or-` in any response. The repository history grep matches only
+   the literal command text in this document, not a credential.
+6. **Legal Gate 1 failure (pre-existing).** Gate 1 flags `scipy`,
+   `pandas` and `docutils` because the copyleft pattern matches words
+   such as "GPL-compatible" inside their BSD licence text, and because
+   `practice-vault/venv` does not exist, so the audit runs against the
+   host Python environment. This predates this task; a fix is recorded
+   as a `Next` item in `STATUS.md`.
+7. **Data protection position.** The operator has decided that the
+   demonstration accepts real client correspondence. The lawful basis,
+   the processor arrangement with OpenRouter, and the international
+   transfer safeguard are **not yet defined** and must be recorded
+   before real correspondence is used. The `clients/kay/` subpage must
+   remain `noindex` and unlinked from the public homepage.
 
 ---
 
