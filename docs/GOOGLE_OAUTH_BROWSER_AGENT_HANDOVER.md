@@ -165,6 +165,8 @@ curl -s -H "X-Vault-Password: ${PRACTICE_VAULT_PASSWORD}" \
 
 1. Enable the Google Calendar API for project `840262346134` at
    `https://console.developers.google.com/apis/api/calendar-json.googleapis.com/overview?project=840262346134`.
+   The full, tested procedure is
+   `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`.
 2. Re-run the calendar check and confirm that the local mirror advances.
 3. Do not repeat the consent flow: the token and scopes are already
    correct.
