@@ -648,6 +648,29 @@
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
 
+62. Restored durable Google Workspace OAuth authorisation for the Practice
+    Vault appliance (handover `docs/GOOGLE_OAUTH_BROWSER_AGENT_HANDOVER.md`):
+    - Published the OAuth consent screen for project `marketcalc` from
+      Testing to **In production** (user type External), after adding the
+      required Branding fields: home page, privacy policy link and the
+      authorised domain `heathandcity.com`.
+    - Published a new public privacy notice at
+      `https://heathandcity.com/privacy-policy/` (repository page
+      `privacy-policy/index.html`, added to `sitemap.xml`) to satisfy
+      Google's Application privacy policy link requirement.
+    - Added redirect URI `http://127.0.0.1:9090/api/google/callback` to
+      the OAuth client; the pre-existing `8080` URI was left untouched.
+      The handover's claim that `9090` was already registered was wrong.
+    - Re-consented through the browser: a fresh token was written at
+      2026-11-13T20:24:34Z with `refresh_token_expires_in` **absent**,
+      so the seven-day expiry no longer applies.
+    - `GET /api/google/status` reports `is_connected: true` for
+      `nevillebryce@gmail.com`; `last_gmail_sync` advanced from 19:21 to
+      20:27Z and 68,874 messages are ingested (one new message).
+    - Restarted the continuous Gmail indexer with `start_indexer.sh`
+      (supervisor 160885); the server process still runs with
+      `START_INDEXER=0`, so a service restart would drop it again.
+
 ---
 
 ## 2. Next
@@ -675,11 +698,10 @@
 8. Define and record the lawful basis, the OpenRouter processor
    arrangement, and the international transfer safeguard required before
    the Kay demonstration handles real client correspondence.
-9. Publish the Google OAuth consent screen to production before
-   17 November 2026, or re-consent weekly; the refresh token expires then.
-10. Restart the Practice Vault service to load the merged
-    interactive-priority code and the Qwen3-4B interactive model.
-11. Rotate the local OpenCode service password, which was printed into a
+9. Restart the Practice Vault service to load the merged
+   interactive-priority code and the Qwen3-4B interactive model, and set
+   `START_INDEXER=1` for it so the Gmail indexer survives that restart.
+10. Rotate the local OpenCode service password, which was printed into a
     session transcript during diagnostics.
 
 ---
