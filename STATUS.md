@@ -603,7 +603,7 @@
       on every script, and British Professional English spelling.
 
 61. Built and verified the Practice Vault personal secretary on branch
-    merged into `master` (367 tests):
+    merged into `master` (372 tests):
     - Requirements, 31 functional requirements, a 100-task catalogue and
       simulation gates in `docs/PRACTICE_VAULT_SECRETARY_REQUIREMENTS.md`.
     - Structured message store: 58,166 messages backfilled in 4.2 s;
@@ -638,6 +638,8 @@
       draft model measured slower and was rejected.
     - Exact-answer cache serves a repeated 105.65-second answer in 0.02
       seconds, invalidated by any ingest.
+    - Forward Gmail sync fetches the last seven days and indexed 66 new
+      messages, without consuming the archive checkpoint.
 
 ---
 
@@ -668,8 +670,6 @@
    the Kay demonstration handles real client correspondence.
 9. Publish the Google OAuth consent screen to production before
    17 November 2026, or re-consent weekly; the refresh token expires then.
-10. Repair forward Gmail synchronisation: the indexer reports
-    end-of-stream and has not fetched mail after 11 November 2026.
 10. Restart the Practice Vault service to load the merged
     interactive-priority code and the Qwen3-4B interactive model.
 11. Rotate the local OpenCode service password, which was printed into a

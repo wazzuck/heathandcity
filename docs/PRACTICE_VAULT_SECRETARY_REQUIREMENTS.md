@@ -981,7 +981,7 @@ Recorded 13 November 2026 after the first build and live activation.
 ### B.1. Delivered
 
 1. Correspondence lists, unread, invitations and topics:
-   `message_store.py` and `secretary.py`; 58,166 rows, newest-20 p95
+   `message_store.py` and `secretary.py`; 58,203 rows, newest-20 p95
    0.96 ms, live unread results.
 2. Deterministic routing and clarification: `query_router.py`; 64 tests,
    including the "recent emails" regression and the "last year" menu.
@@ -999,7 +999,7 @@ Recorded 13 November 2026 after the first build and live activation.
    `quota_watch.py`; `SIGSTOP` verified with a real process.
 9. Model residency: `model_manager.py`; background 7B started on demand
    and evicted with its page cache dropped.
-10. Gmail metadata: `gmail_metadata.py`; over 18,000 messages enriched
+10. Gmail metadata: `gmail_metadata.py`; over 30,000 messages enriched
     with threads, labels and recipients.
 11. Offline simulation: `simulation/`; 7 of 7 scenarios pass gates G1,
     G2, G3, G8 and G9.
@@ -1007,6 +1007,8 @@ Recorded 13 November 2026 after the first build and live activation.
     amended and passing.
 13. Exact-answer cache: `answer_cache.py`; a repeated 105.65-second
     answer served in 0.02 seconds, invalidated by any ingest.
+14. Forward Gmail sync: `scripts/sync_gmail_new.py` and the
+    continuous indexer; 66 new messages fetched through a seven-day query.
 
 ### B.2. Partial
 
@@ -1024,5 +1026,4 @@ Recorded 13 November 2026 after the first build and live activation.
 
 1. Calendar writing, blocked by the read-only OAuth scope.
 2. Attachment indexing and filtering.
-3. Forward Gmail synchronisation after 11 November 2026.
-4. A user-facing thread view, although `thread_id` is now populated.
+3. A user-facing thread view, although `thread_id` is now populated.
