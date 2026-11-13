@@ -356,6 +356,53 @@ export const VERTICAL_DEMOS = Object.freeze({
       "schedules. We do not provide statutory audit or regulated tax advice; " +
       "the system automates preparation for your sign-off."
   },
+
+  "it-support": {
+    id: "it-support",
+    tabLabel: "IT & Software Support",
+    badge: "MANAGED SERVICES & SOFTWARE SUPPORT · NW3 / CITY",
+    headline: "IT Support Engineers & Managed Service Providers",
+    summary:
+      "Turn ticket noise into a clear incident picture: affected system, " +
+      "symptom, error code, severity and next action, with renewals tracked.",
+    stats: [
+      { label: "Tickets Triaged Today", value: "38 Tickets", tone: "gold" },
+      { label: "Licences Expiring Soon", value: "3 Renewals", tone: "amber" },
+      { label: "Client Data Sent to Cloud", value: "None", tone: "emerald" }
+    ],
+    digestTime: "07:45 support briefing · On-premises hardware",
+    queueItems: [
+      {
+        priority: "P1 INCIDENT · SERVICE DOWN",
+        client: "Client line-of-business application (illustrative)",
+        matter: "Outlook and Microsoft 365 sign-in failing for the whole office",
+        status: "Symptom, error code and affected users extracted; cause marked unproven",
+        timer: "Escalated 07:42 today",
+        sourceRef: "Ticket_INC-10457.eml"
+      },
+      {
+        priority: "LICENCE RENEWAL · 21 DAYS",
+        client: "Managed service agreement (illustrative)",
+        matter: "Microsoft 365 and endpoint protection renewal dates",
+        status: "Renewal quote requested; three unused seats flagged",
+        timer: "Renewal in 21 days",
+        sourceRef: "Licence_Register_2026.xlsx"
+      },
+      {
+        priority: "ROOT CAUSE REVIEW",
+        client: "Backup and recovery service (illustrative)",
+        matter: "Nightly backup failing on two servers",
+        status: "Error code quoted; recovery point objective at risk",
+        timer: "RCA due before Friday",
+        sourceRef: "Backup_Job_Log_2026-11-12.csv"
+      }
+    ],
+    guarantee:
+      "Ticket content, client credentials and infrastructure detail stay on " +
+      "your own hardware. The system extracts and prepares; you approve the " +
+      "fix, the reply and the change."
+  },
+
 talent: {
     id: "talent",
     tabLabel: "Authors, Composers & Talent",

@@ -299,6 +299,10 @@ practice-vault/
 | `practice-vault/backend/app/deep_tasks.py` | Checkpointed deep-work queue. |
 | `practice-vault/backend/app/deep_worker.py` | Overnight worker using the 14B model. |
 | `practice-vault/backend/app/learning.py` | Interaction log, feedback and style profile. |
+| `practice-vault/backend/app/professions.py` | Deployment tailoring. |
+| `practice-vault/backend/app/colibri.py` | Control of the 35B engine. |
+| `practice-vault/scripts/profession.py` | Pack selection and evaluation. |
+| `practice-vault/scripts/manage_colibri.py` | Control of the 35B engine. |
 | `practice-vault/scripts/manage_models.py` | Operator control for model residency. |
 | `practice-vault/scripts/manage_matters.py` | Operator control for the matter registry. |
 | `practice-vault/scripts/nightly_maintenance.sh` | Idle-window maintenance and model pass. |

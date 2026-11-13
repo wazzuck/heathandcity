@@ -390,3 +390,10 @@ absent. Add project-specific rules only where they apply.
    capability, route, model or supported phrasing changes, update both in
    the same commit and run the checker against the live appliance. A stale
    catalogue is a defect; the next session will trust it.
+7. **Deployment Profession Pack**: The Practice Vault serves one practice
+   per appliance and selects one pack from
+   `practice-vault/backend/app/professions.py`. The choice is recorded in
+   `~/practice-vault-data/profession.json`. A pack changes interpretation
+   and vocabulary only, never a permission, route or outbound action.
+   Update the pack, its test, its evaluation and the verified interaction
+   catalogue in the same commit.
