@@ -696,6 +696,24 @@
       (supervisor 160885); the server process still runs with
       `START_INDEXER=0`, so a service restart would drop it again.
 
+63. Enabled the Google Calendar API (handover
+    `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`):
+    - Confirmed the console project was `marketcalc`, number
+      `840262346134`, then clicked **Enable** on the Google Calendar API
+      (`calendar-json.googleapis.com`) once at 2026-11-14T03:16:18Z.
+    - The console then showed Status **Enabled** with a **Disable API**
+      button and no warning banner. No other API, credential, scope,
+      redirect URI, consent screen or billing setting was changed.
+    - On the appliance host, the Calendar list returned HTTP 200 with
+      seven calendars (the handover expected one), and the event fetch
+      for 2026 returned five events.
+    - No Calendar warning appeared in
+      `~/practice-vault-data/vault-server.log`, and no operator
+      intervention was required.
+    - The developer container's token lacks the Calendar scope and gives
+      `insufficientPermissions`; the durable token on the appliance host
+      carries the scope, so verification ran there.
+
 ---
 
 ## 2. Next
@@ -723,14 +741,13 @@
 8. Define and record the lawful basis, the OpenRouter processor
    arrangement, and the international transfer safeguard required before
    the Kay demonstration handles real client correspondence.
-9. Enable the Google Calendar API (`calendar-json.googleapis.com`) in
-   project 840262346134. Consent is restored and Gmail and Drive are
-   verified, but calendar calls return `SERVICE_DISABLED`. The handover is
-   `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`.
-10. Restart the Practice Vault service to load the merged
-    interactive-priority code and the Qwen3-4B interactive model, and
-    set `START_INDEXER=1` for it so the Gmail indexer survives that
-    restart.
+9. Restart the Practice Vault service to load the merged
+   interactive-priority code and the Qwen3-4B interactive model, and
+   set `START_INDEXER=1` for it so the Gmail indexer survives that
+   restart.
+10. Run `practice-vault/scripts/sync_calendar.py` once and schedule it
+    nightly, so the enabled Calendar API actually updates the local
+    diary and records `last_calendar_sync`.
 11. Rotate the local OpenCode service password, which was printed into
     a session transcript during diagnostics.
 
@@ -751,12 +768,15 @@ The authoritative appliance register is Section 5 of
 `practice-vault/STATUS.md`, items KF-01 to KF-12. This section records the
 cross-repository actions that need an operator or a site change.
 
-1. **KF-01: Google Calendar API disabled.** Calendar calls return
-   `SERVICE_DISABLED`, so the diary cannot refresh. The handover is
-   `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`. Severity: high.
-2. **KF-02: no scheduled calendar sync.** Enabling the API restores
-   access but does not create a sync job. A calendar sync script, a
-   nightly step and a `last_calendar_sync` timestamp are still needed.
+1. **KF-01: resolved on 14 November 2026.** The Google Calendar API is
+   enabled in project `840262346134`, the Calendar list returns HTTP 200
+   with seven calendars, and the event fetch returns five. The diary can
+   now be read on demand. The record is in
+   `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`, Section 10.
+2. **KF-02: no scheduled calendar sync.** Enabling the API restored
+   access but did not create a sync job. `scripts/sync_calendar.py`
+   exists on the appliance, but no scheduled step calls it and
+   `last_calendar_sync` is still absent from `google_sync_state.json`.
    Severity: high.
 3. **KF-03: restart stops the forward indexer.** The running service
    carries `START_INDEXER=0`; restart it with `START_INDEXER=1`.
