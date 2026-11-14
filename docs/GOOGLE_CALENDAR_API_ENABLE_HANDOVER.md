@@ -6,8 +6,8 @@
 > or a code change.
 > Date: 13 November 2026.
 > Status: completed 14 November 2026 at 03:16 UTC. The API is enabled, a
-> Calendar read succeeds, and 250 events were imported into the local
-> diary at 03:33 UTC. Findings and results are in Section 10.
+> Calendar read succeeds, and 558 events from seven calendars were
+> imported into the local diary at 03:42 UTC. Findings and results are in Section 10.
 > Language: British Professional English (AGENTS.md Policy 15).
 > Line width: 80 columns.
 
@@ -321,8 +321,9 @@ No Calendar warning was written to
 
 ### 10.6 Closed on 14 November 2026
 
-1. **KF-02:** `scripts/sync_calendar.py` ran at 03:33 UTC and imported
-   250 events with source `google_calendar`; `last_calendar_sync` is now
+1. **KF-02:** `scripts/sync_calendar.py` ran at 03:42 UTC and imported
+   558 events from seven calendars, including the shared and holiday
+   calendars, with source `google_calendar`; `last_calendar_sync` is now
    present in `google_sync_state.json`.
 2. The nightly maintenance calls the sync and tolerates a failed request.
 3. The manual Chambers Advisory Conference entry was preserved.
