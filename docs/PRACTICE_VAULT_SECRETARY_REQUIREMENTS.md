@@ -517,6 +517,22 @@ the simulation group that proves it.
    catalogue and the full test suite still pass.
 7. Simulation group: `profession`.
 
+### FR-35. Three-axis classification and human calibration
+
+1. Type (the nine stored categories), stage (a per-type lifecycle) and
+   topic (the pack vocabulary) are independent.
+2. A human reviews a small sample to calibrate the suggestions. The
+   labels are an evaluation set, not the production classifier.
+3. The topic gate requires 200 labels per pack at 80 per cent agreement.
+   Type and stage accuracy are reported separately and are not gates.
+4. A stage exists only for a type with a real lifecycle: receipts
+   distinguish ordered, dispatched, out_for_delivery and delivered;
+   notifications distinguish security_alert, login, payment and statement.
+5. A custom topic may not reuse a stored type name such as `personal`.
+6. Acceptance: the reviewer asks each applicable axis; a topic is not
+   counted as a type; no stored category changes before the gate.
+7. Simulation group: `classification`.
+
 ---
 
 ## 5. Non-functional requirements
@@ -1043,9 +1059,10 @@ Recorded 13 November 2026 after the first build and live activation.
     **"what did you do overnight"** answer, and the nightly Markdown
     digest. The before/after analysis is in
     `practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
-21. Calendar sync caller: `scripts/sync_calendar.py` upserts Google events
-    into `calendar_events.db` and records `last_calendar_sync`. Live use
-    waits for the Google Calendar API to be enabled.
+21. Calendar sync caller: `scripts/sync_calendar.py` imports events from
+    every visible Google calendar. Live: seven calendars and 558 events
+    imported on 14 November 2026; the nightly job records
+    `last_calendar_sync`.
 
 ### B.2. Partial
 

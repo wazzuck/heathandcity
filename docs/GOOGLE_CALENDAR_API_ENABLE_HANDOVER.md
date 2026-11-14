@@ -201,25 +201,25 @@ Success is `events: 0` or more with no warning in
 5. **The console asks for verification.** A restricted-scope review.
    Stop and report; never submit.
 
-## 7. What this does not fix
+## 7. What the console change alone did not fix
 
-Enabling the API restores **access**. It does not, by itself, refresh the
+Enabling the API restored **access**. It did not, by itself, refresh the
 diary.
 
-1. `GoogleWorkspaceSyncService.fetch_calendar_events()` exists. On the
-   appliance host it now has a caller, `scripts/sync_calendar.py`, but
-   that script is not part of this developer checkout.
-2. There is no scheduled calendar sync, and no `last_calendar_sync` key in
-   `google_sync_state.json`. The local `calendar_events` table still
-   holds one manual entry, the Chambers Advisory Conference on
+1. `GoogleWorkspaceSyncService.fetch_calendar_events()` existed. On the
+   appliance host it gained a caller, `scripts/sync_calendar.py`, but
+   that script was not part of this developer checkout at the time.
+2. There was no scheduled calendar sync, and no `last_calendar_sync` key
+   in `google_sync_state.json`. The local `calendar_events` table still
+   held one manual entry, the Chambers Advisory Conference on
    19 November 2026, with source `manual_diary`.
-3. Confirmed on 14 November 2026: `calendar_events.db` holds exactly one
-   row, and its source is `manual_diary`.
+3. Confirmed on 14 November 2026 before the follow-up: `calendar_events.db`
+   held exactly one row, and its source was `manual_diary`.
 
-The caller now exists on the appliance, but the remaining engineering
-change is a nightly step that runs it and records a sync timestamp.
-Until then, enabling the API lets an operator read the calendar on
-demand but does not update the diary automatically.
+All three gaps were closed later on 14 November. The caller runs from the
+appliance checkout, the nightly step records `last_calendar_sync`, and
+558 events from seven calendars are imported. Section 10 records the
+result.
 
 ## 8. Success criteria
 
@@ -311,8 +311,8 @@ No Calendar warning was written to
 
 ### 10.5 Repository record and checks
 
-1. `STATUS.md` entry 63 records the change; KF-01 is resolved and KF-02
-   remains open.
+1. `STATUS.md` entry 63 records the change; KF-01 and KF-02 are both
+   resolved.
 2. `docs/GOOGLE_OAUTH_BROWSER_AGENT_HANDOVER.md` now points here.
 3. Committed as `2d22058` and pushed to `origin/main`.
 4. `scripts/verify_site.py` fails on pre-existing wide lines in

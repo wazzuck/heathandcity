@@ -306,6 +306,23 @@ practice-vault/
 6. The measured before-and-after comparison is in
    `practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
 
+### 4.14. Three-Axis Classification and Calibration
+
+1. **Type** is one of nine stored categories: what the message is.
+2. **Stage** is a lifecycle value for receipts and notifications:
+   ordered, dispatched, out_for_delivery, delivered, and similar.
+3. **Topic** is the pack vocabulary: research, finance, incident and so
+   on. The three axes are independent; a topic is not a child of a type.
+4. `stages.py` holds the lifecycle vocabulary and subject suggestions.
+   `labelling.py` samples messages, writes the review CSV and scores each
+   axis separately.
+5. The reviewer prints every menu up front and asks type, then stage
+   where applicable, then topic. Human labels are a calibration set, not
+   the production classifier.
+6. The topic gate requires 200 labels per pack at 80 per cent. Type and
+   stage accuracy are reported but are not gates. No stored category
+   changes until the topic gate passes.
+
 ---
 
 ## 5. Module Inventory
@@ -340,7 +357,10 @@ practice-vault/
 | `practice-vault/backend/app/professions.py` | Deployment tailoring. |
 | `practice-vault/backend/app/colibri.py` | Control of the 35B engine. |
 | `practice-vault/backend/app/deep_digest.py` | Overnight review digest. |
-| `practice-vault/scripts/sync_calendar.py` | Google Calendar mirror sync. |
+| `practice-vault/backend/app/stages.py` | Lifecycle stages. |
+| `practice-vault/backend/app/labelling.py` | Axis scoring. |
+| `practice-vault/scripts/review_labels.py` | Three-axis review. |
+| `practice-vault/scripts/sync_calendar.py` | Calendar mirror sync. |
 | `practice-vault/scripts/profession.py` | Pack selection and evaluation. |
 | `practice-vault/scripts/manage_colibri.py` | Control of the 35B engine. |
 | `practice-vault/scripts/performance_smoke.py` | Latency and timing. |

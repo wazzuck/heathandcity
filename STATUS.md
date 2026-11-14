@@ -664,9 +664,10 @@
     - Background 7B fixed: the model manager now exports
       `LD_LIBRARY_PATH`; the morning battery starts and unloads the 7B to
       confirm it.
-    - Calendar sync caller: `practice-vault/scripts/sync_calendar.py`
-      upserts Google events and records `last_calendar_sync`; the live run
-      returns 2 until the Calendar API is enabled.
+    - Calendar sync live: the API is enabled, 558 events from seven
+      calendars are imported, the manual entry is preserved, and the
+      nightly job records `last_calendar_sync`. The diary separates timed
+      commitments from all-day reminders.
     - Quality comparison: the 4B was fastest but missed the Corringham
       completion date, the 14B was most complete, and the 35B was most
       precise but 3.5 times slower. The report is in
@@ -762,9 +763,8 @@
    interactive-priority code and the Qwen3-4B interactive model, and
    set `START_INDEXER=1` for it so the Gmail indexer survives that
    restart.
-10. Run `practice-vault/scripts/sync_calendar.py` once and schedule it
-    nightly, so the enabled Calendar API actually updates the local
-    diary and records `last_calendar_sync`.
+10. Run the 200-topic calibration set per pack; require 80 per cent
+    topic agreement before storing topics or wiring the batch classifier.
 11. Rotate the local OpenCode service password, which was printed into
     a session transcript during diagnostics.
 

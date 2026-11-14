@@ -397,3 +397,8 @@ absent. Add project-specific rules only where they apply.
    and vocabulary only, never a permission, route or outbound action.
    Update the pack, its test, its evaluation and the verified interaction
    catalogue in the same commit.
+8. **Three-Axis Classification**: The Practice Vault classifies a message
+   by stored type, optional lifecycle stage and pack topic. The axes are
+   independent; never make a topic a child of a type. Human labels are a
+   calibration set, not the production classifier. Do not store topic or
+   stage labels until the 200-label, 80 per cent topic gate passes.
