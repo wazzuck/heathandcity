@@ -678,7 +678,7 @@
       one list, while holidays and timed commitments keep their dates.
     - Spend honesty: no-match and empty-period answers are explicit, and a
       genuinely mixed merchant gets a per-currency breakdown.
-    - 449 tests pass (up from 412); the morning battery passed all
+    - 450 tests pass (up from 412); the morning battery passed all
       functional checks, including the 7B start after the library-path fix.
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
