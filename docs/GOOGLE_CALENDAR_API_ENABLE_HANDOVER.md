@@ -6,8 +6,8 @@
 > or a code change.
 > Date: 13 November 2026.
 > Status: completed 14 November 2026 at 03:16 UTC. The API is enabled, a
-> Calendar read succeeds, and the local diary table is unchanged.
-> Findings and results are in Section 10.
+> Calendar read succeeds, and 250 events were imported into the local
+> diary at 03:33 UTC. Findings and results are in Section 10.
 > Language: British Professional English (AGENTS.md Policy 15).
 > Line width: 80 columns.
 
@@ -319,11 +319,12 @@ No Calendar warning was written to
    Gate 1 on its known licence false positives. This change is
    documentation only, and neither failure is caused by it.
 
-### 10.6 What remains open
+### 10.6 Closed on 14 November 2026
 
-1. **KF-02:** no scheduled job calls `scripts/sync_calendar.py`, and
-   `last_calendar_sync` is absent from `google_sync_state.json`.
-2. The next engineering step is to run the sync once, confirm that
-   Google events appear with source `google_calendar`, then schedule it
-   nightly. That step changes practice data and needs the operator's
-   agreement.
+1. **KF-02:** `scripts/sync_calendar.py` ran at 03:33 UTC and imported
+   250 events with source `google_calendar`; `last_calendar_sync` is now
+   present in `google_sync_state.json`.
+2. The nightly maintenance calls the sync and tolerates a failed request.
+3. The manual Chambers Advisory Conference entry was preserved.
+4. The primary calendar's repeated all-day task reminders are imported;
+   the diary labels them separately from timed commitments.

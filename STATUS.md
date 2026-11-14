@@ -654,8 +654,9 @@
     - IT and software support added to the website's practice types, the
       fee calculator, `llms.txt`, `llms-full.txt` and the structured data.
     - OAuth consent restored at 20:24 UTC; Gmail and Drive verified live.
-      The Google Calendar API is still disabled in the project and needs
-      one console action.
+      The Google Calendar API was enabled on 14 November at 03:16 UTC; the
+      sync imported 250 events at 03:33, preserved the manual entry, and
+      the nightly job now refreshes the diary.
     - Overnight digest workflow: the secretary answers "what did you do
       overnight" from the deep queue, and a cited Markdown digest is
       written nightly. The before/after analysis is in
@@ -710,6 +711,10 @@
     - No Calendar warning appeared in
       `~/practice-vault-data/vault-server.log`, and no operator
       intervention was required.
+    - The sync caller then imported 250 events with source
+      `google_calendar`, recorded `last_calendar_sync` at 03:33 UTC, and
+      preserved the manual Chambers Advisory Conference entry. The nightly
+      maintenance now calls the sync.
     - The local diary table is unchanged: `calendar_events.db` holds one
       row with source `manual_diary`.
     - The developer container's token lacks the Calendar scope and gives
@@ -767,19 +772,18 @@
 ## 4. Known failures and deferred fixes
 
 The authoritative appliance register is Section 5 of
-`practice-vault/STATUS.md`, items KF-01 to KF-12. This section records the
-cross-repository actions that need an operator or a site change.
+`practice-vault/STATUS.md`. This section records the cross-repository
+actions that need an operator or a site change.
 
 1. **KF-01: resolved on 14 November 2026.** The Google Calendar API is
    enabled in project `840262346134`, the Calendar list returns HTTP 200
    with seven calendars, and the event fetch returns five. The diary can
    now be read on demand. The record is in
    `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`, Section 10.
-2. **KF-02: no scheduled calendar sync.** Enabling the API restored
-   access but did not create a sync job. `scripts/sync_calendar.py`
-   exists on the appliance, but no scheduled step calls it and
-   `last_calendar_sync` is still absent from `google_sync_state.json`.
-   Severity: high.
+2. **KF-02: resolved on 14 November 2026.** `scripts/sync_calendar.py`
+   imported 250 events with source `google_calendar` at 03:33 UTC,
+   recorded `last_calendar_sync`, and the nightly maintenance now calls
+   it. The manual entry was preserved.
 3. **KF-03: restart stops the forward indexer.** The running service
    carries `START_INDEXER=0`; restart it with `START_INDEXER=1`.
    Severity: medium.
