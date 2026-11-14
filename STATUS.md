@@ -667,6 +667,10 @@
     - Calendar sync caller: `practice-vault/scripts/sync_calendar.py`
       upserts Google events and records `last_calendar_sync`; the live run
       returns 2 until the Calendar API is enabled.
+    - Quality comparison: the 4B was fastest but missed the Corringham
+      completion date, the 14B was most complete, and the 35B was most
+      precise but 3.5 times slower. The report is in
+      `practice-vault/docs/QUALITY_COMPARISON_2026-11-14.md`.
     - Morning briefing: `/briefing` now leads with today's commitments
       and the last 24 hours of deep work, then matters, relationships and
       finance. It is deterministic and takes about 0.1 s.
