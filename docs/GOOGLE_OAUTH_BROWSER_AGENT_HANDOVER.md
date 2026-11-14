@@ -171,8 +171,9 @@ calendars, and the event fetch returned five. No re-consent was needed,
 and the token and scopes were not changed. The full record is in
 `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`, Section 10.
 
-Still open: no scheduled job calls `scripts/sync_calendar.py`, so the
-diary does not refresh by itself.
+Closed on 14 November 2026. The sync ran at 03:33 UTC and imported
+250 events; the nightly maintenance calls it. The diary now refreshes
+without manual steps.
 
 ## 7. Rollback
 
