@@ -667,9 +667,11 @@
     - Calendar sync caller: `practice-vault/scripts/sync_calendar.py`
       upserts Google events and records `last_calendar_sync`; the live run
       returns 2 until the Calendar API is enabled.
+    - Diary cleanup: repeated all-day task reminders are collapsed into
+      one list, while holidays and timed commitments keep their dates.
     - Spend honesty: no-match and empty-period answers are explicit, and a
       genuinely mixed merchant gets a per-currency breakdown.
-    - 431 tests pass (up from 412); the morning battery passed all
+    - 432 tests pass (up from 412); the morning battery passed all
       functional checks, including the 7B start after the library-path fix.
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
