@@ -172,7 +172,8 @@ and the token and scopes were not changed. The full record is in
 `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`, Section 10.
 
 Closed on 14 November 2026. The sync ran at 03:33 UTC and imported
-250 events; the nightly maintenance calls it. The diary now refreshes
+558 events from seven calendars; the nightly maintenance calls it.
+The diary now refreshes
 without manual steps.
 
 ## 7. Rollback

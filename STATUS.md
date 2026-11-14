@@ -655,8 +655,8 @@
       fee calculator, `llms.txt`, `llms-full.txt` and the structured data.
     - OAuth consent restored at 20:24 UTC; Gmail and Drive verified live.
       The Google Calendar API was enabled on 14 November at 03:16 UTC; the
-      sync imported 250 events at 03:33, preserved the manual entry, and
-      the nightly job now refreshes the diary.
+      sync imported 558 events from seven calendars at 03:42, preserved
+      the manual entry, and the nightly job now refreshes the diary.
     - Overnight digest workflow: the secretary answers "what did you do
       overnight" from the deep queue, and a cited Markdown digest is
       written nightly. The before/after analysis is in
@@ -669,7 +669,7 @@
       returns 2 until the Calendar API is enabled.
     - Spend honesty: no-match and empty-period answers are explicit, and a
       genuinely mixed merchant gets a per-currency breakdown.
-    - 426 tests pass (up from 412); the morning battery passed all
+    - 431 tests pass (up from 412); the morning battery passed all
       functional checks, including the 7B start after the library-path fix.
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
@@ -711,8 +711,9 @@
     - No Calendar warning appeared in
       `~/practice-vault-data/vault-server.log`, and no operator
       intervention was required.
-    - The sync caller then imported 250 events with source
-      `google_calendar`, recorded `last_calendar_sync` at 03:33 UTC, and
+    - The sync caller then imported 558 events from seven calendars with
+      source `google_calendar`, recorded `last_calendar_sync` at 03:42
+      UTC, and
       preserved the manual Chambers Advisory Conference entry. The nightly
       maintenance now calls the sync.
     - The local diary table is unchanged: `calendar_events.db` holds one
@@ -781,7 +782,8 @@ actions that need an operator or a site change.
    now be read on demand. The record is in
    `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`, Section 10.
 2. **KF-02: resolved on 14 November 2026.** `scripts/sync_calendar.py`
-   imported 250 events with source `google_calendar` at 03:33 UTC,
+   imported 558 events from seven calendars with source
+   `google_calendar` at 03:42 UTC,
    recorded `last_calendar_sync`, and the nightly maintenance now calls
    it. The manual entry was preserved.
 3. **KF-03: restart stops the forward indexer.** The running service
