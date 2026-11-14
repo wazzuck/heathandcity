@@ -340,6 +340,7 @@ practice-vault/
 | `practice-vault/backend/app/professions.py` | Deployment tailoring. |
 | `practice-vault/backend/app/colibri.py` | Control of the 35B engine. |
 | `practice-vault/backend/app/deep_digest.py` | Overnight review digest. |
+| `practice-vault/scripts/sync_calendar.py` | Google Calendar mirror sync. |
 | `practice-vault/scripts/profession.py` | Pack selection and evaluation. |
 | `practice-vault/scripts/manage_colibri.py` | Control of the 35B engine. |
 | `practice-vault/scripts/performance_smoke.py` | Latency and timing. |
