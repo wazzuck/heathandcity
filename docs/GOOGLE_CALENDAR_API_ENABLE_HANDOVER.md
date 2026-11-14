@@ -7,7 +7,8 @@
 > Date: 13 November 2026.
 > Status: completed 14 November 2026 at 03:16 UTC. The API is enabled, a
 > Calendar read succeeds, and 558 events from seven calendars were
-> imported into the local diary at 03:42 UTC. Findings and results are in Section 10.
+> imported into the local diary at 03:42 UTC. Findings and results are
+> in Section 10.
 > Language: British Professional English (AGENTS.md Policy 15).
 > Line width: 80 columns.
 
