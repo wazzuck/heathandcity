@@ -5,8 +5,9 @@
 > Date: 13 November 2026.
 > Status: completed 13 November 2026 at 20:27 UTC. Publishing status is
 > In production and a durable refresh token was issued. Gmail and Drive
-> are verified live. The Google Calendar API remains disabled in the
-> project, so calendar sync needs one console action.
+> are verified live. The Google Calendar API was enabled on 14 November
+> 2026; see
+> `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`, Section 10.
 > Language: British Professional English (AGENTS.md Policy 15).
 > Line width: 80 columns.
 
@@ -163,13 +164,15 @@ curl -s -H "X-Vault-Password: ${PRACTICE_VAULT_PASSWORD}" \
 
 ## 8. Remaining operator action
 
-1. Enable the Google Calendar API for project `840262346134` at
-   `https://console.developers.google.com/apis/api/calendar-json.googleapis.com/overview?project=840262346134`.
-   The full, tested procedure is
-   `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`.
-2. Re-run the calendar check and confirm that the local mirror advances.
-3. Do not repeat the consent flow: the token and scopes are already
-   correct.
+Completed on 14 November 2026. The Google Calendar API
+(`calendar-json.googleapis.com`) was enabled in project `840262346134`
+at 03:16:18 UTC. The Calendar list then returned HTTP 200 with seven
+calendars, and the event fetch returned five. No re-consent was needed,
+and the token and scopes were not changed. The full record is in
+`docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`, Section 10.
+
+Still open: no scheduled job calls `scripts/sync_calendar.py`, so the
+diary does not refresh by itself.
 
 ## 7. Rollback
 

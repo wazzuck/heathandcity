@@ -5,7 +5,8 @@
 > console change. It does not require re-consent, a new token, a new scope
 > or a code change.
 > Date: 13 November 2026.
-> Status: action required. The OAuth token is valid; only the API is off.
+> Status: completed 14 November 2026 at 03:16 UTC. The API is enabled and
+> a Calendar read succeeds. See Section 10.
 > Language: British Professional English (AGENTS.md Policy 15).
 > Line width: 80 columns.
 
@@ -240,3 +241,36 @@ automatically.
 Record the result in `STATUS.md` and in
 `docs/GOOGLE_OAUTH_BROWSER_AGENT_HANDOVER.md`. A stale status file is a
 defect.
+
+---
+
+## 10. Execution report (14 November 2026)
+
+1. **Project:** the console selector showed `marketcalc`, and the home
+   link carried project number `840262346134`. Both names refer to the
+   same project.
+2. **Button:** the Library page showed **Enable**, not **Manage**. It was
+   clicked once at 2026-11-14T03:16:18Z.
+3. **Console result:** the page moved to the API/Service details view and
+   showed Status **Enabled** with a **Disable API** button and no warning
+   banner.
+4. **Propagation:** the first Calendar read ran about four minutes after
+   the click and succeeded. No second click was needed.
+5. **Calendar list:** HTTP 200 with seven calendars. The handover expected
+   one; the account exposes seven, including shared calendars.
+6. **Event fetch:** five events returned for 2026, with no Calendar
+   warning in `~/practice-vault-data/vault-server.log`.
+7. **Unchanged:** no credential, scope, redirect Uniform Resource
+   Identifier (URI), consent screen, billing setting or other API was
+   changed. No verification or security assessment was requested.
+8. **Operator intervention:** none. The existing Chromium session was
+   already signed in as `nevillebryce@gmail.com`.
+9. **Deviation from Section 5:** the developer container holds an older
+   token without the Calendar scope, so the first check there returned
+   `insufficientPermissions`. The appliance host (`86.27.171.186`) holds
+   the durable token; the checks were run there with
+   `~/practice-vault/venv/bin/python`.
+10. **Still open:** `last_calendar_sync` is absent from
+    `google_sync_state.json`, and no scheduled job calls
+    `scripts/sync_calendar.py`. Enabling the API restores access only, as
+    Section 7 said.
