@@ -5,8 +5,9 @@
 > console change. It does not require re-consent, a new token, a new scope
 > or a code change.
 > Date: 13 November 2026.
-> Status: completed 14 November 2026 at 03:16 UTC. The API is enabled and
-> a Calendar read succeeds. See Section 10.
+> Status: completed 14 November 2026 at 03:16 UTC. The API is enabled, a
+> Calendar read succeeds, and the local diary table is unchanged.
+> Findings and results are in Section 10.
 > Language: British Professional English (AGENTS.md Policy 15).
 > Line width: 80 columns.
 
@@ -204,20 +205,20 @@ Success is `events: 0` or more with no warning in
 Enabling the API restores **access**. It does not, by itself, refresh the
 diary.
 
-1. `GoogleWorkspaceSyncService.fetch_calendar_events()` exists but has no
-   caller in the current codebase.
+1. `GoogleWorkspaceSyncService.fetch_calendar_events()` exists. On the
+   appliance host it now has a caller, `scripts/sync_calendar.py`, but
+   that script is not part of this developer checkout.
 2. There is no scheduled calendar sync, and no `last_calendar_sync` key in
-   `google_sync_state.json`.
-3. The local `calendar_events` table currently holds one manual entry,
-   the Chambers Advisory Conference on 19 November 2026, with source
-   `manual_diary`.
+   `google_sync_state.json`. The local `calendar_events` table still
+   holds one manual entry, the Chambers Advisory Conference on
+   19 November 2026, with source `manual_diary`.
+3. Confirmed on 14 November 2026: `calendar_events.db` holds exactly one
+   row, and its source is `manual_diary`.
 
-A separate engineering change is required: a calendar sync script that
-upserts Google events with source `google_calendar`, a nightly step that
-calls it, and a recorded sync timestamp. Record that as a known failure
-until it is built and tested. Until then, enabling the API lets an
-operator read the calendar on demand but does not update the diary
-automatically.
+The caller now exists on the appliance, but the remaining engineering
+change is a nightly step that runs it and records a sync timestamp.
+Until then, enabling the API lets an operator read the calendar on
+demand but does not update the diary automatically.
 
 ## 8. Success criteria
 
@@ -244,33 +245,85 @@ defect.
 
 ---
 
-## 10. Execution report (14 November 2026)
+## 10. Execution report: findings and results (14 November 2026)
 
-1. **Project:** the console selector showed `marketcalc`, and the home
-   link carried project number `840262346134`. Both names refer to the
-   same project.
-2. **Button:** the Library page showed **Enable**, not **Manage**. It was
-   clicked once at 2026-11-14T03:16:18Z.
-3. **Console result:** the page moved to the API/Service details view and
-   showed Status **Enabled** with a **Disable API** button and no warning
+### 10.1 Outcome at a glance
+
+| Success criterion (Section 8) | Result |
+| --- | --- |
+| Console shows the API enabled | Met: Status **Enabled**, no warning |
+| Calendar list returns HTTP 200 | Met: 7 calendars |
+| Event fetch without a Calendar warning | Met: 5 events |
+| No credential, scope, redirect URI or consent change | Met |
+| Report names project, time and output, no token | Met: this section |
+
+### 10.2 What was done
+
+1. Opened the API page named in Section 3 for project `840262346134`.
+2. Confirmed that the project selector read `marketcalc` and that the
+   home link carried the same number. Both names refer to one project.
+3. Found an **Enable** button, so the API was off, as reported.
+4. Clicked **Enable** once at 2026-11-14T03:16:18Z. The console moved to
+   the API/Service details page.
+5. Read Status **Enabled** with a **Disable API** button and no warning
    banner.
-4. **Propagation:** the first Calendar read ran about four minutes after
-   the click and succeeded. No second click was needed.
-5. **Calendar list:** HTTP 200 with seven calendars. The handover expected
-   one; the account exposes seven, including shared calendars.
-6. **Event fetch:** five events returned for 2026, with no Calendar
-   warning in `~/practice-vault-data/vault-server.log`.
-7. **Unchanged:** no credential, scope, redirect Uniform Resource
-   Identifier (URI), consent screen, billing setting or other API was
-   changed. No verification or security assessment was requested.
-8. **Operator intervention:** none. The existing Chromium session was
-   already signed in as `nevillebryce@gmail.com`.
-9. **Deviation from Section 5:** the developer container holds an older
-   token without the Calendar scope, so the first check there returned
-   `insufficientPermissions`. The appliance host (`86.27.171.186`) holds
-   the durable token; the checks were run there with
+6. Waited about four minutes, then ran the Section 5 checks on the
+   appliance host.
+
+### 10.3 Verification output
+
+Calendar list, with no token printed:
+
+```text
+HTTP 200
+calendars: 7
+```
+
+Event fetch for 2026:
+
+```text
+events: 5
+```
+
+No Calendar warning was written to
+`~/practice-vault-data/vault-server.log`.
+
+### 10.4 Findings
+
+1. **The API was the only blocker.** The same durable token that failed
+   with `SERVICE_DISABLED` returned HTTP 200 once the API was enabled.
+   No re-consent, new scope or new token was needed.
+2. **The expected count was wrong.** Section 5 predicted one calendar.
+   The account exposes seven, including shared calendars, so a count of
+   seven is success, not a defect.
+3. **The developer container is not the appliance.** Its token is older
+   and lacks `calendar.readonly`, so the same check returned
+   `403 insufficientPermissions` there. The durable token lives on the
+   appliance host (`86.27.171.186`), and all verification ran there with
    `~/practice-vault/venv/bin/python`.
-10. **Still open:** `last_calendar_sync` is absent from
-    `google_sync_state.json`, and no scheduled job calls
-    `scripts/sync_calendar.py`. Enabling the API restores access only, as
-    Section 7 said.
+4. **The diary is unchanged.** `calendar_events.db` still holds one row,
+   the manual entry with source `manual_diary`. Enabling the API did not
+   import Google events, as Section 7 predicted.
+5. **No side effects were seen.** No warning banner, administrator
+   prompt, organisation policy exception or verification request
+   appeared.
+
+### 10.5 Repository record and checks
+
+1. `STATUS.md` entry 63 records the change; KF-01 is resolved and KF-02
+   remains open.
+2. `docs/GOOGLE_OAUTH_BROWSER_AGENT_HANDOVER.md` now points here.
+3. Committed as `2d22058` and pushed to `origin/main`.
+4. `scripts/verify_site.py` fails on pre-existing wide lines in
+   `docs/ARCHITECTURE.md`. `scripts/verify_legal_compliance.py` fails
+   Gate 1 on its known licence false positives. This change is
+   documentation only, and neither failure is caused by it.
+
+### 10.6 What remains open
+
+1. **KF-02:** no scheduled job calls `scripts/sync_calendar.py`, and
+   `last_calendar_sync` is absent from `google_sync_state.json`.
+2. The next engineering step is to run the sync once, confirm that
+   Google events appear with source `google_calendar`, then schedule it
+   nightly. That step changes practice data and needs the operator's
+   agreement.

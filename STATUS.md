@@ -710,6 +710,8 @@
     - No Calendar warning appeared in
       `~/practice-vault-data/vault-server.log`, and no operator
       intervention was required.
+    - The local diary table is unchanged: `calendar_events.db` holds one
+      row with source `manual_diary`.
     - The developer container's token lacks the Calendar scope and gives
       `insufficientPermissions`; the durable token on the appliance host
       carries the scope, so verification ran there.
