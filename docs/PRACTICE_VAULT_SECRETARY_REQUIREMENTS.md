@@ -1043,6 +1043,9 @@ Recorded 13 November 2026 after the first build and live activation.
     **"what did you do overnight"** answer, and the nightly Markdown
     digest. The before/after analysis is in
     `practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
+21. Calendar sync caller: `scripts/sync_calendar.py` upserts Google events
+    into `calendar_events.db` and records `last_calendar_sync`. Live use
+    waits for the Google Calendar API to be enabled.
 
 ### B.2. Partial
 
