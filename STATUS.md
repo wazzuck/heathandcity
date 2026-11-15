@@ -732,6 +732,33 @@
       `insufficientPermissions`; the durable token on the appliance host
       carries the scope, so verification ran there.
 
+64. Completed the overnight accuracy, offline cold-start and privacy
+    programme (15 November 2026):
+    - Fixed live demo failures: weekday completion dates resolve
+      deterministically in under a second; drafting no longer returns a
+      timeout stub; transient and time-sensitive answers are not cached;
+      matter status agrees with the briefing; unread mail hides bulk noise
+      and puts human correspondence first; compound ticket-and-matter
+      questions answer both halves.
+    - Added `bootstrap.py` and `bootstrap_practice.py`: an empty appliance
+      can parse local documents and mail exports, classify with rules,
+      index the text and write a calibration sample and readiness report
+      with no network call.
+    - Added `active_learning.py`: unknown and low-confidence messages form
+      a small, diverse review queue.
+    - Added `offline_guard.py` and `privacy_audit.py`: offline mode refuses
+      non-loopback sockets, the API scrubs inherited cloud credentials,
+      and `/api/offline/status` reports the guard.
+    - Added `model_manifest.py` and `model_vault.py`: a GGUF model imported
+      from removable media is recorded with its SHA-256 digest and
+      verified before deployment.
+    - Added a cloud-generated, fully synthetic 40-case accuracy benchmark.
+      The local run passes 40 of 40. No real practice data was sent to a
+      cloud model.
+    - 522 tests pass; 20 of 20 verified interactions pass; the fast demo
+      benchmark is 8 of 8; the legal gates pass. The full report is
+      `practice-vault/docs/OVERNIGHT_2026-11-15.md`.
+
 ---
 
 ## 2. Next

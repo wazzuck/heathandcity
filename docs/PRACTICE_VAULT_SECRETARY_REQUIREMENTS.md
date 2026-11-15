@@ -533,6 +533,31 @@ the simulation group that proves it.
    counted as a type; no stored category changes before the gate.
 7. Simulation group: `classification`.
 
+### FR-36. Offline cold start, active learning and privacy
+
+1. A new appliance can build a searchable archive from local documents
+   and mail exports with no network call and no cloud model. Supported
+   sources are PDF, DOCX, XLSX, TXT, MD, EML and MBOX.
+2. The bootstrap classifies with the deterministic rules tier, indexes
+   the text, writes a calibration sample and records counts, candidate
+   matters, acronyms and retrieval recall at five.
+3. An active-learning queue puts unknown messages first, then the weakest
+   rules results, with a cap per sender and category.
+4. `PRACTICE_VAULT_OFFLINE=1` refuses every non-loopback socket
+   connection. The API removes inherited cloud credentials at startup.
+5. `scripts/privacy_audit.py` checks data location, local models,
+   listeners, outbound peers and inherited credentials. `--strict` is the
+   deployment gate.
+6. A GGUF model imported from removable media is recorded with its byte
+   size and SHA-256 digest; verification fails on a changed file.
+7. A fully synthetic accuracy benchmark covers question answering,
+   classification, relative dates, refusals and drafting. No real
+   practice data is sent to a cloud model for testing.
+8. Acceptance: the bootstrap runs on a clean directory; the guard refuses
+   an external address; the audit passes; the synthetic benchmark runs;
+   the full suite and verified interactions still pass.
+9. Simulation group: `offline`.
+
 ---
 
 ## 5. Non-functional requirements

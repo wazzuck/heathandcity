@@ -323,6 +323,31 @@ practice-vault/
    stage accuracy are reported but are not gates. No stored category
    changes until the topic gate passes.
 
+### 4.15. Offline Cold Start and Privacy Guard
+
+1. `bootstrap.py` turns an empty data directory into a searchable
+   archive from local documents and mail exports. It classifies with the
+   rules tier, indexes chunks, writes a calibration sample and reports
+   counts, candidate matters, acronyms and retrieval recall at five.
+2. `active_learning.py` selects unknown and low-confidence messages for
+   human review, with a cap per sender and category.
+3. `offline_guard.py` refuses every non-loopback socket connection when
+   `PRACTICE_VAULT_OFFLINE=1`, and the API scrubs inherited cloud
+   credentials at startup.
+4. `privacy_audit.py` checks data location, local models, listeners,
+   outbound peers, external URLs and inherited credentials. `--strict`
+   is the deployment gate.
+5. `model_manifest.py` imports a GGUF model from removable media and
+   records its SHA-256 digest; `model_vault.py` exposes import, verify and
+   list commands.
+6. `accuracy_benchmark.py` runs a cloud-generated, fully synthetic
+   40-case set covering question answering, classification, relative
+   dates, refusals and drafting. The fixture is in
+   `backend/tests/fixtures/synthetic_accuracy_cases.json`.
+7. Cloud models are used for development review and synthetic test
+   generation only. No runtime path sends practice data to a cloud
+   service.
+
 ---
 
 ## 5. Module Inventory
@@ -359,6 +384,16 @@ practice-vault/
 | `practice-vault/backend/app/deep_digest.py` | Overnight review digest. |
 | `practice-vault/backend/app/stages.py` | Lifecycle stages. |
 | `practice-vault/backend/app/labelling.py` | Axis scoring. |
+| `practice-vault/backend/app/bootstrap.py` | Cold-start archive. |
+| `practice-vault/backend/app/active_learning.py` | Review queue. |
+| `practice-vault/backend/app/offline_guard.py` | Loopback-only runtime guard. |
+| `practice-vault/backend/app/model_manifest.py` | Local GGUF model checksums. |
+| `practice-vault/scripts/bootstrap_practice.py` | Cold-start command. |
+| `practice-vault/scripts/active_learning.py` | Review-queue command. |
+| `practice-vault/scripts/privacy_audit.py` | Privacy and offline audit. |
+| `practice-vault/scripts/model_vault.py` | Model import and verification. |
+| `practice-vault/scripts/accuracy_benchmark.py` | Accuracy benchmark. |
+| `practice-vault/scripts/warm_demo_cache.py` | Demo cache warmer. |
 | `practice-vault/scripts/review_labels.py` | Three-axis review. |
 | `practice-vault/scripts/sync_calendar.py` | Calendar mirror sync. |
 | `practice-vault/scripts/profession.py` | Pack selection and evaluation. |

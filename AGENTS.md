@@ -402,3 +402,9 @@ absent. Add project-specific rules only where they apply.
    independent; never make a topic a child of a type. Human labels are a
    calibration set, not the production classifier. Do not store topic or
    stage labels until the 200-label, 80 per cent topic gate passes.
+9. **Offline cold start and privacy**: Every new capability must have a
+   fully offline path. `scripts/bootstrap_practice.py` builds an archive
+   from local files; `scripts/active_learning.py` selects a small review
+   queue; `PRACTICE_VAULT_OFFLINE=1` enforces loopback-only egress; and
+   `scripts/privacy_audit.py --strict` is the deployment gate. Never make
+   a cloud service a runtime dependency.
