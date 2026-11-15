@@ -751,7 +751,8 @@
       and `/api/offline/status` reports the guard.
     - Added `model_manifest.py` and `model_vault.py`: a GGUF model imported
       from removable media is recorded with its SHA-256 digest and
-      verified before deployment.
+      verified before deployment. The five live models are registered and
+      verify cleanly.
     - Added a cloud-generated, fully synthetic 40-case accuracy benchmark.
       The local run passes 40 of 40. No real practice data was sent to a
       cloud model.
@@ -792,6 +793,8 @@
    restart.
 10. Run the 200-topic calibration set per pack; require 80 per cent
     topic agreement before storing topics or wiring the batch classifier.
+    A 50-row high-value queue is ready at
+    `~/practice-vault-data/reports/active_learning_queue.csv`.
 11. Rotate the local OpenCode service password, which was printed into
     a session transcript during diagnostics.
 
@@ -803,6 +806,13 @@
    but the router still forwards port 9090. Remove the forward, then
    decide whether the service returns to the Local Area Network (LAN) or
    stays on loopback behind a Virtual Private Network (VPN).
+2. **Offline or connected deployment.** `PRACTICE_VAULT_OFFLINE=1`
+   enforces strict loopback-only egress and blocks Google Workspace
+   sync. A human must choose strict offline or connected sync for each
+   appliance.
+3. **Pre-existing wide lines.** `scripts/verify_site.py` still fails on
+   older module-table lines in `docs/ARCHITECTURE.md`. They predate this
+   run and should be reformatted separately.
 
 ---
 

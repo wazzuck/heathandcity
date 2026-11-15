@@ -337,9 +337,9 @@ practice-vault/
 4. `privacy_audit.py` checks data location, local models, listeners,
    outbound peers, external URLs and inherited credentials. `--strict`
    is the deployment gate.
-5. `model_manifest.py` imports a GGUF model from removable media and
-   records its SHA-256 digest; `model_vault.py` exposes import, verify and
-   list commands.
+5. `model_manifest.py` imports a GGUF model from removable media, or
+   registers one already present, and records its SHA-256 digest;
+   `model_vault.py` exposes import, register, verify and list commands.
 6. `accuracy_benchmark.py` runs a cloud-generated, fully synthetic
    40-case set covering question answering, classification, relative
    dates, refusals and drafting. The fixture is in
@@ -391,7 +391,7 @@ practice-vault/
 | `practice-vault/scripts/bootstrap_practice.py` | Cold-start command. |
 | `practice-vault/scripts/active_learning.py` | Review-queue command. |
 | `practice-vault/scripts/privacy_audit.py` | Privacy and offline audit. |
-| `practice-vault/scripts/model_vault.py` | Model import and verification. |
+| `practice-vault/scripts/model_vault.py` | Model import, register and verify. |
 | `practice-vault/scripts/accuracy_benchmark.py` | Accuracy benchmark. |
 | `practice-vault/scripts/warm_demo_cache.py` | Demo cache warmer. |
 | `practice-vault/scripts/demo_readiness.py` | Demo readiness scorecard. |
