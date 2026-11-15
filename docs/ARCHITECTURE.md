@@ -350,8 +350,9 @@ practice-vault/
    generation only. No runtime path sends practice data to a cloud
    service.
 8. `erase_message.py` removes one message from the structured store, the
-   vector index and the lexical index, and writes a content-free audit
-   entry for a data-protection request.
+   vector index and the lexical index, including bootstrap attachment
+   chunks and files, and writes a content-free audit entry for a
+   data-protection request.
 
 ---
 
