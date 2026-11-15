@@ -394,6 +394,7 @@ practice-vault/
 | `practice-vault/scripts/model_vault.py` | Model import and verification. |
 | `practice-vault/scripts/accuracy_benchmark.py` | Accuracy benchmark. |
 | `practice-vault/scripts/warm_demo_cache.py` | Demo cache warmer. |
+| `practice-vault/scripts/demo_readiness.py` | Demo readiness scorecard. |
 | `practice-vault/scripts/review_labels.py` | Three-axis review. |
 | `practice-vault/scripts/sync_calendar.py` | Calendar mirror sync. |
 | `practice-vault/scripts/profession.py` | Pack selection and evaluation. |
