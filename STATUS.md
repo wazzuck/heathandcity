@@ -755,8 +755,9 @@
       verified before deployment. The five live models are registered and
       verify cleanly.
     - Added a cloud-generated, fully synthetic 40-case accuracy benchmark.
-      The local run passes 40 of 40. No real practice data was sent to a
-      cloud model.
+      The local run passes 40 of 40. A separate retrieval benchmark passes
+      29 of 29 with recall 1.0 at five. No real practice data was sent to
+      a cloud model.
     - 522 tests pass; 20 of 20 verified interactions pass; the fast demo
       benchmark is 8 of 8; the legal gates pass. The full report is
       `practice-vault/docs/OVERNIGHT_2026-11-15.md`.

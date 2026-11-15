@@ -395,6 +395,7 @@ practice-vault/
 | `practice-vault/scripts/privacy_audit.py` | Privacy and offline audit. |
 | `practice-vault/scripts/model_vault.py` | Model import, register and verify. |
 | `practice-vault/scripts/accuracy_benchmark.py` | Accuracy benchmark. |
+| `practice-vault/scripts/retrieval_benchmark.py` | Retrieval recall benchmark. |
 | `practice-vault/scripts/warm_demo_cache.py` | Demo cache warmer. |
 | `practice-vault/scripts/demo_readiness.py` | Demo readiness scorecard. |
 | `practice-vault/scripts/review_labels.py` | Three-axis review. |
