@@ -327,8 +327,10 @@ practice-vault/
 
 1. `bootstrap.py` turns an empty data directory into a searchable
    archive from local documents and mail exports. It classifies with the
-   rules tier, indexes chunks, writes a calibration sample and reports
-   counts, candidate matters, acronyms and retrieval recall at five.
+   rules tier, indexes chunks and supported attachments, writes a
+   calibration sample and reports counts, candidate matters, acronyms and
+   retrieval recall at five. Live Gmail attachment metadata remains a
+   separate gap (KF-11).
 2. `active_learning.py` selects unknown and low-confidence messages for
    human review, with a cap per sender and category.
 3. `offline_guard.py` refuses every non-loopback socket connection when

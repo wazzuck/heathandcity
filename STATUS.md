@@ -742,8 +742,9 @@
       questions answer both halves.
     - Added `bootstrap.py` and `bootstrap_practice.py`: an empty appliance
       can parse local documents and mail exports, classify with rules,
-      index the text and write a calibration sample and readiness report
-      with no network call.
+      index the text and supported attachments, and write a calibration
+      sample and readiness report with no network call. Live Gmail
+      attachment metadata remains a separate gap (KF-11).
     - Added `active_learning.py`: unknown and low-confidence messages form
       a small, diverse review queue.
     - Added `offline_guard.py` and `privacy_audit.py`: offline mode refuses
