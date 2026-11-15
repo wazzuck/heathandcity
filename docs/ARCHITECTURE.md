@@ -370,51 +370,51 @@ practice-vault/
 | `llms-full.txt` | Full plain-text context corpus for AI crawlers. |
 | `vault` | Interactive Claude Code-style CLI shortcut launcher. |
 | `practice-vault/backend/` | Appliance FastAPI server, LanceDB, RAG, and MCP. |
-| `practice-vault/backend/app/message_store.py` | Structured message table and full-text topic search. |
-| `practice-vault/backend/app/secretary.py` | Deterministic answers for lists, spend and tickets. |
-| `practice-vault/backend/app/classifier.py` | Rules-first, nine-category mail classification. |
-| `practice-vault/backend/app/tickets.py` | Audited ticket lifecycle and next-task recommendation. |
-| `practice-vault/backend/app/governor.py` | Interactive priority and background preemption. |
-| `practice-vault/backend/app/query_router.py` | Rules-first intent routing before retrieval. |
-| `practice-vault/backend/app/spend_queries.py` | Spend totals with coverage and duplicate evidence. |
-| `practice-vault/backend/app/matters.py` | Matter registry and append-only status history. |
-| `practice-vault/backend/app/gmail_metadata.py` | Thread, label and recipient enrichment. |
-| `practice-vault/backend/app/model_manager.py` | On-demand model residency and eviction. |
-| `practice-vault/backend/app/answer_cache.py` | Exact repeated answers, revision-guarded. |
-| `practice-vault/backend/app/deep_tasks.py` | Checkpointed deep-work queue. |
-| `practice-vault/backend/app/deep_worker.py` | Overnight worker using the 14B model. |
-| `practice-vault/backend/app/learning.py` | Interaction log, feedback and style profile. |
-| `practice-vault/backend/app/professions.py` | Deployment tailoring. |
-| `practice-vault/backend/app/colibri.py` | Control of the 35B engine. |
-| `practice-vault/backend/app/deep_digest.py` | Overnight review digest. |
+| `practice-vault/backend/app/message_store.py` | Message table and FTS. |
+| `practice-vault/backend/app/secretary.py` | Deterministic answers. |
+| `practice-vault/backend/app/classifier.py` | Nine-category classifier. |
+| `practice-vault/backend/app/tickets.py` | Ticket lifecycle. |
+| `practice-vault/backend/app/governor.py` | Priority governor. |
+| `practice-vault/backend/app/query_router.py` | Intent routing. |
+| `practice-vault/backend/app/spend_queries.py` | Spend totals. |
+| `practice-vault/backend/app/matters.py` | Matter registry. |
+| `practice-vault/backend/app/gmail_metadata.py` | Thread and label metadata. |
+| `practice-vault/backend/app/model_manager.py` | Model residency. |
+| `practice-vault/backend/app/answer_cache.py` | Exact answer cache. |
+| `practice-vault/backend/app/deep_tasks.py` | Deep-work queue. |
+| `practice-vault/backend/app/deep_worker.py` | Overnight 14B worker. |
+| `practice-vault/backend/app/learning.py` | Interaction and style. |
+| `practice-vault/backend/app/professions.py` | Profession tailoring. |
+| `practice-vault/backend/app/colibri.py` | 35B control. |
+| `practice-vault/backend/app/deep_digest.py` | Overnight digest. |
 | `practice-vault/backend/app/stages.py` | Lifecycle stages. |
 | `practice-vault/backend/app/labelling.py` | Axis scoring. |
 | `practice-vault/backend/app/bootstrap.py` | Cold-start archive. |
 | `practice-vault/backend/app/active_learning.py` | Review queue. |
-| `practice-vault/backend/app/offline_guard.py` | Loopback-only runtime guard. |
-| `practice-vault/backend/app/model_manifest.py` | Local GGUF model checksums. |
+| `practice-vault/backend/app/offline_guard.py` | Loopback guard. |
+| `practice-vault/backend/app/model_manifest.py` | GGUF checksums. |
 | `practice-vault/scripts/bootstrap_practice.py` | Cold-start command. |
-| `practice-vault/scripts/active_learning.py` | Review-queue command. |
-| `practice-vault/scripts/privacy_audit.py` | Privacy and offline audit. |
-| `practice-vault/scripts/model_vault.py` | Model import, register and verify. |
+| `practice-vault/scripts/active_learning.py` | Review command. |
+| `practice-vault/scripts/privacy_audit.py` | Privacy audit. |
+| `practice-vault/scripts/model_vault.py` | Model import and verify. |
 | `practice-vault/scripts/accuracy_benchmark.py` | Accuracy benchmark. |
-| `practice-vault/scripts/retrieval_benchmark.py` | Retrieval recall benchmark. |
-| `practice-vault/scripts/warm_demo_cache.py` | Demo cache warmer. |
-| `practice-vault/scripts/demo_readiness.py` | Demo readiness scorecard. |
-| `practice-vault/scripts/erase_message.py` | Single-message erasure. |
+| `practice-vault/scripts/retrieval_benchmark.py` | Retrieval recall. |
+| `practice-vault/scripts/warm_demo_cache.py` | Cache warmer. |
+| `practice-vault/scripts/demo_readiness.py` | Readiness scorecard. |
+| `practice-vault/scripts/erase_message.py` | Message erasure. |
 | `practice-vault/scripts/review_labels.py` | Three-axis review. |
-| `practice-vault/scripts/sync_calendar.py` | Calendar mirror sync. |
-| `practice-vault/scripts/profession.py` | Pack selection and evaluation. |
-| `practice-vault/scripts/manage_colibri.py` | Control of the 35B engine. |
-| `practice-vault/scripts/performance_smoke.py` | Latency and timing. |
+| `practice-vault/scripts/sync_calendar.py` | Calendar sync. |
+| `practice-vault/scripts/profession.py` | Pack selection. |
+| `practice-vault/scripts/manage_colibri.py` | 35B control. |
+| `practice-vault/scripts/performance_smoke.py` | Latency smoke. |
 | `practice-vault/scripts/overnight_tests.sh` | Morning battery. |
-| `practice-vault/scripts/manage_models.py` | Operator control for model residency. |
-| `practice-vault/scripts/manage_matters.py` | Operator control for the matter registry. |
-| `practice-vault/scripts/nightly_maintenance.sh` | Idle-window maintenance and model pass. |
-| `practice-vault/bin/` | Native C++ llama-server inference binaries. |
-| `practice-vault/frontend/` | Sovereign on-premises dashboard interface. |
-| `practice-vault/scripts/` | Host setup, daemon runners, and agent CLI. |
-| `scripts/verify_site.py` | Automated compliance, hosting, and 80-col guard. |
+| `practice-vault/scripts/manage_models.py` | Model residency. |
+| `practice-vault/scripts/manage_matters.py` | Matter registry. |
+| `practice-vault/scripts/nightly_maintenance.sh` | Nightly maintenance. |
+| `practice-vault/bin/` | Native inference binaries. |
+| `practice-vault/frontend/` | Dashboard interface. |
+| `practice-vault/scripts/` | Host setup and CLI. |
+| `scripts/verify_site.py` | Site verifier. |
 
 ---
 

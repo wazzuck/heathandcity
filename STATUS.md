@@ -815,9 +815,8 @@
    enforces strict loopback-only egress and blocks Google Workspace
    sync. A human must choose strict offline or connected sync for each
    appliance.
-3. **Pre-existing wide lines.** `scripts/verify_site.py` still fails on
-   older module-table lines in `docs/ARCHITECTURE.md`. They predate this
-   run and should be reformatted separately.
+3. **Pre-existing wide lines.** Resolved: `scripts/verify_site.py` now
+   passes after the module-table descriptions were shortened.
 
 ---
 
