@@ -553,10 +553,12 @@ the simulation group that proves it.
 7. A fully synthetic accuracy benchmark covers question answering,
    classification, relative dates, refusals and drafting. No real
    practice data is sent to a cloud model for testing.
-8. Acceptance: the bootstrap runs on a clean directory; the guard refuses
+8. A single message can be erased from the structured store, the vector
+   index and the lexical index, with a content-free audit entry.
+9. Acceptance: the bootstrap runs on a clean directory; the guard refuses
    an external address; the audit passes; the synthetic benchmark runs;
    the full suite and verified interactions still pass.
-9. Simulation group: `offline`.
+10. Simulation group: `offline`.
 
 ---
 

@@ -754,6 +754,9 @@
       from removable media is recorded with its SHA-256 digest and
       verified before deployment. The five live models are registered and
       verify cleanly.
+    - Added `scripts/erase_message.py`: one message can be removed from the
+      structured store, the vector index and the lexical index, with a
+      content-free audit entry.
     - Added a cloud-generated, fully synthetic 40-case accuracy benchmark.
       The local run passes 40 of 40. A separate retrieval benchmark passes
       29 of 29 with recall 1.0 at five. No real practice data was sent to

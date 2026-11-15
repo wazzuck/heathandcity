@@ -349,6 +349,9 @@ practice-vault/
 7. Cloud models are used for development review and synthetic test
    generation only. No runtime path sends practice data to a cloud
    service.
+8. `erase_message.py` removes one message from the structured store, the
+   vector index and the lexical index, and writes a content-free audit
+   entry for a data-protection request.
 
 ---
 
@@ -398,6 +401,7 @@ practice-vault/
 | `practice-vault/scripts/retrieval_benchmark.py` | Retrieval recall benchmark. |
 | `practice-vault/scripts/warm_demo_cache.py` | Demo cache warmer. |
 | `practice-vault/scripts/demo_readiness.py` | Demo readiness scorecard. |
+| `practice-vault/scripts/erase_message.py` | Single-message erasure. |
 | `practice-vault/scripts/review_labels.py` | Three-axis review. |
 | `practice-vault/scripts/sync_calendar.py` | Calendar mirror sync. |
 | `practice-vault/scripts/profession.py` | Pack selection and evaluation. |
