@@ -344,8 +344,8 @@ practice-vault/
    `model_vault.py` exposes import, register, verify and list commands.
 6. `accuracy_benchmark.py` runs a cloud-generated, fully synthetic
    40-case set covering question answering, classification, relative
-   dates, refusals and drafting. The fixture is in
-   `backend/tests/fixtures/synthetic_accuracy_cases.json`.
+   dates, refusals and drafting, plus a harder 50-case set. The fixture
+   is in `backend/tests/fixtures/synthetic_accuracy_cases.json`.
 7. Cloud models are used for development review and synthetic test
    generation only. No runtime path sends practice data to a cloud
    service.
