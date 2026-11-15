@@ -560,6 +560,19 @@ the simulation group that proves it.
    the full suite and verified interactions still pass.
 10. Simulation group: `offline`.
 
+### FR-37. Interaction inventory and documentation coverage
+
+1. Every API route, CLI command, dashboard panel and script is enumerated
+   in a generated inventory.
+2. Each item carries one status: Verified, Tested, Partial, Operational or
+   Uncovered, with an evidence note.
+3. The curated tested catalogue remains the contract for demonstrated
+   phrasing; the inventory is the completeness view.
+4. Acceptance: `scripts/interaction_inventory.py --check` passes in the
+   test suite and the readiness scorecard; no item is Uncovered; every
+   Partial item states its limitation.
+5. Simulation group: `documentation`.
+
 ---
 
 ## 5. Non-functional requirements

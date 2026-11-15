@@ -354,6 +354,27 @@ practice-vault/
    chunks and files, and writes a content-free audit entry for a
    data-protection request.
 
+### 4.16. Interaction Coverage and Documentation
+
+1. `docs/VERIFIED_INTERACTIONS.md` is the curated, tested contract: 40
+   numbered interactions with exact phrasing, route, latency and known
+   limitations.
+2. `scripts/interaction_inventory.py` generates
+   `docs/INTERACTION_INVENTORY.md` from the source. It enumerates every
+   Application Programming Interface (API) route, Command-Line Interface
+   (CLI) command, dashboard panel and script.
+3. The current inventory covers 47 API routes, 14 canonical CLI commands
+   (21 with aliases), 6 dashboard panels and 58 scripts.
+4. Coverage counts are 36 Verified, 42 Tested, 13 Partial, 34 Operational
+   and 0 Uncovered. The 13 Partial surfaces are the local `/search` route,
+   which lacks a catalogue entry, and the online web-search and Google
+   Workspace paths, which need an external service and are blocked in
+   strict offline mode.
+5. `scripts/interaction_inventory.py --check` fails when the generated
+   file is stale. `backend/tests/test_interaction_inventory.py` and
+   `scripts/demo_readiness.py` run the check, so the inventory cannot
+   drift silently from the code.
+
 ---
 
 ## 5. Module Inventory
@@ -402,6 +423,7 @@ practice-vault/
 | `practice-vault/scripts/retrieval_benchmark.py` | Retrieval recall. |
 | `practice-vault/scripts/warm_demo_cache.py` | Cache warmer. |
 | `practice-vault/scripts/demo_readiness.py` | Readiness scorecard. |
+| `practice-vault/scripts/interaction_inventory.py` | Coverage inventory. |
 | `practice-vault/scripts/erase_message.py` | Message erasure. |
 | `practice-vault/scripts/demo_mode.py` | Indexer pause and resume. |
 | `practice-vault/scripts/review_labels.py` | Three-axis review. |

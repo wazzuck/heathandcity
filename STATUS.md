@@ -770,7 +770,18 @@
       exact-answer cache and return in under half a second through the
       streaming interface. The cache uses a logical evidence revision, so
       routine re-indexing does not evict it.
-    - 546 tests pass; 20 of 20 verified interactions pass; the fast demo
+    - Added `scripts/interaction_inventory.py`, which generates
+      `docs/INTERACTION_INVENTORY.md` from the source. The inventory
+      enumerates 47 API routes, 14 canonical CLI commands (21 with
+      aliases), 6 dashboard panels and 58 scripts, with 36 Verified, 42
+      Tested, 13 Partial, 34 Operational and 0 Uncovered surfaces. The 13
+      Partial entries are the local `/search` route, which lacks a
+      catalogue entry, and the online web-search and Google Workspace
+      paths, which need an external service.
+    - Added `backend/tests/test_interaction_inventory.py` and a readiness
+      check so a stale inventory fails the build and the demonstration
+      gate.
+    - 548 tests pass; 20 of 20 verified interactions pass; the fast demo
       benchmark is 8 of 8; the legal gates pass. The full report is
       `practice-vault/docs/OVERNIGHT_2026-11-15.md`.
 
