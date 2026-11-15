@@ -403,6 +403,7 @@ practice-vault/
 | `practice-vault/scripts/warm_demo_cache.py` | Cache warmer. |
 | `practice-vault/scripts/demo_readiness.py` | Readiness scorecard. |
 | `practice-vault/scripts/erase_message.py` | Message erasure. |
+| `practice-vault/scripts/demo_mode.py` | Indexer pause and resume. |
 | `practice-vault/scripts/review_labels.py` | Three-axis review. |
 | `practice-vault/scripts/sync_calendar.py` | Calendar sync. |
 | `practice-vault/scripts/profession.py` | Pack selection. |

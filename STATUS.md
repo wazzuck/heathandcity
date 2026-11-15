@@ -758,6 +758,8 @@
       structured store, the vector index and the lexical index, including
       bootstrap attachment chunks and files, with a content-free audit
       entry.
+    - Added `scripts/demo_mode.py` to pause the indexer and warm the cache
+      for a guided demonstration, then resume indexing afterwards.
     - Added a cloud-generated, fully synthetic 40-case accuracy benchmark.
       The local run passes 40 of 40 after product guards (39 of 40 raw). A
       separate retrieval benchmark passes 29 of 29 with recall 1.0 at
@@ -809,6 +811,9 @@
     `~/practice-vault-data/reports/active_learning_queue.csv`.
 11. Rotate the local OpenCode service password, which was printed into
     a session transcript during diagnostics.
+12. Resume the continuous indexer after the demonstration with
+    `practice-vault/scripts/demo_mode.py stop`; new mail will invalidate
+    the warmed cache, which is correct.
 
 ---
 
