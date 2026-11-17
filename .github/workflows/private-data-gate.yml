@@ -1,0 +1,44 @@
+name: Private data gate
+
+# Enforces AGENTS.md policy 18: no private or personal data may
+# enter this repository. The workflow fails the build when
+# scripts/verify_no_private_data.py finds a credential, identifier
+# or client record in the tracked tree.
+#
+# What this workflow is deliberately not for: it does not scan pull
+# requests from forks with secrets exposed, because this repository
+# holds no workflow secrets at all; and it does not replace the
+# operator's own pre-commit run of the same script, which catches
+# content before it is ever committed.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  private-data-gate:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: check the repository code out at the commit under
+      # test. actions/checkout is pinned to a major version because
+      # GitHub's own first-party action is the only dependency this
+      # workflow needs.
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          # Full history, because one of the three scan scopes is
+          # the complete commit history (--history), not only the
+          # current tree.
+          fetch-depth: 0
+
+      # Step 2: run the project's private-data scanner over the
+      # working tree and the full history. Exit code 1 from the
+      # script fails this step and therefore the build.
+      - name: Scan tree and history for private data
+        run: python3 scripts/verify_no_private_data.py --history
+
+      # Step 3: run the site verifier so the documentation and
+      # British English gates also hold on every push, matching the
+      # local pre-commit checks in AGENTS.md policy 14.
+      - name: Run site verification
+        run: python3 scripts/verify_site.py
