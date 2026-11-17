@@ -154,6 +154,7 @@ PATTERNS: list[PatternSpec] = [
         # Bare six-to-eight digit numbers are far too noisy on their
         # own, so this fires only where the label makes the meaning
         # explicit: "GMC: 1234567" or "GMC Reference Number: 7654321".
+        # The example numbers here are deliberately fictional.
         r"\bGMC\b[^0-9\n]{0,20}\b\d{6,8}\b",
         flags=re.IGNORECASE,
     ),
