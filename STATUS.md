@@ -785,18 +785,19 @@
 
 ## 2. Next
 
-1. **URGENT: purge unreachable Git objects on GitHub.** The the client
-   client work (dossier, mock-up, legacy Maps key) was purged from all
-   history and both branches were force-pushed on 17 November 2026, but
-   GitHub still serves the old commits by their original SHA: the
-   dossier is retrievable at commit `d81ec67`. Until GitHub Support
-   deletes the unreachable objects and cached copies, the data remains
-   world-readable. Open a GitHub Support request (Settings > Contact
-   GitHub Support, or https://support.github.com/contact) quoting the
-   repository, the force-push date, and the old commit SHAs
-   `d81ec67`, `dc2dbd6`, `cb530ac`, `52d0b5e`. Ask explicitly for
-   unreachable object and cache purging. Also rotate the legacy
-   Google Maps browser key, which was exposed in that history.
+1. **URGENT: purge unreachable Git objects on GitHub.** The removed
+   third-party client work (dossier, mock-up, legacy Maps key) was
+   purged from all history and both branches were force-pushed on
+   17 November 2026, but GitHub still serves the old commits by their
+   original SHA: the dossier is retrievable at commit `d81ec67`. Until
+   GitHub Support deletes the unreachable objects and cached copies,
+   the data remains world-readable. Open a GitHub Support request
+   (Settings > Contact GitHub Support, or
+   https://support.github.com/contact) quoting the repository, the
+   force-push date, and the old commit SHAs `d81ec67`, `dc2dbd6`,
+   `cb530ac`, `52d0b5e`. Ask explicitly for unreachable object and
+   cache purging. Also rotate the legacy Google Maps browser key,
+   which was exposed in that history.
 2. **Standing Activity: Real-World Usability & Interaction Testing**:
    - Iteratively execute and verify catalog interactions against live archives.
    - Refine response tightness to direct bottom-line conclusions
