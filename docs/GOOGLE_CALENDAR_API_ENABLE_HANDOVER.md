@@ -301,7 +301,7 @@ No Calendar warning was written to
    and lacks `calendar.readonly`, so the same check returned
    `403 insufficientPermissions` there. The durable token lives on the
    appliance host (`86.27.171.186`), and all verification ran there with
-   `~/practice-vault/venv/bin/python`.
+   `~/~/practice-vault/venv/bin/python`.
 4. **The diary is unchanged.** `calendar_events.db` still holds one row,
    the manual entry with source `manual_diary`. Enabling the API did not
    import Google events, as Section 7 predicted.

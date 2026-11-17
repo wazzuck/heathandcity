@@ -155,12 +155,12 @@ within a single working session, adhering to the Zero Operational Disruption
 architecture.
 
 ### 5.2. Target System Directory Structure
-The prototype application codebase shall reside in `/opt/practice-vault/` (or
+The prototype application codebase shall reside in `/opt/~/practice-vault/` (or
 the developer's local user directory during prototyping) with the following
 layout:
 
 ```
-practice-vault/
+~/practice-vault/
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py
@@ -222,8 +222,8 @@ system configuration on Debian 13 (Trixie) and Ubuntu 24.04 LTS:
 3. **Python Virtual Environment & Dependencies:**
    Create an isolated environment and install the verified Python manifest:
    ```bash
-   python3 -m venv /opt/practice-vault/venv
-   source /opt/practice-vault/venv/bin/activate
+   python3 -m venv /opt/~/practice-vault/venv
+   source /opt/~/practice-vault/venv/bin/activate
    pip install --upgrade pip
    pip install \
      fastapi==0.115.0 \

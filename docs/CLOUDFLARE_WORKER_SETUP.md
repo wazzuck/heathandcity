@@ -697,7 +697,7 @@ Complete this section during and after execution.
 6. **Legal Gate 1 failure (pre-existing).** Gate 1 flags `scipy`,
    `pandas` and `docutils` because the copyleft pattern matches words
    such as "GPL-compatible" inside their BSD licence text, and because
-   `practice-vault/venv` does not exist, so the audit runs against the
+   `~/practice-vault/venv` does not exist, so the audit runs against the
    host Python environment. This predates this task; a fix is recorded
    as a `Next` item in `STATUS.md`.
 7. **Data protection position.** The operator has decided that the

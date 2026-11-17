@@ -159,10 +159,6 @@ ENV/
 env.bak/
 venv.bak/
 # Sovereign Practice Vault Data Isolation (Strictly outside Git repository)
-practice-vault/venv/
-practice-vault/data/
-!practice-vault/data/sample_docs/
-!practice-vault/data/sample_docs/*
 *.lancedb
 *.lance
 *.jsonl

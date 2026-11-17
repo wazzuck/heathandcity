@@ -1090,7 +1090,7 @@ Recorded 13 November 2026 after the first build and live activation.
     executable checker.
 18. Deployment profession packs: `professions.py`, `scripts/profession.py`
     and `GET/POST /api/profession`. Four packs ship; the measured IT
-    support case is in `practice-vault/docs/IT_SUPPORT_TEST_CASE.md`.
+    support case is in `~/practice-vault/docs/IT_SUPPORT_TEST_CASE.md`.
 19. Colibri overnight path: `colibri.py` and
     `deep_worker.py --engine colibri`. A grounded 35B summary with six
     citations completed at about 0.8 tokens per second, then the engine
@@ -1098,7 +1098,7 @@ Recorded 13 November 2026 after the first build and live activation.
 20. Overnight workflow: `deep_digest.py`, the secretary's
     **"what did you do overnight"** answer, and the nightly Markdown
     digest. The before/after analysis is in
-    `practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
+    `~/practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
 21. Calendar sync caller: `scripts/sync_calendar.py` imports events from
     every visible Google calendar. Live: seven calendars and 558 events
     imported on 14 November 2026; the nightly job records

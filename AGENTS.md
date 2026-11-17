@@ -320,9 +320,8 @@ only; two uncommitted edits to one file can still lose one of them.
         refresh tokens, private keys, certificate files, connection
         strings.
       - Machine-local operational data: virtual environments, vector
-        indexes, parsed document stores, caches, logs, anything under
-        `practice-vault/data/` beyond the synthetic sample documents,
-        and anything under `~/practice-vault-data/`.
+        indexes, parsed document stores, caches, logs, and anything
+        under `~/practice-vault-data/`.
     - Working rules that keep the mandate true:
       1. Review `git diff --cached` line by line before every commit;
          read the content, not only the file names.
@@ -341,9 +340,10 @@ only; two uncommitted edits to one file can still lose one of them.
       a history rewrite (`git filter-repo`) plus a support request to
       the host to purge cached copies. Do not attempt the rewrite
       without explicit operator approval.
-    - This mandate applies to this repository's website code, the
-      `practice-vault/` appliance code, documentation, commit
-      messages, and branch names alike.
+    - This mandate applies to this repository's website code,
+      documentation, commit messages, and branch names alike. The
+      appliance code lives in its own repository (`datavault`) and
+      carries the same mandate as its policy 17.
 
 ---
 
@@ -456,7 +456,7 @@ absent. Add project-specific rules only where they apply.
    catalogue is a defect; the next session will trust it.
 7. **Deployment Profession Pack**: The Practice Vault serves one practice
    per appliance and selects one pack from
-   `practice-vault/backend/app/professions.py`. The choice is recorded in
+   `~/practice-vault/backend/app/professions.py`. The choice is recorded in
    `~/practice-vault-data/profession.json`. A pack changes interpretation
    and vocabulary only, never a permission, route or outbound action.
    Update the pack, its test, its evaluation and the verified interaction

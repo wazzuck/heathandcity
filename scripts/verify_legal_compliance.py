@@ -45,8 +45,11 @@ from pathlib import Path
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-BACKEND_DIR = ROOT_DIR / "practice-vault" / "backend"
-VENV_PYTHON = ROOT_DIR / "practice-vault" / "venv" / "bin" / "python"
+# The Practice Vault now lives in its own repository (datavault)
+# at ~/practice-vault/, outside this website repository.
+VAULT_DIR = Path.home() / "practice-vault"
+BACKEND_DIR = VAULT_DIR / "backend"
+VENV_PYTHON = VAULT_DIR / "venv" / "bin" / "python"
 
 # If executed with system Python, transparently delegate to the venv Python
 # so package distributions audited are exactly those installed in the appliance.

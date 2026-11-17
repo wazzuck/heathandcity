@@ -2,9 +2,9 @@
 
 ## 1. Done
 
-1. Committed repository governance (`AGENTS.md`), local strategy brief
-   (`hampstead_local_consulting_strategy.md`), and founder background notes
-   (`neville_background.txt`).
+1. Committed repository governance (`AGENTS.md`). The local strategy
+   brief and founder background notes first committed here were
+   removed on 17 November 2026 as personal data under policy 18.
 2. Built the static, single-page showcase website (`index.html`,
    `css/styles.css`, `js/config.js`, `js/gpu-scene.js`, `js/app.js`) ready for
    GitHub Pages and Cloudflare Pages with zero reliance on `SharedArrayBuffer`,
@@ -163,7 +163,7 @@
       criteria, and copy-paste AI master build prompt for the Lenovo
       ThinkCentre M720q Tiny prototype.
 
-28. Implemented sovereign practice automation prototype (practice-vault/):
+28. Implemented sovereign practice automation prototype (~/practice-vault/):
     - Provisioned host prerequisites (Tesseract OCR, Poppler, CIFS, Ollama).
     - Pulled local models (llama3.2:3b and nomic-embed-text) via Ollama.
     - Built multi-format document parser (backend/app/ingest.py) supporting
@@ -179,9 +179,9 @@
     - Created test suites (backend/tests/) and acceptance criteria verification
       script (scripts/verify_prototype.py), passing all 5 acceptance checks.
     - Configured production runners, share mounting scripts, and operational
-      runbook (practice-vault/README.md).
+      runbook (~/practice-vault/README.md).
 
-29. Added Google Workspace OAuth2 login & synchronization (practice-vault/):
+29. Added Google Workspace OAuth2 login & synchronization (~/practice-vault/):
     - Implemented Google Workspace OAuth2 service in backend/app/google_sync.py
       with read-only access scopes for Gmail and Google Drive / Docs.
     - Added RESTful endpoints in backend/app/api.py for login authorization,
@@ -214,7 +214,8 @@
 
 31. Configured host Debian 13 (Trixie) environment for Practice Vault:
     - Updated documentation (`docs/PRODUCT_SPECIFICATION.md`,
-      `practice-vault/README.md`, `practice-vault/scripts/setup_m720q.sh`) to
+      `~/practice-vault/README.md`,
+      `~/practice-vault/scripts/setup_m720q.sh`) to
       designate Debian 13 (Trixie) as the tested host Operating System (OS).
     - Configured systemd logind and sleep drop-ins
       (`/etc/systemd/logind.conf.d/zz-always-on.conf` and
@@ -227,7 +228,7 @@
       activates up to 3.4-3.7 GHz across all cores during vector embedding
       and Artificial Intelligence (AI) inference, returning immediately to
       sub-1.6 GHz power-efficient idle when waiting for requests.
-    - Fixed test isolation in `practice-vault/backend/app/google_sync.py` and
+    - Fixed test isolation in `~/practice-vault/backend/app/google_sync.py` and
       verified full unit test and acceptance criteria suites.
 
 32. Conducted full-repository API key and secret security audit:
@@ -286,7 +287,7 @@
       Qwen 2.5 (7B) / Qwen 3 (8B) for complex multi-document legal synthesis.
 
 36. Built Sovereign Command-Line Interface (CLI) and Terminal REPL (`./vault`):
-    - Implemented `practice-vault/scripts/vault_cli.py` and root launcher
+    - Implemented `~/practice-vault/scripts/vault_cli.py` and root launcher
       `./vault` supporting interactive terminal REPL and direct scriptable
       queries.
     - Added sub-second hybrid search mode (`./vault -s <query>`) returning
@@ -353,7 +354,7 @@
     - Replaced in-memory vector table deserialisation in `indexer.py` and
       `tracker.py` with direct SQLite FTS5 queries and incremental stat updates;
       backend memory RSS reduced to 586 MB.
-    - All 15 unit tests passing in `practice-vault/backend/tests/`.
+    - All 15 unit tests passing in `~/practice-vault/backend/tests/`.
 
 42. Launched Overnight Continuous Ingestion Daemon:
     - Initiated background indexer daemon (`scripts/continuous_indexer.py`)
@@ -367,7 +368,7 @@
       references, false presuppositions, chronological version conflicts,
       homonym name collisions, and partial keyword scope traps.
     - Built comprehensive evaluation harness in
-      `practice-vault/scripts/test_ambiguity_scenarios.py`.
+      `~/practice-vault/scripts/test_ambiguity_scenarios.py`.
     - Proved `qwen3.5:4b` under enhanced prompt achieved 5/5 flawless results
       (enumerated multiple distinct matters, refuted contradictory premises,
       isolated superseded rates, disambiguated homonyms, and guarded domain).
@@ -395,7 +396,7 @@
       Activity Detection (VAD) for fast local audio transcription.
     - Implemented multi-speaker acoustic feature clustering (Spectral Centroid,
       Root Mean Square energy, Zero-Crossing Rate) in
-      `practice-vault/backend/app/audio.py` for CPU-efficient speaker turn
+      `~/practice-vault/backend/app/audio.py` for CPU-efficient speaker turn
       separation.
     - Implemented person tagging API and UI allowing users to map speaker IDs
       to human roles (e.g. Counsel, Medical Consultant, Client).
@@ -405,10 +406,10 @@
 
 46. Financial Ledger Exploration Dashboard & Structured Audit:
     - Added dedicated Expenditure & Ledger Audit view (`tab-ledger`) in
-      `practice-vault/frontend/` with macro key performance metrics, annual
+      `~/practice-vault/frontend/` with macro key performance metrics, annual
       spend filters (2021-2026), interactive merchant search, and CSV export.
     - Added REST endpoints `GET /api/transactions/summary` and `GET
-      /api/transactions/ledger` in `practice-vault/backend/app/api.py`.
+      /api/transactions/ledger` in `~/practice-vault/backend/app/api.py`.
 
 47. Advanced SOTA RAG Optimisations & Complete Test Suite:
     - Added Neural Cross-Encoder Refusal Gate (Corrective RAG) in `rag.py`
@@ -417,7 +418,7 @@
       `ingest.py`.
     - Added legal and accounting synonym expansion in `indexer.py` SQLite FTS5.
     - Expanded test suite to 19 unit tests across
-      `practice-vault/backend/tests/` (all 19 passing).
+      `~/practice-vault/backend/tests/` (all 19 passing).
 
 48. Sovereign Performance Tuning & In-Memory Retrieval Optimisation:
     - Configured SQLite Full-Text Search 5 (FTS5) with high-performance RAM
@@ -443,7 +444,7 @@
       latency and attribution badge, and keyboard shortcuts (`Ctrl+Enter`, `/`,
       `Esc`).
     - Expanded test suite to 22 unit tests across
-      `practice-vault/backend/tests/` (all 22 passing).
+      `~/practice-vault/backend/tests/` (all 22 passing).
 
 50. Configured Social Preview Metadata & Confirmed Multi-Domain SSL:
     - Added `og:image` and `twitter:image` tags in `index.html` referencing
@@ -494,9 +495,9 @@
 55. Executive Interface Usability, Ambiguity & Longitudinal Tracker:
     - Formulated comprehensive executive interface architecture tailored for
       time-poor, non-technical HNW principals, King's Counsel, and surgeons
-      (`practice-vault/docs/EXECUTIVE_CLI_AND_INTERACTION_CATALOG_PLAN.md`).
+      (`~/practice-vault/docs/EXECUTIVE_CLI_AND_INTERACTION_CATALOG_PLAN.md`).
     - Established persistent longitudinal testing framework and defect log
-      (`practice-vault/docs/REAL_WORLD_USER_INTERACTION_TRACKER.md`) tracking
+      (`~/practice-vault/docs/REAL_WORLD_USER_INTERACTION_TRACKER.md`) tracking
       response tightness, proactive ambiguity handling, and active memory.
     - Initialised 25-interaction catalog with initial baseline tests passed
       (clinical fact retrieval, coreference anchoring, document parsing,
@@ -652,7 +653,7 @@
     - Overnight digest workflow: the secretary answers "what did you do
       overnight" from the deep queue, and a cited Markdown digest is
       written nightly. The before/after analysis is in
-      `practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
+      `~/practice-vault/docs/BEFORE_AFTER_2026-11-13.md`.
     - Background 7B fixed: the model manager now exports
       `LD_LIBRARY_PATH`; the morning battery starts and unloads the 7B to
       confirm it.
@@ -663,7 +664,7 @@
     - Quality comparison: the 4B was fastest but missed the Corringham
       completion date, the 14B was most complete, and the 35B was most
       precise but 3.5 times slower. The report is in
-      `practice-vault/docs/QUALITY_COMPARISON_2026-11-14.md`.
+      `~/practice-vault/docs/QUALITY_COMPARISON_2026-11-14.md`.
     - Morning briefing: `/briefing` now leads with today's commitments
       and the last 24 hours of deep work, then matters, relationships and
       finance. It is deterministic and takes about 0.1 s.
@@ -693,7 +694,7 @@
       2026-11-13T20:24:34Z with `refresh_token_expires_in` **absent**,
       so the seven-day expiry no longer applies.
     - `GET /api/google/status` reports `is_connected: true` for
-      `nevillebryce@gmail.com`; `last_gmail_sync` advanced from 19:21 to
+      the operator's Gmail account; `last_gmail_sync` advanced from 19:21 to
       20:27Z and 68,874 messages are ingested (one new message).
     - Restarted the continuous Gmail indexer with `start_indexer.sh`
       (supervisor 160885); the server process still runs with
@@ -775,13 +776,27 @@
       gate.
     - 548 tests pass; 20 of 20 verified interactions pass; the fast demo
       benchmark is 8 of 8; the legal gates pass. The full report is
-      `practice-vault/docs/OVERNIGHT_2026-11-15.md`.
-    - Added `practice-vault/docs/HANDOVER_OUTSTANDING_TASKS_2026-11-15.md`,
+      `~/practice-vault/docs/OVERNIGHT_2026-11-15.md`.
+    - Added `~/practice-vault/docs/HANDOVER_OUTSTANDING_TASKS_2026-11-15.md`,
       a prioritised queue for the next AI session with acceptance
       criteria, verification commands and the human gates that must not
       be crossed.
 
 ---
+
+63. **Separated the Practice Vault into its own repository.** The
+    appliance code that previously lived under `practice-vault/` now
+    lives in the private `wazzuck/datavault` repository at
+    `~/practice-vault/`, with all runtime and personal data in
+    `~/practice-vault-data/` outside every Git repository. Removed
+    from this repository in the same change: the `practice-vault/`
+    tree (40 files), `neville_background.txt` and
+    `hampstead_local_consulting_strategy.md` (personal data under
+    policy 18), and the operator's e-mail address from the OAuth
+    handover and this log. `scripts/verify_legal_compliance.py` and
+    the root `vault` launcher now point at `~/practice-vault/`. The
+    policy 18 history purge of the removed files is proposed
+    separately and awaits explicit operator approval.
 
 ## 2. Next
 
@@ -813,7 +828,7 @@
    Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
 7. Fix Legal Gate 1 false positives in `scripts/verify_legal_compliance.py`:
    match SPDX licence identifiers or classifiers instead of free text, and
-   provision `practice-vault/venv` so the audit runs against the appliance
+   provision `~/practice-vault/venv` so the audit runs against the appliance
    environment rather than the host Python installation.
 8. Rotate the OpenRouter credential (deferred operator decision) and
    update the secret stored by Worker `kay-classify`; also report the 29
@@ -832,7 +847,7 @@
 12. Rotate the local OpenCode service password, which was printed into
     a session transcript during diagnostics.
 13. Resume the continuous indexer after the demonstration with
-    `practice-vault/scripts/demo_mode.py stop`; new mail will invalidate
+    `~/practice-vault/scripts/demo_mode.py stop`; new mail will invalidate
     the warmed cache, which is correct.
 
 ---
@@ -855,7 +870,7 @@
 ## 4. Known failures and deferred fixes
 
 The authoritative appliance register is Section 5 of
-`practice-vault/STATUS.md`. This section records the cross-repository
+`~/practice-vault/STATUS.md`. This section records the cross-repository
 actions that need an operator or a site change.
 
 1. **KF-01: resolved on 14 November 2026.** The Google Calendar API is

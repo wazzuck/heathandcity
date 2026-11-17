@@ -104,7 +104,7 @@ Zurich).
 ## 3. Empirical Model Evaluation Matrix
 
 We conducted rigorous automated trials using the evaluation harness in
-`practice-vault/scripts/test_ambiguity_scenarios.py` on the on-premises
+`~/practice-vault/scripts/test_ambiguity_scenarios.py` on the on-premises
 sovereign appliance (Intel Core i3-9100T, 15.5 GiB Random Access Memory (RAM)).
 
 Trials evaluated two leading compact SLMs under two prompting regimes:
@@ -157,7 +157,7 @@ following architectural enhancements were integrated into the core engine:
 
 ### 4.1 Enhanced Institutional System Prompt
 The production Retrieval-Augmented Generation (RAG) module in
-`practice-vault/backend/app/rag.py` has been updated with five binding
+`~/practice-vault/backend/app/rag.py` has been updated with five binding
 governance directives:
 
 1. **Citation Discipline:** Mandatory document and page citations formatted

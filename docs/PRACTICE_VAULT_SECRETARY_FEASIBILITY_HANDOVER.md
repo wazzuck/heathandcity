@@ -64,7 +64,7 @@ current state of offline AI?
 ### 3.2. Inference stack
 
 1. `[MEASURED]` Running process:
-   `/home/neville/practice-vault/bin/llama-server` with model
+   `/home/neville/~/practice-vault/bin/llama-server` with model
    `phi4-mini.gguf` (Phi-4-mini, 3.8 billion parameters, 2.4 GB file),
    `-c 8192 -t 4 --parallel 2 --flash-attn on`, quantised key-value
    cache (`q8_0`), `--spec-type ngram-simple`, port 8081.
@@ -72,7 +72,7 @@ current state of offline AI?
    prompt processing about 47 tokens per second; generation about
    10 tokens per second; 238-token prompt with 36-token answer took
    8.6 seconds wall time.
-3. `[REPO]` `~/practice-vault/docs/LLM_SERVER_COMPARISON_AND_BENCHMARK_
+3. `[REPO]` `~/~/practice-vault/docs/LLM_SERVER_COMPARISON_AND_BENCHMARK_
    REPORT.md` section 3.3: Vulkan offload to the UHD 630 was slower
    (about 16.8 prompt and 5.5 generation tokens per second).
 4. `[REPO]` Ollama is installed (`/usr/local/bin/ollama`) as a fallback,
@@ -80,7 +80,7 @@ current state of offline AI?
 
 ### 3.3. Data and application
 
-1. `[REPO]` Application code: `~/practice-vault/backend/app/`
+1. `[REPO]` Application code: `~/~/practice-vault/backend/app/`
    (about 13,000 lines of Python). Relevant modules: `rag.py`,
    `temporal_filter.py`, `triage.py`, `calendar_engine.py`,
    `tracker.py`, `fact_engine.py`, `relationship_engine.py`,

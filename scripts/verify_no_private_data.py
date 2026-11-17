@@ -22,9 +22,11 @@ INVARIANTS:
 1. Exit code 0 means "no forbidden pattern found"; exit code 1 means
    "found"; exit code 2 means the scanner itself failed to run.
 2. The scan must never modify the repository: it only reads.
-3. Synthetic sample documents under `practice-vault/data/sample_docs/`
-   are exempt from the personal-name heuristics only, never from the
-   credential patterns.
+3. The appliance's sample documents live in
+   `~/practice-vault-data/sample_docs/`, outside this repository,
+   and are exempt from nothing here because the scanner cannot see
+   them; the credential patterns therefore cover every tracked
+   file without exception.
 4. Acronyms used below are expanded on first use: United Kingdom
    General Data Protection Regulation (UK GDPR), General Medical
    Council (GMC), Application Programming Interface (API), Uniform
@@ -171,7 +173,6 @@ PATTERNS: list[PatternSpec] = [
 # whose path matches this are skipped entirely for speed and noise,
 # but only after they have been confirmed synthetic by a human once.
 ALLOWLISTED_PATH_PARTS = (
-    "practice-vault/data/sample_docs/",
 )
 
 # Files that are allowed to contain the scanner's own patterns.

@@ -21,7 +21,8 @@ consent screen to production, then obtain one fresh refresh token.
 
 ## 2. Known facts
 
-1. Account: `nevillebryce@gmail.com`, a consumer account, so the OAuth user
+1. Account: the operator's consumer Gmail account (the address is
+   held in `~/vunderland/keys/`, never in this repository), so the OAuth user
    type is **External**.
 2. Scopes requested:
    - `https://www.googleapis.com/auth/gmail.readonly` (restricted);
@@ -115,7 +116,7 @@ curl -s -H "X-Vault-Password: ${PRACTICE_VAULT_PASSWORD}" \
 1. The Gmail indexer is currently disabled on the running service
    (`START_INDEXER=0`). Restart with the indexer enabled once the token is
    confirmed, or run:
-   `~/practice-vault/scripts/start_indexer.sh`.
+   `~/~/practice-vault/scripts/start_indexer.sh`.
 2. The metadata sync may be running separately. It is resumable and needs
    no action beyond a valid token.
 
@@ -151,7 +152,7 @@ curl -s -H "X-Vault-Password: ${PRACTICE_VAULT_PASSWORD}" \
 2. All five scopes are present, plus `openid`. The refresh token is
    present. No access or refresh token value is recorded in this file.
 3. `GET /api/google/status` returned `is_connected: true` for
-   `nevillebryce@gmail.com`.
+   the operator's Gmail account.
 4. Live calls: the Gmail profile returned 200 with 58,203 messages; the
    Drive `about` endpoint returned 200; the Calendar list returned 403.
 5. The synchronisation state advanced: `last_gmail_sync` at 20:43:33 UTC
