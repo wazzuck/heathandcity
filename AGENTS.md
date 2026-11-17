@@ -298,6 +298,53 @@ only; two uncommitted edits to one file can still lose one of them.
     - Delegate only whole, self-contained jobs. Never split one file or
       one change between the main session and a subagent.
 
+18. **Never commit private or personal data (binding mandate).**
+    - This repository is published on a public remote. Treat every
+      commit as permanent and world-readable: Git history cannot be
+      edited cheaply once pushed, and public hosts retain unreachable
+      objects until they are purged on request.
+    - Never stage, commit or push any of the following, in any branch
+      or any point in history:
+      - Personal data of identified or identifiable living individuals
+        under the United Kingdom (UK) General Data Protection
+        Regulation (UK GDPR): names paired with roles or biographies,
+        dates of birth, photographs, home or work addresses, personal
+        telephone numbers, personal email addresses, national
+        identifiers (for example General Medical Council (GMC)
+        reference numbers, NHS numbers, National Insurance numbers).
+      - Client or third-party business records: correspondence,
+        dossiers, rosters, contact lists, financial records, medical
+        or patient data, contract drafts.
+      - Credentials and secrets: passwords, Application Programming
+        Interface (API) keys, OAuth client secrets, access tokens,
+        refresh tokens, private keys, certificate files, connection
+        strings.
+      - Machine-local operational data: virtual environments, vector
+        indexes, parsed document stores, caches, logs, anything under
+        `practice-vault/data/` beyond the synthetic sample documents,
+        and anything under `~/practice-vault-data/`.
+    - Working rules that keep the mandate true:
+      1. Review `git diff --cached` line by line before every commit;
+         read the content, not only the file names.
+      2. Add ignore rules to `.gitignore` in the same change that
+         introduces any new local data directory.
+      3. Run `scripts/verify_no_private_data.py` before every commit
+         and in Continuous Integration (CI); a hit blocks the commit.
+      4. Sample documents committed for tests must be synthetic,
+         clearly fictional, and must not reproduce a real person,
+         practice or client.
+      5. Credentials live outside the repository (for example
+         `~/vunderland/keys/`) and are referenced by path, never by
+         value.
+    - If private data is ever found in history: stop immediately,
+      tell the operator, rotate any credential involved, and propose
+      a history rewrite (`git filter-repo`) plus a support request to
+      the host to purge cached copies. Do not attempt the rewrite
+      without explicit operator approval.
+    - This mandate applies to this repository's website code, the
+      `practice-vault/` appliance code, documentation, commit
+      messages, and branch names alike.
+
 ---
 
 ## 5. Definition of done

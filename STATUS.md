@@ -25,47 +25,39 @@
    repository remotes to `wazzuck/heathandcity`, and updated package metadata.
 7. Configured Spaceship Domain Name System (DNS) apex A records and www CNAME
    record; confirmed live HTTPS serving on `https://heathandcity.com`.
-8. Constructed a complete 63-page offline-first restoration mock-up and
-   cold-calling acquisition playbook for a third-party client
-   (`clients/removed-client/`) following the Silicon Practice provider
-   collapse, covering all clinical rosters, opening hours, patient care
-   pathways, and National Health Service (NHS) Design System assets.
-9. Authored the comprehensive NHS client acquisition, legal, UK GDPR, Caldicott
+8. Authored the comprehensive NHS client acquisition, legal, UK GDPR, Caldicott
    Principles, DSPT, and DTAC compliance guide in
    `docs/NHS_CLIENT_ACQUISITION_AND_COMPLIANCE_GUIDE.md`.
-10. Compiled a third-party client leadership, ownership, and stakeholder
-    contact intelligence dossier in
-    `clients/removed-client/PRACTICE_STAKEHOLDER_AND_CONTACT_DOSSIER.md`.
-11. Updated the principal contact telephone number to `+44 20 4520 9114` in
-    the centralised brand configuration and the static contact fallback.
-12. Rewrote the landing page for time-poor principals: barristers, insurance
+9. Updated the principal contact telephone number to `+44 20 4520 9114` in
+   the centralised brand configuration and the static contact fallback.
+10. Rewrote the landing page for time-poor principals: barristers, insurance
     and stock brokers, composers, and surgeons. Plain-English hero, three
     promises, four-practice demo, fixed-fee pricing, and a collapsed technical
     panel (`index.html`, `css/styles.css`, `js/config.js`, `js/app.js`).
-13. Removed the animated Three.js and WebGPU visual, its engine module
+11. Removed the animated Three.js and WebGPU visual, its engine module
     (`js/gpu-scene.js`), the `three` dependency, and the matching checks in
     `scripts/verify_site.py`. The page is now static text and layout only.
-14. Shortened the hero label to "TECHNOLOGY FOR PRIVATE PRACTICES"
+12. Shortened the hero label to "TECHNOLOGY FOR PRIVATE PRACTICES"
     (`js/config.js`, `index.html`).
-15. Reworded the hero label to "STATE-OF-THE-ART TECHNOLOGY FOR SMALL
+13. Reworded the hero label to "STATE-OF-THE-ART TECHNOLOGY FOR SMALL
     PRIVATE PRACTICES" (`js/config.js`, `index.html`).
-16. Renamed the brand to "Heath & City Technology" in the header, footer,
+14. Renamed the brand to "Heath & City Technology" in the header, footer,
     page title and README (`js/config.js`, `index.html`, `README.md`).
-17. Replaced the header "Book a coffee" button with the telephone number
+15. Replaced the header "Book a coffee" button with the telephone number
     (`index.html`).
-18. Header button now reads "Book an in-person coffee" with the telephone
+16. Header button now reads "Book an in-person coffee" with the telephone
     number (`index.html`).
-19. Search and AI-assistant visibility (phases 1 and 2): static HTML for
+17. Search and AI-assistant visibility (phases 1 and 2): static HTML for
     JavaScript-built content, FAQ, structured data, canonical and Open
     Graph tags, `robots.txt`, `sitemap.xml`, `llms.txt`, and verifier
     checks.
-20. Added About the Founder section with portrait image
+18. Added About the Founder section with portrait image
     (`img/neville-bryce.jpg`), verified 17+ years low-latency financial
     systems background from LinkedIn, credibility chips, and Schema.org
     `Person` JSON-LD entity.
-21. Redesigned desktop layout: widened container to 92% (1600px cap) and
+19. Redesigned desktop layout: widened container to 92% (1600px cap) and
     added root scroll-padding-top clearance for the sticky header.
-22. Refined opening hero & brand identity:
+20. Refined opening hero & brand identity:
     - Updated primary headline to "Your information automated. Your time back."
     - Refined sales pitch copy with 50% larger typography.
     - Streamlined hero by moving coffee booking button to About section and
@@ -75,12 +67,12 @@
       and 'Continuity'.
     - Integrated labyrinth & seedling brand logo into header and browser
       favicon.
-23. Refined brand emblem artwork and framing:
+21. Refined brand emblem artwork and framing:
     - Removed tight inner labyrinth wall to open central sanctuary courtyard.
     - Enlarged golden leaf by 1.85x with anti-aliased smooth contours.
     - Made upper golden maze wall continuous and anchored stem flush to base.
     - Framed header emblem as crisp 56px square with 1px black rim border.
-24. Added high-impact practice automations section & polished copy:
+22. Added high-impact practice automations section & polished copy:
     - Added "If you have the data, we can build it" section with a vertical
       stack of three focused practice use cases (shared inbox matter tracking,
       100% private offline AI, and automated fee reconciliation).
@@ -88,7 +80,7 @@
       hierarchy.
     - Retitled About section to "The Person Behind Heath & City" with a clean,
       grounded name label.
-25. Refined layout alignment, section themes, typography, and copy:
+23. Refined layout alignment, section themes, typography, and copy:
     - Removed jump links from sticky top header banner.
     - Left-aligned opening hero narrative with 1600px main container.
     - Replaced "Hampstead Village" with "Hampstead" across all copy and configs.
@@ -108,7 +100,7 @@
       "rigour", "catalog" -> "catalogue").
     - Enforced British English in AGENTS.md and automated check in
       verify_site.py.
-26. Refined practice automations copy, section headers, and founder typography:
+24. Refined practice automations copy, section headers, and founder typography:
     - Retitled Card 2 to "Private document classification" with human-centred
       copy.
     - Retitled Card 3 to "Preparation of financial accounts" with grounded
@@ -117,7 +109,7 @@
     - Shortened about heading to "Behind Heath & City".
     - Updated founder credential chips to "BofA" and "SOTA Computing".
     - Increased founder name ("Neville Bryce") font size by 50% to 1.425rem.
-27. Refined card hierarchy, terminology dictionaries, address, and credentials:
+25. Refined card hierarchy, terminology dictionaries, address, and credentials:
     - Retitled Card 2 to "Private document management" and moved to top of
       stack.
     - Highlighted custom practice dictionaries for nuanced terminology.
@@ -127,7 +119,7 @@
     - Removed redundant "Base" line from direct contact card and LLM specs.
     - Updated founder credential chips to "Algorithmic Trading & High
       Performance Computing" and standardised Title Case across all chips.
-28. Added governance section, rebrand, and founder/header refinements:
+26. Added governance section, rebrand, and founder/header refinements:
     - Added "Contractual safeguards & the small print" section (Data
       Processing Agreement, Non-Disclosure Agreement, Technical and
       Organisational Measures, right to independent scrutiny).
@@ -141,7 +133,7 @@
     - Direct line button now pulses between white and the section
       background colour (stops for reduced-motion readers).
 
-29. Streamlined page architecture, expanded vertical suite & appliance spec:
+27. Streamlined page architecture, expanded vertical suite & appliance spec:
     - Standardised "private UK data vault" across index.html, js/config.js,
       llms-full.txt, and local strategy documentation.
     - Refined core promise cards: removed redundant uppercase badges, reworded
@@ -171,7 +163,7 @@
       criteria, and copy-paste AI master build prompt for the Lenovo
       ThinkCentre M720q Tiny prototype.
 
-30. Implemented sovereign practice automation prototype (practice-vault/):
+28. Implemented sovereign practice automation prototype (practice-vault/):
     - Provisioned host prerequisites (Tesseract OCR, Poppler, CIFS, Ollama).
     - Pulled local models (llama3.2:3b and nomic-embed-text) via Ollama.
     - Built multi-format document parser (backend/app/ingest.py) supporting
@@ -189,7 +181,7 @@
     - Configured production runners, share mounting scripts, and operational
       runbook (practice-vault/README.md).
 
-31. Added Google Workspace OAuth2 login & synchronization (practice-vault/):
+29. Added Google Workspace OAuth2 login & synchronization (practice-vault/):
     - Implemented Google Workspace OAuth2 service in backend/app/google_sync.py
       with read-only access scopes for Gmail and Google Drive / Docs.
     - Added RESTful endpoints in backend/app/api.py for login authorization,
@@ -201,7 +193,7 @@
     - Expanded automated unit test suite (backend/tests/test_google_sync.py),
       passing all 7 unit checks cleanly.
 
-32. Provisioned Google Cloud OAuth 2.0 credentials for the Practice Vault
+30. Provisioned Google Cloud OAuth 2.0 credentials for the Practice Vault
     appliance (operational task, no repository changes):
     - Enabled the Gmail API and the Google Drive API in Cloud project
       `marketcalc`.
@@ -220,7 +212,7 @@
       `is_connected: true`, and `GET /api/google/auth-url` returns a valid
       Google authorisation URL.
 
-33. Configured host Debian 13 (Trixie) environment for Practice Vault:
+31. Configured host Debian 13 (Trixie) environment for Practice Vault:
     - Updated documentation (`docs/PRODUCT_SPECIFICATION.md`,
       `practice-vault/README.md`, `practice-vault/scripts/setup_m720q.sh`) to
       designate Debian 13 (Trixie) as the tested host Operating System (OS).
@@ -238,18 +230,18 @@
     - Fixed test isolation in `practice-vault/backend/app/google_sync.py` and
       verified full unit test and acceptance criteria suites.
 
-34. Conducted full-repository API key and secret security audit:
+32. Conducted full-repository API key and secret security audit:
     - Scanned working tree, untracked files, and Git commit history across 13
       secret regex classes (Google API keys, OAuth secrets, OpenAI, Anthropic,
       AWS, GitHub tokens, Slack tokens, Stripe keys, and private key blocks).
-    - Neutralised legacy third-party Google Maps browser key embedded in the
-      a third-party client offline restoration mock-up.
+    - Neutralised a legacy third-party Google Maps browser key embedded in a
+      client mock-up, since removed from this repository.
     - Verified zero active API keys or credentials exist within the working
       tree or repository.
     - Verified that Google Workspace OAuth credentials remain strictly isolated
       in external storage at ~/vunderland/keys/heathandcity.txt.
 
-35. Updated unified system architecture specification (`docs/ARCHITECTURE.md`):
+33. Updated unified system architecture specification (`docs/ARCHITECTURE.md`):
     - Restructured into a decoupled dual-system architecture: System A (Public
       Showcase & AI Discoverability) and System B (Sovereign Practice Vault
       Appliance).
@@ -264,7 +256,7 @@
     - Codified Speculation Rules API and targeted crawler routing directives.
     - Verified all 80-column line limits and British English rules.
 
-36. Implemented Indexing Job Tracker, Volume Auditing & Google Docs Auto-Sync:
+34. Implemented Indexing Job Tracker, Volume Auditing & Google Docs Auto-Sync:
     - Built `IndexingJobTracker` (`backend/app/tracker.py`) tracking elapsed
       run-times, processing velocity (items/sec), and dynamic Estimated Time
       of Arrival (ETA) projections with persistent job history.
@@ -280,7 +272,7 @@
     - Documented all features in `docs/ARCHITECTURE.md` (Sections 4.6-4.8).
     - Verified all 11 pytest checks and 5/5 prototype acceptance suite stages.
 
-37. Evaluated Small Language Model (SLM) scaling and provisioned Qwen 3:
+35. Evaluated Small Language Model (SLM) scaling and provisioned Qwen 3:
     - Conducted Central Processing Unit (CPU) latency and token throughput
       benchmarks across Qwen 2.5 (3B and 7B) and Llama 3.2 (3B), validating
       11.2 tok/s on 3B versus 4.5 tok/s on 7B.
@@ -293,7 +285,7 @@
       interactive low-latency conversational queries (<3.5s response) and
       Qwen 2.5 (7B) / Qwen 3 (8B) for complex multi-document legal synthesis.
 
-38. Built Sovereign Command-Line Interface (CLI) and Terminal REPL (`./vault`):
+36. Built Sovereign Command-Line Interface (CLI) and Terminal REPL (`./vault`):
     - Implemented `practice-vault/scripts/vault_cli.py` and root launcher
       `./vault` supporting interactive terminal REPL and direct scriptable
       queries.
@@ -309,7 +301,7 @@
     - Increased backend HTTP client timeout to 180s in `backend/app/rag.py`
       and enabled dynamic model overrides in `backend/app/api.py`.
 
-39. Provisioned and Benchmarked Qwen 3 (4B) Reasoning Model (`qwen3:4b`):
+37. Provisioned and Benchmarked Qwen 3 (4B) Reasoning Model (`qwen3:4b`):
     - Downloaded and verified `qwen3:4b` (2.5 GB, 4.0B parameters, 262k
       context) into local Ollama runtime.
     - Benchmarked raw token generation velocity at 9.42 tokens/sec on host
@@ -324,14 +316,14 @@
       for low-latency interactive conversational search (~24-28s on CPU),
       while `qwen3:4b` is available for deep legal deliberation.
 
-40. Advanced Corpus Ingestion to 42,700 Chunks:
+38. Advanced Corpus Ingestion to 42,700 Chunks:
     - Ingested historical Gmail messages in persistent batches, expanding
       corpus to 42,442+ documents and 42,700 chunks across LanceDB and
       SQLite FTS5.
     - Checkpointed sync state safely preserved in external appliance storage
       (`~/practice-vault-data/google_sync_state.json`).
 
-41. Provisioned and Benchmarked SOTA Small Language Models (SLMs):
+39. Provisioned and Benchmarked SOTA Small Language Models (SLMs):
     - Researched latest open-weight models in the 3B-9B class; downloaded and
       verified `qwen3.5:4b` (3.3 GB), `qwen3.5:9b` (6.6 GB), and
       `phi4-mini:latest` (2.5 GB, Microsoft 3.8B SOTA) into local Ollama.
@@ -342,7 +334,7 @@
       citation compliance); `qwen3.5:4b` with `think: false` delivered 4.70s
       warm latency (9.1 tok/s, 100% citation compliance).
 
-42. Built Path B Structured Transaction Pipeline (`transactions.py`):
+40. Built Path B Structured Transaction Pipeline (`transactions.py`):
     - Offloaded exhaustive multi-document financial inquiries from SLMs to
       deterministic SQLite queries, eliminating arithmetic hallucinations.
     - Scanned indexed email database and extracted 1,607 verified transactions
@@ -352,7 +344,7 @@
       table, email citations), and "What did I buy from Amazon?" (725 orders,
       £15,255.52).
 
-43. Hardened Ingestion Pipeline & Reduced Memory Footprint:
+41. Hardened Ingestion Pipeline & Reduced Memory Footprint:
     - Upgraded `google_sync.py` to extract HTML email bodies using `lxml.html`,
       parse true email dates via `internalDate` into ISO8601 UTC strings, and
       chunk long emails (>400 words) with sliding windows and preserved headers.
@@ -363,14 +355,14 @@
       backend memory RSS reduced to 586 MB.
     - All 15 unit tests passing in `practice-vault/backend/tests/`.
 
-44. Launched Overnight Continuous Ingestion Daemon:
+42. Launched Overnight Continuous Ingestion Daemon:
     - Initiated background indexer daemon (`scripts/continuous_indexer.py`)
       running continuously with controlled 12-second inter-batch pauses to
       ingest remaining historical Gmail messages to complete mailbox archive.
     - Corpus expanded to 55,171+ chunks across 54,885+ Gmail messages and 268
       Google Docs (22.55 million words, 232.5 MB storage).
 
-45. Designed Ambiguity Testing Harness & Institutional Query Governance:
+43. Designed Ambiguity Testing Harness & Institutional Query Governance:
     - Catalogued 5 primary semantic ambiguity failure modes: under-specified
       references, false presuppositions, chronological version conflicts,
       homonym name collisions, and partial keyword scope traps.
@@ -387,7 +379,7 @@
       `docs/PRACTICE_VAULT_AMBIGUITY_AND_QUERY_GOVERNANCE.md`.
     - All 15 unit tests pass cleanly.
 
-46. Commercial Open-Source Licensing & Legal Compliance Audit Suite:
+44. Commercial Open-Source Licensing & Legal Compliance Audit Suite:
     - Built automated legal audit suite (`scripts/verify_legal_compliance.py`)
       verifying zero copyleft contamination across all 65 installed packages,
       United Kingdom General Data Protection Regulation (UK GDPR) 127.0.0.1
@@ -398,7 +390,7 @@
       `docs/COMMERCIAL_SALE_AND_REGULATORY_COMPLIANCE.md`.
     - Unit test `test_legal_compliance.py` passing in test suite.
 
-47. Sovereign Audio Dictation, Speaker Diarisation & Person Tagging:
+45. Sovereign Audio Dictation, Speaker Diarisation & Person Tagging:
     - Integrated Faster-Whisper (`tiny.en` int8 on CPU) with Silero Voice
       Activity Detection (VAD) for fast local audio transcription.
     - Implemented multi-speaker acoustic feature clustering (Spectral Centroid,
@@ -411,14 +403,14 @@
     - Complies with Investigatory Powers Act 2016 statutory recording consent
       requirements.
 
-48. Financial Ledger Exploration Dashboard & Structured Audit:
+46. Financial Ledger Exploration Dashboard & Structured Audit:
     - Added dedicated Expenditure & Ledger Audit view (`tab-ledger`) in
       `practice-vault/frontend/` with macro key performance metrics, annual
       spend filters (2021-2026), interactive merchant search, and CSV export.
     - Added REST endpoints `GET /api/transactions/summary` and `GET
       /api/transactions/ledger` in `practice-vault/backend/app/api.py`.
 
-49. Advanced SOTA RAG Optimisations & Complete Test Suite:
+47. Advanced SOTA RAG Optimisations & Complete Test Suite:
     - Added Neural Cross-Encoder Refusal Gate (Corrective RAG) in `rag.py`
       achieving ~30ms instant refusal for out-of-domain queries.
     - Added Anthropic-style Contextual Retrieval header prepending in
@@ -427,7 +419,7 @@
     - Expanded test suite to 19 unit tests across
       `practice-vault/backend/tests/` (all 19 passing).
 
-50. Sovereign Performance Tuning & In-Memory Retrieval Optimisation:
+48. Sovereign Performance Tuning & In-Memory Retrieval Optimisation:
     - Configured SQLite Full-Text Search 5 (FTS5) with high-performance RAM
       PRAGMAs (64 MB page cache, 256 MB memory-mapped I/O, write-ahead logging).
     - Added in-memory Least Recently Used (LRU) query embedding cache (2,048
@@ -439,7 +431,7 @@
       (`keep_alive: "24h"`, `num_thread: 4`, `num_predict: 512`), eliminating
       cold-load latency.
 
-51. Advanced Nuance Handling, Aspect Decomposition & Interface Enhancements:
+49. Advanced Nuance Handling, Aspect Decomposition & Interface Enhancements:
     - Implemented sub-aspect query decomposition in `_decompose_query()` and
       multi-aspect candidate fusion in `search_aspects()` with coverage bonuses.
     - Added multi-year financial variance comparison (`compare_years()` and
@@ -453,14 +445,14 @@
     - Expanded test suite to 22 unit tests across
       `practice-vault/backend/tests/` (all 22 passing).
 
-52. Configured Social Preview Metadata & Confirmed Multi-Domain SSL:
+50. Configured Social Preview Metadata & Confirmed Multi-Domain SSL:
     - Added `og:image` and `twitter:image` tags in `index.html` referencing
       the brand emblem (`https://heathandcity.com/img/logo-square.png`).
     - Confirmed automated GitHub Pages multi-domain Transport Layer Security
       (TLS) certificate active across both `heathandcity.com` (HTTP/2 200) and
       `www.heathandcity.com` (HTTP/2 301 canonical redirect).
 
-53. Native C++ Inference Engine & Real-Time Streaming Migration:
+51. Native C++ Inference Engine & Real-Time Streaming Migration:
     - Compiled native upstream `llama-server` (b12277) targeting Coffee Lake
       AVX2/FMA/F16C (`-march=native -O3 -fopenmp`) and deployed to `bin/`.
     - Configured native runner (`scripts/start_llama_server.sh`) on loopback
@@ -472,13 +464,13 @@
       Hypothetical Document Embeddings (`_apply_hyde`), and GBNF
       grammar-constrained JSON decoding.
 
-54. 100% Practice Correspondence Archive Ingestion:
+52. 100% Practice Correspondence Archive Ingestion:
     - Fully ingested 68,685 Gmail messages and 268 Google Docs into
       quarantined LanceDB and SQLite FTS5 storage (`practice-vault-data/`).
     - Total indexed volume reached 69,163 chunks with sub-second retrieval.
     - Reconciled 2,337 practice financial transaction records (£2,055,080.74).
 
-55. Claude Code-Style Interactive Conversational Agent CLI (`./vault`):
+53. Claude Code-Style Interactive Conversational Agent CLI (`./vault`):
     - Upgraded terminal interface into an interactive conversational agent
       modelled after Claude Code.
     - Renders user badges (`● You`), assistant headers (`╭─ Practice Clerk`),
@@ -488,7 +480,7 @@
     - Added root `./vault` executable delegating to local authenticated
       appliance daemon.
 
-56. Built-In Local Tool Execution Engine:
+54. Built-In Local Tool Execution Engine:
     - Integrated `read_document`: parses external PDF, Word (DOCX), Excel
       (XLSX), Markdown (MD), and text/CSV on the fly without pre-indexing.
     - Integrated `ingest_document`: indexes single external documents into
@@ -499,7 +491,7 @@
     - Test suite expanded to 30 unit tests (all 30 passing).
     - 4-gate commercial regulatory auditor verified (all 4 gates passing).
 
-57. Executive Interface Usability, Ambiguity & Longitudinal Tracker:
+55. Executive Interface Usability, Ambiguity & Longitudinal Tracker:
     - Formulated comprehensive executive interface architecture tailored for
       time-poor, non-technical HNW principals, King's Counsel, and surgeons
       (`practice-vault/docs/EXECUTIVE_CLI_AND_INTERACTION_CATALOG_PLAN.md`).
@@ -509,7 +501,7 @@
     - Initialised 25-interaction catalog with initial baseline tests passed
       (clinical fact retrieval, coreference anchoring, document parsing,
       negative refusal).
-58. Exported Cloudflare Worker setup handover for the Kay demonstration:
+56. Exported Cloudflare Worker setup handover for the Kay demonstration:
     - Authored `docs/CLOUDFLARE_WORKER_SETUP.md`, a self-contained
       specification for an external Artificial Intelligence (AI) agent to
       provision the proxy that protects the OpenRouter credential.
@@ -535,7 +527,7 @@
       both pass, and confirmed the embedded Worker source parses under
       `node --check`.
 
-59. Provisioned and deployed the Kay classification Cloudflare Worker
+57. Provisioned and deployed the Kay classification Cloudflare Worker
     (operational task, Worker kept outside this repository at
     `~/kay-worker`):
     - Installed `wrangler` 4.86.0 (MIT OR Apache-2.0, permissive) and
@@ -562,7 +554,7 @@
       arrangement and international transfer safeguard still to be
       defined; OpenRouter key rotation deferred by operator decision.
 
-60. Published the Kay demonstration on the website, identical to the
+58. Published the Kay demonstration on the website, identical to the
     Kay project's own demo (`harness/standalone_classifier`):
     - Copied `index.html`, `style.css` and `app.js` verbatim into
       `clients/kay/`; `style.css` is byte-identical to the Kay
@@ -602,7 +594,7 @@
       `sk-or-` occurrences), plus 80-column wrapping, `node --check`
       on every script, and British Professional English spelling.
 
-61. Built and verified the Practice Vault personal secretary on branch
+59. Built and verified the Practice Vault personal secretary on branch
     merged into `master` (412 tests):
     - Requirements, 34 functional requirements, a 100-task catalogue and
       simulation gates in `docs/PRACTICE_VAULT_SECRETARY_REQUIREMENTS.md`.
@@ -684,7 +676,7 @@
     - Forward Gmail sync fetches the last seven days and indexed 66 new
       messages, without consuming the archive checkpoint.
 
-62. Restored durable Google Workspace OAuth authorisation for the Practice
+60. Restored durable Google Workspace OAuth authorisation for the Practice
     Vault appliance (handover `docs/GOOGLE_OAUTH_BROWSER_AGENT_HANDOVER.md`):
     - Published the OAuth consent screen for project `marketcalc` from
       Testing to **In production** (user type External), after adding the
@@ -707,7 +699,7 @@
       (supervisor 160885); the server process still runs with
       `START_INDEXER=0`, so a service restart would drop it again.
 
-63. Enabled the Google Calendar API (handover
+61. Enabled the Google Calendar API (handover
     `docs/GOOGLE_CALENDAR_API_ENABLE_HANDOVER.md`):
     - Confirmed the console project was `marketcalc`, number
       `840262346134`, then clicked **Enable** on the Google Calendar API
@@ -732,7 +724,7 @@
       `insufficientPermissions`; the durable token on the appliance host
       carries the scope, so verification ran there.
 
-64. Completed the overnight accuracy, offline cold-start and privacy
+62. Completed the overnight accuracy, offline cold-start and privacy
     programme (15 November 2026):
     - Fixed live demo failures: weekday completion dates resolve
       deterministically in under a second; drafting no longer returns a
