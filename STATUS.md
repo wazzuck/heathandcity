@@ -785,40 +785,52 @@
 
 ## 2. Next
 
-1. **Standing Activity: Real-World Usability & Interaction Testing**:
+1. **URGENT: purge unreachable Git objects on GitHub.** The the client
+   client work (dossier, mock-up, legacy Maps key) was purged from all
+   history and both branches were force-pushed on 17 November 2026, but
+   GitHub still serves the old commits by their original SHA: the
+   dossier is retrievable at commit `d81ec67`. Until GitHub Support
+   deletes the unreachable objects and cached copies, the data remains
+   world-readable. Open a GitHub Support request (Settings > Contact
+   GitHub Support, or https://support.github.com/contact) quoting the
+   repository, the force-push date, and the old commit SHAs
+   `d81ec67`, `dc2dbd6`, `cb530ac`, `52d0b5e`. Ask explicitly for
+   unreachable object and cache purging. Also rotate the legacy
+   Google Maps browser key, which was exposed in that history.
+2. **Standing Activity: Real-World Usability & Interaction Testing**:
    - Iteratively execute and verify catalog interactions against live archives.
    - Refine response tightness to direct bottom-line conclusions
      (maximum 3 bullets).
    - Implement proactive disambiguation router presenting 2–3 numbered choices.
    - Implement 4-stage Active Practice Memory for permanent self-correction.
-2. Deploy appliance hardware image to production Lenovo ThinkCentre M720q
+3. Deploy appliance hardware image to production Lenovo ThinkCentre M720q
    appliances for commercial partner trials.
-3. Extend the deployment profession packs when a partner trial demands a
+4. Extend the deployment profession packs when a partner trial demands a
    new practice type; each pack is one entry plus a test.
-4. Visibility phase 3 (one page per profession) awaits a decision.
-5. Visibility phase 4 (off-page): Google Business Profile, Search Console,
+5. Visibility phase 3 (one page per profession) awaits a decision.
+6. Visibility phase 4 (off-page): Google Business Profile, Search Console,
    Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
-6. Fix Legal Gate 1 false positives in `scripts/verify_legal_compliance.py`:
+7. Fix Legal Gate 1 false positives in `scripts/verify_legal_compliance.py`:
    match SPDX licence identifiers or classifiers instead of free text, and
    provision `practice-vault/venv` so the audit runs against the appliance
    environment rather than the host Python installation.
-7. Rotate the OpenRouter credential (deferred operator decision) and
+8. Rotate the OpenRouter credential (deferred operator decision) and
    update the secret stored by Worker `kay-classify`; also report the 29
    credential files tracked under `keys/` in `wazzuck/vunderland`.
-8. Define and record the lawful basis, the OpenRouter processor
+9. Define and record the lawful basis, the OpenRouter processor
    arrangement, and the international transfer safeguard required before
    the Kay demonstration handles real client correspondence.
-9. Restart the Practice Vault service to load the merged
+10. Restart the Practice Vault service to load the merged
    interactive-priority code and the Qwen3-4B interactive model, and
    set `START_INDEXER=1` for it so the Gmail indexer survives that
    restart.
-10. Run the 200-topic calibration set per pack; require 80 per cent
+11. Run the 200-topic calibration set per pack; require 80 per cent
     topic agreement before storing topics or wiring the batch classifier.
     A 50-row high-value queue is ready at
     `~/practice-vault-data/reports/active_learning_queue.csv`.
-11. Rotate the local OpenCode service password, which was printed into
+12. Rotate the local OpenCode service password, which was printed into
     a session transcript during diagnostics.
-12. Resume the continuous indexer after the demonstration with
+13. Resume the continuous indexer after the demonstration with
     `practice-vault/scripts/demo_mode.py stop`; new mail will invalidate
     the warmed cache, which is correct.
 
