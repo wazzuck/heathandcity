@@ -281,6 +281,23 @@ only; two uncommitted edits to one file can still lose one of them.
     - Verify that both the online enrichment pipeline and the sovereign
       offline counterpart pass all regression tests and verification gates.
 
+17. **Delegate long-running jobs to a subagent.**
+    - If a job will occupy the session for minutes or more (a full test
+      suite, a large refactor, a build, a migration, a bulk edit, or
+      extended research), launch it as a subagent rather than running
+      it in the main session.
+    - The main session is the operator's channel: it must stay
+      responsive so the operator can keep working while the job runs.
+    - Say in one line that the job was delegated and what it will do,
+      then move on to other work. Do not sit idle waiting for it.
+    - The subagent owns the job end to end. Give it the full task,
+      the files it may touch, and the checks it must run, so it follows
+      the same rules as this file.
+    - When the subagent reports back, inspect its diff and run the
+      checks yourself under policy 14 before treating the job as done.
+    - Delegate only whole, self-contained jobs. Never split one file or
+      one change between the main session and a subagent.
+
 ---
 
 ## 5. Definition of done
