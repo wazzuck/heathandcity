@@ -796,11 +796,29 @@
     handover and this log. `scripts/verify_legal_compliance.py` and
     the root `vault` launcher now point at `~/practice-vault/`. The
     policy 18 history purge of the removed files is proposed
-    separately and awaits explicit operator approval.
+    separately and awaits explicit operator approval; it is
+    tracked as `docs/URGENT_WEBSITE_HISTORY_PURGE.md`, as the
+    first item under "Next", and as the fourth entry under
+    "Blocked".
 
 ## 2. Next
 
-1. **URGENT: purge unreachable Git objects on GitHub.** The removed
+1. **URGENT (21 November 2026): purge the website repository
+   history.** The working tree is clean, but all 179 public
+   commits still serve the two personal files removed on
+   17 November, the old `practice-vault/` fixtures that name
+   real correspondents, the master passphrase written as a
+   literal, and the operator's e-mail address in every author
+   identity. Policy 18 forbids the rewrite without explicit
+   operator approval. The 155 tested replacement rules are
+   staged at `/home/neville/backups/replace_text_website.txt`.
+   Follow `docs/URGENT_WEBSITE_HISTORY_PURGE.md` the moment
+   approval is given, then open the GitHub Support request for
+   unreachable objects and cached copies. Treat as urgent: this
+   data stays world-readable until the purge and the Support
+   request both complete.
+
+2. **URGENT: purge unreachable Git objects on GitHub.** The removed
    third-party client work (dossier, mock-up, legacy Maps key) was
    purged from all history and both branches were force-pushed on
    17 November 2026, but GitHub still serves the old commits by their
@@ -813,40 +831,40 @@
    `cb530ac`, `52d0b5e`. Ask explicitly for unreachable object and
    cache purging. Also rotate the legacy Google Maps browser key,
    which was exposed in that history.
-2. **Standing Activity: Real-World Usability & Interaction Testing**:
+3. **Standing Activity: Real-World Usability & Interaction Testing**:
    - Iteratively execute and verify catalog interactions against live archives.
    - Refine response tightness to direct bottom-line conclusions
      (maximum 3 bullets).
    - Implement proactive disambiguation router presenting 2–3 numbered choices.
    - Implement 4-stage Active Practice Memory for permanent self-correction.
-3. Deploy appliance hardware image to production Lenovo ThinkCentre M720q
+4. Deploy appliance hardware image to production Lenovo ThinkCentre M720q
    appliances for commercial partner trials.
-4. Extend the deployment profession packs when a partner trial demands a
+5. Extend the deployment profession packs when a partner trial demands a
    new practice type; each pack is one entry plus a test.
-5. Visibility phase 3 (one page per profession) awaits a decision.
-6. Visibility phase 4 (off-page): Google Business Profile, Search Console,
+6. Visibility phase 3 (one page per profession) awaits a decision.
+7. Visibility phase 4 (off-page): Google Business Profile, Search Console,
    Bing Webmaster Tools, LinkedIn, directories, and real testimonials.
-7. Fix Legal Gate 1 false positives in `scripts/verify_legal_compliance.py`:
+8. Fix Legal Gate 1 false positives in `scripts/verify_legal_compliance.py`:
    match SPDX licence identifiers or classifiers instead of free text, and
    provision `~/practice-vault/venv` so the audit runs against the appliance
    environment rather than the host Python installation.
-8. Rotate the OpenRouter credential (deferred operator decision) and
+9. Rotate the OpenRouter credential (deferred operator decision) and
    update the secret stored by Worker `kay-classify`; also report the 29
    credential files tracked under `keys/` in `wazzuck/vunderland`.
-9. Define and record the lawful basis, the OpenRouter processor
+10. Define and record the lawful basis, the OpenRouter processor
    arrangement, and the international transfer safeguard required before
    the Kay demonstration handles real client correspondence.
-10. Restart the Practice Vault service to load the merged
+11. Restart the Practice Vault service to load the merged
    interactive-priority code and the Qwen3-4B interactive model, and
    set `START_INDEXER=1` for it so the Gmail indexer survives that
    restart.
-11. Run the 200-topic calibration set per pack; require 80 per cent
+12. Run the 200-topic calibration set per pack; require 80 per cent
     topic agreement before storing topics or wiring the batch classifier.
     A 50-row high-value queue is ready at
     `~/practice-vault-data/reports/active_learning_queue.csv`.
-12. Rotate the local OpenCode service password, which was printed into
+13. Rotate the local OpenCode service password, which was printed into
     a session transcript during diagnostics.
-13. Resume the continuous indexer after the demonstration with
+14. Resume the continuous indexer after the demonstration with
     `~/practice-vault/scripts/demo_mode.py stop`; new mail will invalidate
     the warmed cache, which is correct.
 
@@ -864,6 +882,13 @@
    appliance.
 3. **Pre-existing wide lines.** Resolved: `scripts/verify_site.py` now
    passes after the module-table descriptions were shortened.
+
+4. **Website history purge awaiting operator approval (policy 18).**
+   The rewrite cannot start until the operator replies with
+   explicit approval. The prepared rules and the full execution
+   steps are in `docs/URGENT_WEBSITE_HISTORY_PURGE.md`. Until
+   then the removed personal files remain readable in the public
+   commit history.
 
 ---
 
